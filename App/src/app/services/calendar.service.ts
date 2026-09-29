@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CalendarService {
-  private apiUrl = 'http://localhost:3000/api/calendar';
+  private apiUrl = '/api/calendar';
 
   constructor(private http: HttpClient) {}
 

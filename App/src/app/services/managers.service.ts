@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ManagerService {
 
-  private apiUrl = 'http://localhost:3000/api/managers';
+  private apiUrl = '/api/managers';
 
   constructor(private http: HttpClient) { }
 

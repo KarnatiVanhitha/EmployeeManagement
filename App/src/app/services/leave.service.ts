@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LeaveService {
 
-  private apiUrl = 'http://localhost:3000/api/leaves';
+  private apiUrl = '/api/leaves';
 
   constructor(private http: HttpClient) { }
 

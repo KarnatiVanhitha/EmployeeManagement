@@ -26,7 +26,7 @@ describe('ProjectsService', () => {
   it('should call the Jira sprint board endpoint', () => {
     service.getJiraSprints('100').subscribe();
 
-    const req = httpMock.expectOne('http://localhost:3000/api/jira/sprints?boardId=100');
+    const req = httpMock.expectOne('/api/jira/sprints?boardId=100');
     expect(req.request.method).toBe('GET');
     req.flush({ values: [] });
   });
@@ -35,7 +35,7 @@ describe('ProjectsService', () => {
     service.getJiraBoards('1337').subscribe();
 
     const req = httpMock.expectOne(
-      'http://localhost:3000/api/jira/boards?projectKeyOrId=1337&maxResults=100'
+      '/api/jira/boards?projectKeyOrId=1337&maxResults=100'
     );
     expect(req.request.method).toBe('GET');
     req.flush({ values: [] });

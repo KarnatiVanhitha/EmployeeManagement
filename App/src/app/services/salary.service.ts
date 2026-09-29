@@ -8,20 +8,20 @@ export class SalaryService {
   constructor(private http: HttpClient) { }
   getSalaries() {
 
-  return this.http.get('http://localhost:3000/api/salaries');
+  return this.http.get('/api/salaries');
 
 }
 
 getSalariesByEmployeeId(employeeId: number) {
 
-  return this.http.get(`http://localhost:3000/api/salaries/employee/${employeeId}`);
+  return this.http.get(`/api/salaries/employee/${employeeId}`);
 
 }
 
 addSalary(data: any) {
 
   return this.http.post(
-    'http://localhost:3000/api/salaries',
+    '/api/salaries',
     data
   );
 
@@ -30,7 +30,7 @@ addSalary(data: any) {
 updateSalary(id: number, data: any) {
 
   return this.http.put(
-    `http://localhost:3000/api/salaries/${id}`,
+    `/api/salaries/${id}`,
     data
   );
 

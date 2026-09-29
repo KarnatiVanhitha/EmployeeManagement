@@ -47,8 +47,8 @@ export interface JiraIssue {
   providedIn: 'root'
 })
 export class JiraserviceService {
-  private readonly baseUrl = 'http://localhost:3000/api/jira';
-  private readonly directProxyUrl = 'http://localhost:3000/jira';
+  private readonly baseUrl = '/api/jira';
+  private readonly directProxyUrl = '/jira';
 
   constructor(private http: HttpClient) {}
 

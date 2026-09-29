@@ -392,7 +392,7 @@ export class ProjectsComponent implements OnInit {
 
     this.http
       .get<any[]>(
-        'http://localhost:3000/api/employees'
+        '/api/employees'
       )
       .subscribe({
 
@@ -1593,7 +1593,7 @@ export class ProjectsComponent implements OnInit {
 
     this.http
       .put(
-        `http://localhost:3000/api/projects/${projectId}/manager`,
+        `/api/projects/${projectId}/manager`,
         payload
       )
       .subscribe({
@@ -2982,7 +2982,7 @@ export class ProjectsComponent implements OnInit {
 
     this.http
       .delete(
-        `http://localhost:3000/api/tasks/${taskId}`
+        `/api/tasks/${taskId}`
       )
       .subscribe({
 
@@ -3612,7 +3612,7 @@ export class ProjectsComponent implements OnInit {
 
     this.http
       .put(
-        `http://localhost:3000/api/tasks/${taskId}/assign`,
+        `/api/tasks/${taskId}/assign`,
         payload
       )
       .subscribe({

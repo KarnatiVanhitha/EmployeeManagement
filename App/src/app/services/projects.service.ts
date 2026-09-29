@@ -9,10 +9,10 @@ export class ProjectsService {
 
  
   constructor( private http:HttpClient) { }
-  private apiUrl = 'http://localhost:3000/api/projects';
-  private tasksUrl = 'http://localhost:3000/api/tasks';
-  private useCasesUrl = 'http://localhost:3000/api/usecases';
-  private sprintsUrl = 'http://localhost:3000/api/sprints';
+  private apiUrl = '/api/projects';
+  private tasksUrl = '/api/tasks';
+  private useCasesUrl = '/api/usecases';
+  private sprintsUrl = '/api/sprints';
 
   addProject(project: any) {
     return this.http.post(this.apiUrl, project);
@@ -24,7 +24,7 @@ export class ProjectsService {
 
   getJiraProjects() {
     return this.http.get<any>(
-      'http://localhost:3000/api/jira/projects',
+      '/api/jira/projects',
       {
         params: {
           maxResults: 100,
@@ -36,13 +36,13 @@ export class ProjectsService {
 
   getJiraIssueTypes(): Observable<any[]> {
     return this.http.get<any[]>(
-      'http://localhost:3000/api/jira/issue-types'
+      '/api/jira/issue-types'
     );
   }
 
   getJiraSpaces(params?: any): Observable<any> {
     return this.http.get<any>(
-      'http://localhost:3000/api/jira/spaces',
+      '/api/jira/spaces',
       {
         params: params || { limit: 100 }
       }
@@ -51,7 +51,7 @@ export class ProjectsService {
 
   getJiraEpics(projectId: string): Observable<any> {
     return this.http.get<any>(
-      'http://localhost:3000/api/jira/issues/search',
+      '/api/jira/issues/search',
       {
         params: {
           jql: `project = ${projectId} AND issuetype = Epic`,
@@ -63,7 +63,7 @@ export class ProjectsService {
 
   getJiraTasks(projectId: string): Observable<any> {
     return this.http.get<any>(
-      'http://localhost:3000/api/jira/issues/search',
+      '/api/jira/issues/search',
       {
         params: {
           jql: `project = ${projectId} AND issuetype in (Task, Story, Bug, "Sub-task") ORDER BY created DESC`,
@@ -75,7 +75,7 @@ export class ProjectsService {
 
   getJiraSprints(boardId: string = '100'): Observable<any> {
     return this.http.get<any>(
-      'http://localhost:3000/api/jira/sprints',
+      '/api/jira/sprints',
       {
         params: {
           boardId
@@ -86,7 +86,7 @@ export class ProjectsService {
 
   getJiraBoards(projectId: string): Observable<any> {
     return this.http.get<any>(
-      'http://localhost:3000/api/jira/boards',
+      '/api/jira/boards',
       {
         params: {
           projectKeyOrId: projectId,

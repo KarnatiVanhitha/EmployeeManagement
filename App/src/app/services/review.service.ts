@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ReviewService {
 
-  private apiUrl = 'http://localhost:3000/api/reviews';
+  private apiUrl = '/api/reviews';
 
   constructor(private http: HttpClient) { }
 

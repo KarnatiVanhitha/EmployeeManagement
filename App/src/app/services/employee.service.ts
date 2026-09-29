@@ -11,10 +11,10 @@ export class EmployeeService {
   // API URLS
   // =========================================================
 
-  private apiUrl = 'http://localhost:3000/api/employees';
+  private apiUrl = '/api/employees';
 
   private superAdminApiUrl =
-    'http://localhost:3000/api/SuperAdmins';
+    '/api/SuperAdmins';
 
 
   // =========================================================
@@ -109,7 +109,7 @@ export class EmployeeService {
   getRoles(): Observable<any[]> {
 
     return this.http.get<any[]>(
-      'http://localhost:3000/api/roles'
+      '/api/roles'
     );
 
   }
@@ -124,7 +124,7 @@ export class EmployeeService {
   ): Observable<any[]> {
 
     return this.http.get<any[]>(
-      `http://localhost:3000/api/roles/department/${departmentId}`
+      `/api/roles/department/${departmentId}`
     );
 
   }
@@ -137,7 +137,7 @@ export class EmployeeService {
   getDepartment(): Observable<any> {
 
     return this.http.get<any>(
-      'http://localhost:3000/api/departments'
+      '/api/departments'
     );
 
   }
@@ -148,7 +148,7 @@ export class EmployeeService {
   // =========================================================
   //
   // POST:
-  // http://localhost:3000/api/employees/login
+  // /api/employees/login
   //
   // data should contain whatever your backend expects,
   // for example:
@@ -177,7 +177,7 @@ export class EmployeeService {
   // =========================================================
   //
   // POST:
-  // http://localhost:3000/api/SuperAdmins/login
+  // /api/SuperAdmins/login
   //
   // =========================================================
 
