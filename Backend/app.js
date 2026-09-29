@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+const { normalizeLocalUrls } = require("./utils/normalizeLocalUrls");
 
 const { connectDB } = require("./config/db");
 
@@ -42,6 +43,19 @@ app.use(express.urlencoded({
     limit: "50mb"
 }));
 
+app.use("/api", (req, res, next) => {
+    if (req.path === "/jira" || req.path.startsWith("/jira/")) {
+        return next();
+    }
+
+    if (req.body && typeof req.body === "object") {
+        req.body = normalizeLocalUrls(req.body);
+    }
+
+    const sendJson = res.json.bind(res);
+    res.json = (body) => sendJson(normalizeLocalUrls(body));
+    next();
+});
 
 app.use("/api/managers", teamManagerRoutes);
 app.use("/api/employees", employeeRoutes);
@@ -137,8 +151,9 @@ async function startServer() {
         await initUseCaseTable();
         await initSprintTable();
 
-        app.listen(3000, () => {
-            console.log("Server running on port 3000");
+        const port = process.env.PORT || 3000;
+        app.listen(port, "0.0.0.0", () => {
+            console.log(`Server running on port ${port}`);
         });
 
     }
