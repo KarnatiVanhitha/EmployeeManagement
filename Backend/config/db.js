@@ -1,12 +1,14 @@
 const sql = require("mssql");
 
 const config = {
-    user: "desideaAdmin",
-    password: "De$ide@2019",
-    server: "desidea.database.windows.net",
-    database: "SCLANDEMP",
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    server: process.env.DB_SERVER,
+    database: process.env.DB_DATABASE,
+    port: Number(process.env.DB_PORT || 1433),
     options: {
-        trustServerCertificate: true
+        encrypt: true,
+        trustServerCertificate: process.env.DB_TRUST_SERVER_CERTIFICATE === "true"
     }
 };
 
