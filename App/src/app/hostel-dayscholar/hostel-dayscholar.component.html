@@ -1,0 +1,65 @@
+<div class="container-fluid py-4">
+  <div class="card rounded shadow-sm p-4 mx-auto w-100">
+    <h2 class="mb-4">Hostel / Dayscholar Student Lookup</h2>
+
+    <div class="row g-3 align-items-end mb-4">
+      <div class="col-md-4">
+        <label class="form-label">Student Type</label>
+        <select class="form-select" [(ngModel)]="selectedType" (change)="showStudents()">
+          <option value="">Select Type</option>
+          <option *ngFor="let type of typeOptions" [value]="type.value">{{ type.label }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Class</label>
+        <select class="form-select" [(ngModel)]="selectedClass" (change)="showStudents()">
+          <option value="">Select Class</option>
+          <option *ngFor="let cls of classes" [value]="cls">{{ cls }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Section</label>
+        <select class="form-select" [(ngModel)]="selectedSection" (change)="showStudents()">
+          <option value="">Select Section</option>
+          <option *ngFor="let section of sections" [value]="section">{{ section }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="filteredStudents.length; else noStudents">
+      <div class="mb-3 fw-semibold">
+        Showing {{ filteredStudents.length }} student{{ filteredStudents.length > 1 ? 's' : '' }} matching your selection.
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead class="table-secondary">
+            <tr>
+              <th>Roll No</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Class</th>
+              <th>Section</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of filteredStudents">
+              <td>{{ student.roll }}</td>
+              <td>{{ student.name }}</td>
+              <td>{{ student.type === 'hostel' ? 'Hostel' : 'Dayscholar' }}</td>
+              <td>{{ student.class }}</td>
+              <td>{{ student.section }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <ng-template #noStudents>
+      <div class="alert alert-info mb-0">
+        {{ infoMessage }}
+      </div>
+    </ng-template>
+  </div>
+</div>

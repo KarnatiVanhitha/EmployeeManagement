@@ -1,0 +1,331 @@
+<div class="container-fluid py-4 staff-page">
+
+  <div class="d-flex align-items-center gap-4 mb-4 search-wrapper">
+    <button
+      class="btn btn-link text-secondary text-decoration-none p-0 d-flex align-items-center filter-btn"
+    >
+      <span>Add filter</span>
+      <i class="bi bi-chevron-down ms-2 small"></i>
+    </button>
+
+    <div class="input-group search-box staff-search-box">
+      <span class="input-group-text bg-white border-0 ps-4">
+        <i class="bi bi-search text-muted"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control border-0 shadow-none"
+        placeholder="Search staff by name or email"
+      />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div *ngIf="staffList.length > 0; else emptyState" class="table-responsive bg-white rounded-4 p-3 shadow-sm staff-table-card">
+
+        <table class="table align-middle staff-table">
+
+          <thead class="table-light">
+
+            <tr>
+
+              <th>Name</th>
+              <th>Email</th>
+              <th>Class</th>
+              <th>Gender</th>
+              <th>Phone</th>
+              <th >View</th>
+              <th class="text-center">Delete</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <ng-container *ngFor="let item of staffList; let i = index">
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-3">
+                    <img
+                      [src]="item.image || 'assets/default.png'"
+                      class="rounded-circle border staff-avatar"
+                      width="45"
+                      height="45"
+                      alt="{{ item.firstName }}"
+                    >
+                    <div>
+                      <div class="fw-semibold">
+                        {{ item.firstName }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.class || 'N/A' }}</td>
+                <td>{{ item.gender }}</td>
+                <td>{{ item.phone }}</td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-light staff-action-btn"
+                    (click)="toggleDetails(i); $event.stopPropagation()"
+                  >
+                    <i class="bi"
+                      [ngClass]="expandedStaffIndex === i ? 'bi-chevron-down' : 'bi-chevron-right'"
+                    ></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button
+                    class="btn btn-sm staff-delete-btn"
+                    (click)="deleteStaff(i); $event.stopPropagation()"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="expandedStaffIndex === i">
+                <td colspan="9" class="details shadow-lg staff-details-panel">
+                  <div class="container mt-2">
+                    <div class="text-end mb-3">
+                      <button
+                      class="btn px-4 py-2 rounded-3 fw-semibold text-white editbutton staff-edit-btn"
+                      (click)="editStaff()">
+                                   Edit Profile
+
+                       </button>
+                    </div>
+                    <div *ngIf="isEditMode" class="card border-0 shadow-sm p-4 mt-3">
+
+  <h5 class="fw-bold mb-4">Edit Staff Details</h5>
+
+  <div class="row g-3">
+
+    <div class="col-md-6">
+      <label class="form-label">First Name</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="selectedStaff.firstName">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Last Name</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="selectedStaff.lastName">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        [(ngModel)]="selectedStaff.email">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Phone</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="selectedStaff.phone">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Gender</label>
+      <select
+        class="form-select"
+        [(ngModel)]="selectedStaff.gender">
+
+        <option>Male</option>
+        <option>Female</option>
+
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Salary</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="selectedStaff.salary">
+    </div>
+
+    <div class="col-md-12">
+      <label class="form-label">Address</label>
+      <textarea
+        class="form-control"
+        rows="3"
+        [(ngModel)]="selectedStaff.address">
+      </textarea>
+    </div>
+
+  </div>
+
+  <div class="mt-4 d-flex gap-2">
+
+    <button
+      class="btn btn-success"
+      (click)="updateStaff()">
+
+      <i class="bi bi-check-circle me-2"></i>
+      Save Changes
+
+    </button>
+
+    <button
+      class="btn btn-secondary"
+      (click)="isEditMode = false">
+
+      Cancel
+
+    </button>
+
+  </div>
+
+</div>
+
+                    <div class="card border-0 rounded-4 text-white p-4 profilecard staff-profile-card">
+                      <div class="row align-items-center">
+                        <div class="col-lg-8">
+                          <span class="badge bg-light text-primary px-3 py-2 mb-3">
+                            #{{ selectedStaff.teacherId || 'N/A' }}
+                          </span>
+
+                          <h2 class="fw-bold mb-3">
+                            {{ selectedStaff.firstName }} {{ selectedStaff.lastName }}
+                          </h2>
+
+                          <p class="mb-0 fs-5 text-light">
+                            {{ selectedStaff.qualification || 'Staff Member' }}
+                            <span class="text-warning mx-2">•</span>
+                            {{ selectedStaff.experience || 'Experience not available' }}
+                          </p>
+                        </div>
+
+                        <div class="col-lg-4 text-lg-end text-center mt-4 mt-lg-0">
+                          <img
+                            [src]="selectedStaff.image || 'assets/default.png'"
+                            class="rounded-3 border border-3 border-light staff-profile-image"
+                            width="110"
+                            height="110"
+                            alt="{{ selectedStaff.firstName }}"
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Duty Schedule & Performance -->
+<div class="row g-4 mt-4">
+
+  <!-- Duty Schedule -->
+  <div class="col-lg-6">
+    <div class="card border-0 rounded-4 p-4 shadow-sm staff-info-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Duty Schedule</h5>
+        <span class="badge bg-primary">Current Shift</span>
+      </div>
+
+      <table class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Shift</th>
+            <th>Time</th>
+            <th>Area</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Morning</td>
+            <td>06:00 AM - 02:00 PM</td>
+            <td>Main Gate</td>
+          </tr>
+          <tr>
+            <td>Evening</td>
+            <td>02:00 PM - 10:00 PM</td>
+            <td>Parking Area</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Assigned Duties -->
+  <div class="col-lg-6">
+    <div class="card border-0 rounded-4 p-4 shadow-sm staff-info-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Assigned Duties</h5>
+        <span class="badge bg-success">Today's Tasks</span>
+      </div>
+
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          Monitor visitor entries and exits.
+        </li>
+        <li class="list-group-item">
+          Maintain discipline in assigned area.
+        </li>
+        <li class="list-group-item">
+          Report incidents to administration.
+        </li>
+        <li class="list-group-item">
+          Complete daily duty checklist.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- Performance Remarks -->
+<div class="row g-4 mt-2">
+
+  <div class="col-12">
+    <div class="card border-0 rounded-4 p-4 shadow-sm staff-info-card">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Performance Remarks</h5>
+        <span class="badge bg-warning text-dark">
+          Monthly Review
+        </span>
+      </div>
+
+      <div class="alert alert-success staff-alert">
+        <strong>Positive:</strong> Excellent punctuality and attendance record.
+      </div>
+
+      <div class="alert alert-info staff-alert">
+        <strong>Supervisor Note:</strong> Maintains assigned area properly and follows instructions.
+      </div>
+
+      <div class="alert alert-warning staff-alert">
+        <strong>Improvement Needed:</strong> Ensure daily reports are submitted before shift completion.
+      </div>
+
+    </div>
+  </div>
+
+</div>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <ng-template #emptyState>
+        <div class="empty p-5 text-center">
+          <h3>No staff records found</h3>
+          <p class="mb-0">Add staff members to populate this list.</p>
+        </div>
+      </ng-template>
+
+    </div>
+
+  </div>
+
+</div>

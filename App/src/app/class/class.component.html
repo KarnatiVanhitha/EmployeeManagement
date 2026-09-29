@@ -1,0 +1,273 @@
+<!-- ================= SCHOOL CLASS MANAGEMENT UI ================= -->
+
+<div class="container-fluid bg-light min-vh-100 p-4">
+
+  <!-- HEADER -->
+  <div class="mb-4">
+    <h3 class="fw-bold">Classes</h3>
+    <p class="text-secondary mb-0">
+      Select class → section → student
+    </p>
+  </div>
+
+  <!-- ================= CLASS CARDS ================= -->
+  <div class="row g-4 mb-4">
+
+    <!-- CLASS CARD -->
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6"
+         *ngFor="let cls of classes">
+
+      <div
+        class="card border-0 shadow-sm rounded-4 p-4 class-card"
+        [class.active-class]="selectedClass === cls.name"
+        (click)="selectClass(cls)"
+      >
+
+        <div class="text-center">
+
+          <div class="class-icon mx-auto mb-3">
+            <i class="bi bi-mortarboard-fill"></i>
+          </div>
+
+          <h5 class="fw-bold mb-1">
+            {{cls.name}}
+          </h5>
+
+          <p class="text-secondary mb-0">
+            {{cls.students}} Students
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= SECTION DROPDOWN ================= -->
+
+  <div
+    class="card border-0 shadow-sm rounded-4 p-4 mb-4"
+    *ngIf="selectedClass"
+  >
+
+    <div class="row align-items-end">
+
+      <div class="col-lg-4">
+
+        <label class="fw-semibold mb-2">
+          Select Section
+        </label>
+
+        <select
+          class="form-select py-3 rounded-3"
+          [(ngModel)]="selectedSection"
+        >
+
+          <option value="">
+            Choose Section
+          </option>
+
+          <option
+            *ngFor="let section of sections"
+            [value]="section"
+          >
+            {{section}}
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= STUDENT LIST ================= -->
+
+  <div
+    class="card border-0 shadow-sm rounded-4 p-4"
+    *ngIf="selectedSection"
+  >
+
+    <!-- TITLE -->
+    <div class="mb-4">
+
+      <h4 class="fw-bold mb-1">
+        Students
+      </h4>
+
+      <p class="text-secondary mb-0">
+        {{selectedClass}} - {{selectedSection}}
+      </p>
+
+    </div>
+
+    <!-- STUDENTS -->
+    <div class="row g-4">
+
+      <div
+        class="col-lg-4 col-md-6"
+        *ngFor="let student of students"
+      >
+
+        <div
+          class="card border-0 shadow-sm rounded-4 p-3 student-card"
+          (click)="viewStudent(student)"
+        >
+
+          <div class="d-flex align-items-center gap-3">
+
+            <img
+              [src]="student.image"
+              class="rounded-circle"
+              width="65"
+              height="65"
+            >
+
+            <div>
+
+              <h5 class="fw-bold mb-1">
+                {{student.name}}
+              </h5>
+
+              <p class="text-secondary mb-1">
+                Roll No : {{student.roll}}
+              </p>
+
+              <span class="badge bg-success-subtle text-success">
+                Active
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= STUDENT DETAILS ================= -->
+
+  <div
+    class="card border-0 shadow-sm rounded-4 p-4 mt-4"
+    *ngIf="selectedStudent"
+  >
+
+    <div class="row align-items-center">
+
+      <!-- IMAGE -->
+      <div class="col-lg-3 text-center mb-4 mb-lg-0">
+
+        <img
+          [src]="selectedStudent.image"
+          class="rounded-circle shadow"
+          width="150"
+          height="150"
+        >
+
+      </div>
+
+      <!-- DETAILS -->
+      <div class="col-lg-9">
+
+        <div class="d-flex justify-content-between flex-wrap">
+
+          <div>
+
+            <h3 class="fw-bold mb-1">
+              {{selectedStudent.name}}
+            </h3>
+
+            <p class="text-secondary">
+              Roll No : {{selectedStudent.roll}}
+            </p>
+
+          </div>
+
+          <span class="badge bg-primary px-4 py-3 h-100">
+            {{selectedClass}}
+          </span>
+
+        </div>
+
+        <div class="row mt-4 g-4">
+
+          <div class="col-md-3">
+
+            <div class="border rounded-4 p-3 text-center">
+
+              <h6 class="text-secondary">
+                Attendance
+              </h6>
+
+              <h4 class="fw-bold text-success">
+                92%
+              </h4>
+
+            </div>
+
+          </div>
+
+          <div class="col-md-3">
+
+            <div class="border rounded-4 p-3 text-center">
+
+              <h6 class="text-secondary">
+                Grade
+              </h6>
+
+              <h4 class="fw-bold">
+                A+
+              </h4>
+
+            </div>
+
+          </div>
+
+          <div class="col-md-3">
+
+            <div class="border rounded-4 p-3 text-center">
+
+              <h6 class="text-secondary">
+                Fees
+              </h6>
+
+              <h4 class="fw-bold text-success">
+                Paid
+              </h4>
+
+            </div>
+
+          </div>
+
+          <div class="col-md-3">
+
+            <div class="border rounded-4 p-3 text-center">
+
+              <h6 class="text-secondary">
+                Rank
+              </h6>
+
+              <h4 class="fw-bold text-primary">
+                #5
+              </h4>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

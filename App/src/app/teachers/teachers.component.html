@@ -1,0 +1,1269 @@
+<div class="container-fluid bg-light vh-100 p-4">
+
+ 
+  <!-- ================= SEARCH ================= -->
+
+<div class="d-flex align-items-center gap-4 mb-4 search-wrapper">
+
+  <!-- Filter Button -->
+ <button
+  class="btn btn-link text-secondary text-decoration-none p-0 d-flex align-items-center filter-btn"
+>
+  <span>Add filter</span>
+  <i class="bi bi-chevron-down ms-2 small"></i>
+</button>
+
+  <!-- Search Box -->
+  <div class="input-group search-box">
+
+    <span class="input-group-text bg-white border-0 ps-4">
+      <i class="bi bi-search text-muted"></i>
+    </span>
+
+    <input
+      type="text"
+      class="form-control border-0 shadow-none"
+      placeholder="Search for a student by name or email"
+    >
+
+  </div>
+
+</div>
+
+  <!-- ================= CONTENT ================= -->
+
+  <div class="row">
+
+    <!-- ================= TABLE ================= -->
+
+    <div
+      class="col-12"
+      *ngIf="!selectedTeacher"
+    >
+
+      <div
+        *ngIf="teachers.length > 0; else emptyState"
+        class="table-responsive bg-white rounded-4 p-3 shadow-sm"
+      >
+
+        <table class="table align-middle">
+
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Class</th>
+      <th>Gender</th>
+      <th>Phone</th>
+      <th>Subject</th>
+      <th >View</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+
+ <tbody>
+
+  <ng-container *ngFor="let t of teachers">
+
+    <!-- MAIN ROW -->
+    <tr >
+
+      <td>
+        <div class="d-flex align-items-center gap-3">
+      
+          <img [src]="t.image" class="rounded-circle" width="42" height="42">
+        <span>{{ t.firstName }} {{ t.lastName }}</span>
+        </div>
+      </td>
+
+      <td>{{ t.email }}</td>
+      <td>{{ t.class }}</td>
+      <td>{{ t.gender }}</td>
+      <td>{{ t.phone }}</td>
+      <td>{{ t.subject }}</td>
+
+      <!-- ACTION -->
+      <td>
+        <button class="btn btn-sm btn-light"
+                (click)="toggleDropdown(t.id); $event.stopPropagation()">
+
+          <i class="bi"
+             [ngClass]="expandedTeacherId === t.id ? 'bi-chevron-down' : 'bi-chevron-right'">
+          </i>
+
+        </button>
+      </td>
+
+      <!-- DELETE -->
+      <td>
+        <button class="btn btn-sm btn-danger"
+                (click)="removeTeacher(t.id); $event.stopPropagation()">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+
+    </tr>
+
+    <!-- DROPDOWN ROW -->
+    <tr *ngIf="expandedTeacherId === t.id">
+
+      <td colspan="9" class="details shadow-lg">
+  
+  <div class="container mt-2">
+
+  <!-- EDIT BUTTON OUTSIDE CARD -->
+  <div class="text-end mb-3 ">
+<button
+  class="btn px-4 py-2 rounded-3 fw-semibold edit-btn text-white"
+  data-bs-toggle="modal"
+  data-bs-target="#editTeacherModal"
+  (click)="openEditModal(t)">
+  Edit Profile
+</button>
+  </div>
+<!-- Edit Teacher Modal -->
+<div class="modal fade" id="editTeacherModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Teacher Profile</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label class="form-label">Full Name</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editTeacher.firstName">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              [(ngModel)]="editTeacher.email">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Phone</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editTeacher.phone">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Gender</label>
+            <select
+              class="form-select"
+              [(ngModel)]="editTeacher.gender">
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Class</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editTeacher.class">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Subject</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editTeacher.subject">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Image URL</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editTeacher.image">
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="saveTeacher()"
+          data-bs-dismiss="modal">
+          Save Changes
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+  <!-- PROFILE CARD -->
+  <div class="card border-0 rounded-4  text-white p-4 profilecard">
+
+    <div class="row align-items-center">
+
+      <!-- LEFT SIDE DETAILS -->
+      <div class="col-lg-8">
+
+        <span class="badge bg-light text-primary px-3 py-2 mb-3">
+          &#35;{{t.id}}
+        </span>
+
+        <h2 class="fw-bold mb-3">
+          {{t.firstName }} {{t.lastName}}
+        </h2>
+
+        <p class="mb-0 fs-5 text-light">
+          Classes : {{ t.class }}
+          <span class="text-warning mx-2">•</span>
+          {{ t.subject }}
+        </p>
+
+      </div>
+
+      <!-- RIGHT SIDE IMAGE -->
+      <div class="col-lg-4 text-lg-end text-center mt-4 mt-lg-0">
+
+        <img
+          [src]="t.image || 'assets/default.png'"
+          class="rounded-3 border border-3 border-light"
+          width="110"
+          height="110"
+          style="object-fit: cover;"
+        >
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<div class="container-fluid mt-4">
+
+  <div class="row g-4">
+
+    <!-- ================= TODAY'S CLASSES ================= -->
+    <div class="col-12 col-xl-8">
+
+      <div class="card border-0 shadow-sm h-100 ">
+
+        <!-- HEADER -->
+        <div
+          class="card-header  border-0 p-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3"
+        >
+
+          <h4 class="fw-bold mb-0">
+            Today's Classes
+          </h4>
+
+          <!-- DATE CONTROLS -->
+          <div class="d-flex align-items-center gap-3">
+
+            <!-- PREVIOUS -->
+            <button
+              class="btn btn-light border rounded-circle d-flex align-items-center justify-content-center"
+              (click)="changeDate(-1)"
+              style="width: 20px; height: 20px;"
+            >
+              <i class="bi bi-chevron-left"></i>
+            </button>
+
+            <!-- DATE -->
+            <span class="fw-semibold fs-5 text-secondary date">
+              {{ todayDate | date:'dd MMM yyyy' }}
+            </span>
+
+            <!-- NEXT -->
+            <button
+              class="btn btn-light border rounded-circle d-flex align-items-center justify-content-center"
+              (click)="changeDate(1)"
+              style="width: 20px; height: 20px;"
+            >
+              <i class="bi bi-chevron-right"></i>
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- CLASS LIST -->
+        <div class="card-body p-4 ">
+
+          <div class="row g-4">
+
+            <!-- CARD 1 -->
+            <div class="col-12 col-md-6 col-lg-3">
+
+              <div class="bg-light rounded-4 p-4 h-100">
+
+                <div class="badge bg-danger fs-6 fw-semibold px-2 py-2 rounded-3 mb-3 d-flex align-items-center">
+                  <i class="bi bi-clock me-2"></i>
+                     <span>09:00 - 09:45</span>
+                  </div>
+
+                <h5 class="mb-1 fw-semibold">
+                  Class V, B
+                </h5>
+
+                <p class="text-secondary mb-0">
+                  Mathematics
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- CARD 2 -->
+            <div class="col-12 col-md-6 col-lg-3">
+
+              <div class="bg-light rounded-4 p-4 h-100">
+
+                <div
+                  class="badge bg-danger fs-6 fw-semibold px-2 py-2 rounded-3 mb-3 d-flex align-items-center"
+                >
+                  <i class="bi bi-clock me-2"></i>
+                  <span>10:00 - 10:45</span>
+                </div>
+
+                <h5 class="mb-1 fw-semibold">
+                  Class IV, C
+                </h5>
+
+                <p class="text-secondary mb-0">
+                  English
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- CARD 3 -->
+            <div class="col-12 col-md-6 col-lg-3">
+
+              <div class="bg-light rounded-4 p-4 h-100">
+
+                <div
+                  class="badge bg-primary fs-6 fw-semibold px-3 py-2 rounded-3 mb-3 d-flex align-items-center"
+                >
+                 <i class="bi bi-clock me-2"></i>
+                 <span>12:00-12:45</span>
+                </div>
+
+                <h5 class="mb-1 fw-semibold">
+                  Class VI, A
+                </h5>
+
+                <p class="text-secondary mb-0">
+                  Science
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- CARD 4 -->
+            <div class="col-12 col-md-6 col-lg-3">
+
+              <div class="bg-light rounded-4 p-4 h-100">
+
+                <div
+                  class="badge bg-primary fs-6 fw-semibold px-3 py-2 rounded-3 mb-3 d-flex align-items-center"
+                >
+                  <i class="bi bi-clock me-2"></i>
+                 <span>01:00 - 2:15</span>
+                </div>
+
+                <h5 class="mb-1 fw-semibold">
+                  Class VII, D
+                </h5>
+
+                <p class="text-secondary mb-0">
+                  Social
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================= SYLLABUS ================= -->
+    <div class="col-12 col-xl-4">
+
+      <div class="card border-0 shadow-sm h-100">
+
+        <!-- HEADER -->
+        <div class="card-header bg-white border-0 p-4">
+
+          <h4 class="fw-bold mb-0">
+            Syllabus Progress
+          </h4>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body p-4">
+
+          <!-- SUBJECT -->
+          <div class="mb-4">
+
+            <div class="d-flex justify-content-between mb-2">
+
+              <span class="fw-semibold">
+                Mathematics
+              </span>
+
+              <span class="fw-bold text-primary">
+                90%
+              </span>
+
+            </div>
+
+            <div class="progress rounded-pill" style="height: 10px;">
+
+              <div
+                class="progress-bar bg-primary"
+                role="progressbar"
+                style="width: 90%;"
+              ></div>
+
+            </div>
+
+          </div>
+
+          <!-- SUBJECT -->
+          <div class="mb-4">
+
+            <div class="d-flex justify-content-between mb-2">
+
+              <span class="fw-semibold">
+                Science
+              </span>
+
+              <span class="fw-bold text-success">
+                75%
+              </span>
+
+            </div>
+
+            <div class="progress rounded-pill" style="height: 10px;">
+
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                style="width: 75%;"
+              ></div>
+
+            </div>
+
+          </div>
+
+          <!-- SUBJECT -->
+          <div class="mb-4">
+
+            <div class="d-flex justify-content-between mb-2">
+
+              <span class="fw-semibold">
+                English
+              </span>
+
+              <span class="fw-bold text-danger">
+                50%
+              </span>
+
+            </div>
+
+            <div class="progress rounded-pill" style="height: 10px;">
+
+              <div
+                class="progress-bar bg-danger"
+                role="progressbar"
+                style="width: 50%;"
+              ></div>
+
+            </div>
+
+          </div>
+
+          <!-- SUBJECT -->
+          <div>
+
+            <div class="d-flex justify-content-between mb-2">
+
+              <span class="fw-semibold">
+                Social
+              </span>
+
+              <span class="fw-bold text-warning">
+                65%
+              </span>
+
+            </div>
+
+            <div class="progress rounded-pill" style="height: 10px;">
+
+              <div
+                class="progress-bar bg-warning"
+                role="progressbar"
+                style="width: 65%;"
+              ></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<div class="container-fluid mt-4">
+
+  <div class="row g-4">
+
+    <!-- ================= ATTENDANCE ================= -->
+    <div class="col-12 col-xl-6">
+
+      <div class="card border-0 shadow-sm h-100">
+
+        <!-- HEADER -->
+        <div
+          class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center"
+        >
+
+          <h4 class="fw-bold mb-0">
+            Attendance
+          </h4>
+
+          <button class="btn btn-light border rounded-3 px-3">
+            <i class="bi bi-calendar-week me-2"></i>
+            <span>This Week</span>
+          </button>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body p-4">
+
+          <!-- LAST 7 DAYS -->
+          <div class="border rounded-4 p-4 mb-2">
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+
+              <h5 class="fw-semibold mb-0">
+                Last 7 Days
+              </h5>
+
+              <span class="text-secondary">
+                14 May 2024 - 21 May 2024
+              </span>
+
+            </div>
+
+            <!-- DAYS -->
+            <div class="d-flex gap-2 flex-wrap">
+
+              <div
+                class="bg-success text-white rounded-3 d-flex align-items-center justify-content-center fw-bold"
+                style="width: 24px; height: 24px;"
+              >
+                <span>M</span>
+              </div>
+
+              <div
+                class="bg-success text-white rounded-3 d-flex align-items-center justify-content-center fw-bold"
+                style="width: 24px; height: 24px;"
+              >
+                <span>T</span>
+              </div>
+
+              <div
+                class="bg-success text-white rounded-3 d-flex align-items-center justify-content-center fw-bold"
+                style="width: 24px; height: 24px;"
+              >
+               <span>W</span>
+              </div>
+
+              <div
+                class="bg-success text-white rounded-3 d-flex align-items-center justify-content-center fw-bold"
+                style="width: 24px; height: 24px;"
+              >
+                <span>T</span>
+              </div>
+
+              <div
+                class="bg-danger text-white rounded-3 d-flex align-items-center justify-content-center fw-bold"
+                style="width: 24px; height: 24px;"
+              >
+                <span>F</span>
+              </div>
+
+              <div
+                class="bg-light border rounded-3 d-flex align-items-center justify-content-center fw-bold text-secondary"
+                style="width: 24px; height: 24px;"
+              >
+               <span>S</span>
+              </div>
+
+              <div
+                class="bg-light border rounded-3 d-flex align-items-center justify-content-center fw-bold text-secondary"
+                style="width: 24px; height: 24px;"
+              >
+               <span>S</span>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- TOTAL WORKING DAYS -->
+          <div class="d-flex align-items-center gap-2 mb-4">
+
+            <i class="bi bi-calendar-check text-primary"></i>
+
+            <span class="text-secondary">
+              No of total working days
+              <strong class="text-dark">28 Days</strong>
+            </span>
+
+          </div>
+
+          <!-- STATUS -->
+          <div class="border rounded-4 p-4 mb-4">
+
+            <div class="row text-center">
+
+              <div class="col-3 border-end">
+                <h5 class="mb-2">Present</h5>
+                <h3 class="fw-bold text-success">25</h3>
+              </div>
+
+              <div class="col-3 border-end">
+                <h5 class="mb-2">Absent</h5>
+                <h3 class="fw-bold text-danger">2</h3>
+              </div>
+
+              <div class="col-3 border-end">
+                <h5 class="mb-2">Halfday</h5>
+                <h3 class="fw-bold text-warning">0</h3>
+              </div>
+
+              <div class="col-3">
+                <h5 class="mb-2">Late</h5>
+                <h3 class="fw-bold text-primary">1</h3>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- CIRCLE -->
+          <div class="d-flex justify-content-center">
+
+            <div class="attendance-circle"></div>
+
+          </div>
+
+          <!-- LEGEND -->
+          <div class="d-flex justify-content-center gap-4 mt-4 flex-wrap">
+
+            <div class="d-flex align-items-center gap-2">
+              <span class="legend bg-success"></span>
+              <small>Present</small>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <span class="legend bg-primary"></span>
+              <small>Late</small>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <span class="legend bg-warning"></span>
+              <small>Half Day</small>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <span class="legend bg-danger"></span>
+              <small>Absent</small>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================= UPCOMING EVENTS ================= -->
+    <div class="col-12 col-xl-6">
+
+      <div class="card border-0 shadow-sm h-100">
+
+        <!-- HEADER -->
+        <div class="card-header bg-white border-0 p-4">
+
+          <h4 class="fw-bold mb-0">
+            Upcoming Events
+          </h4>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body p-4">
+
+          <!-- EVENT -->
+          <div class="border-start border-4 border-danger ps-4 mb-4">
+
+            <div class="bg-light rounded-4 p-4">
+
+              <div class="d-flex justify-content-between align-items-start">
+
+                <div>
+
+                  <h5 class="fw-bold mb-2">
+                    Vacation Meeting
+                  </h5>
+
+                  <p class="text-secondary mb-3">
+                    <i class="bi bi-calendar-event me-2"></i>
+                    07 July 2024
+                  </p>
+
+                  <p class="text-secondary mb-0">
+                    <i class="bi bi-clock me-2"></i>
+                    09:10 AM - 10:50 PM
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- EVENT -->
+          <div class="border-start border-4 border-info ps-4 mb-4">
+
+            <div class="bg-light rounded-4 p-4">
+
+              <h5 class="fw-bold mb-2">
+                Parents Teacher Meet
+              </h5>
+
+              <p class="text-secondary mb-3">
+                <i class="bi bi-calendar-event me-2"></i>
+                15 July 2024
+              </p>
+
+              <p class="text-secondary mb-0">
+                <i class="bi bi-clock me-2"></i>
+                09:10 AM - 10:50 PM
+              </p>
+
+            </div>
+
+          </div>
+
+          <!-- EVENT -->
+          <div class="border-start border-4 border-primary ps-4">
+
+            <div class="bg-light rounded-4 p-4">
+
+              <h5 class="fw-bold mb-2">
+                Staff Meeting
+              </h5>
+
+              <p class="text-secondary mb-3">
+                <i class="bi bi-calendar-event me-2"></i>
+                10 July 2024
+              </p>
+
+              <p class="text-secondary mb-0">
+                <i class="bi bi-clock me-2"></i>
+                09:10 AM - 10:50 PM
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<div class="container-fluid mt-4">
+
+  <div class="row g-4">
+
+    <!-- ================= BEST PERFORMERS ================= -->
+    <div class="col-12 col-xl-6">
+
+      <div class="card border-0 shadow-sm h-100">
+
+        <!-- HEADER -->
+        <div
+          class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center"
+        >
+
+          <h4 class="fw-bold mb-0">
+            Best Performers
+          </h4>
+
+          <a routerLink="#" class="text-decoration-none fw-semibold">
+            View All
+          </a>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body p-4">
+
+          <!-- ITEM -->
+          <div class="mb-5">
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+
+              <h6 class="fw-semibold mb-0">
+                Class IV, C
+              </h6>
+
+              <span class="badge bg-light text-dark rounded-pill px-3 py-2">
+                80%
+              </span>
+
+            </div>
+
+            <div class="progress rounded-pill" style="height: 10px;">
+
+              <div
+                class="progress-bar bg-primary rounded-pill"
+                role="progressbar"
+                style="width: 80%;"
+              ></div>
+
+            </div>
+
+          </div>
+
+          <!-- ITEM -->
+          <div class="mb-5">
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+
+              <h6 class="fw-semibold mb-0">
+                Class III, B
+              </h6>
+
+              <span class="badge bg-light text-dark rounded-pill px-3 py-2">
+                54%
+              </span>
+
+            </div>
+
+            <div class="progress rounded-pill" style="height: 10px;">
+
+              <div
+                class="progress-bar bg-warning rounded-pill"
+                role="progressbar"
+                style="width: 54%;"
+              ></div>
+
+            </div>
+
+          </div>
+
+          <!-- ITEM -->
+          <div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+
+              <h6 class="fw-semibold mb-0">
+                Class V, A
+              </h6>
+
+              <span class="badge bg-light text-dark rounded-pill px-3 py-2">
+                78%
+              </span>
+
+            </div>
+
+            <div class="progress rounded-pill" style="height: 10px;">
+
+              <div
+                class="progress-bar bg-info rounded-pill"
+                role="progressbar"
+                style="width: 78%;"
+              ></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================= STUDENT PROGRESS ================= -->
+    <div class="col-12 col-xl-6">
+
+      <div class="card border-0 shadow-sm h-100">
+
+        <!-- HEADER -->
+        <div
+          class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center"
+        >
+
+          <h4 class="fw-bold mb-0">
+            Student Progress
+          </h4>
+
+          <button class="btn btn-light border rounded-3 px-3">
+            <i class="bi bi-calendar-event me-2"></i>
+            <span>This Month</span>
+          </button>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body p-4">
+
+          <!-- STUDENT -->
+          <div
+            class="border rounded-4 p-2 mb-4 d-flex justify-content-between align-items-center"
+          >
+
+            <div class="d-flex align-items-center gap-3">
+
+              <img
+                src="https://randomuser.me/api/portraits/women/44.jpg"
+                class="rounded-3"
+                width="40"
+                height="40"
+              />
+
+              <div>
+
+                <h5 class="fw-semibold mb-1">
+                  Susan Boswell
+                </h5>
+
+                <p class="text-secondary mb-0">
+                  III, B
+                </p>
+
+              </div>
+
+            </div>
+
+            <span class="badge bg-success fs-6 px-3 py-2">
+              98%
+            </span>
+
+          </div>
+
+          <!-- STUDENT -->
+          <div
+            class="border rounded-4 p-2 mb-4 d-flex justify-content-between align-items-center"
+          >
+
+            <div class="d-flex align-items-center gap-3">
+
+              <img
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                class="rounded-3"
+                width="40"
+                height="40"
+              />
+
+              <div>
+
+                <h5 class="fw-semibold mb-1">
+                  Richard Mayes
+                </h5>
+
+                <p class="text-secondary mb-0">
+                  V, A
+                </p>
+
+              </div>
+
+            </div>
+
+            <span class="badge bg-success fs-6 px-3 py-2">
+              98%
+            </span>
+
+          </div>
+
+          <!-- STUDENT -->
+          <div
+            class="border rounded-4 p-2 d-flex justify-content-between align-items-center"
+          >
+
+            <div class="d-flex align-items-center gap-3">
+
+              <img
+                src="https://randomuser.me/api/portraits/women/68.jpg"
+                class="rounded-3"
+                width="40"
+                height="40"
+              />
+
+              <div>
+
+                <h5 class="fw-semibold mb-1">
+                  Veronica Randle
+                </h5>
+
+                <p class="text-secondary mb-0">
+                  V, B
+                </p>
+
+              </div>
+
+            </div>
+
+            <span class="badge bg-primary fs-6 px-3 py-2">
+              78%
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<div class="container py-4 Syllabus">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold mb-0">Syllabus / Lesson Plan</h4>
+   <button
+  class="btn btn-outline-primary btn-sm"
+  (click)="showAllSyllabus = !showAllSyllabus">
+
+  {{ showAllSyllabus ? 'Show Less' : 'View All' }}
+
+</button>
+  </div>
+
+  <!-- Cards Row -->
+  <div class="row g-3">
+
+    <!-- Card 1 -->
+    <div class="col-lg-3 col-md-6">
+      <div class="card h-100 border">
+
+        <div class="text-center fw-bold p-3 rounded m-3 bg-success-subtle text-success">
+          <h5>Class V, B</h5>
+        </div>
+
+        <div class="card-body">
+          <h6 class="fw-semibold mb-3">
+            Introduction Note to Physics on Tech
+          </h6>
+
+          <div class="progress mb-3" style="height:6px;">
+            <div class="progress-bar bg-success" style="width:80%"></div>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <a routerLink="#" class="text-dark text-decoration-none">
+              <i class="bi bi-pencil-square"></i> Reschedule
+            </a>
+            <a routerLink="#" class="text-primary text-decoration-none">
+              <i class="bi bi-share"></i> Share
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col-lg-3 col-md-6">
+      <div class="card h-100 border">
+
+        <div class="text-center fw-bold p-3 rounded m-3 bg-warning-subtle text-warning">
+          <h5> Class V, A</h5>
+        </div>
+
+        <div class="card-body">
+          <h6 class="fw-semibold mb-3">
+            Biometric & their Working Functionality
+          </h6>
+
+          <div class="progress mb-3" style="height:6px;">
+            <div class="progress-bar bg-warning" style="width:80%"></div>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <a routerLink="#" class="text-dark text-decoration-none">
+              <i class="bi bi-pencil-square"></i> Reschedule
+            </a>
+            <a routerLink="#" class="text-primary text-decoration-none">
+              <i class="bi bi-share"></i> Share
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-lg-3 col-md-6">
+      <div class="card h-100 border">
+
+        <div class="text-center fw-bold p-3 rounded m-3 bg-primary-subtle text-primary">
+        <h5>  Class IV, C</h5>
+        </div>
+
+        <div class="card-body">
+          <h6 class="fw-semibold mb-3">
+            Analyze and interpret literary texts skills
+          </h6>
+
+          <div class="progress mb-3" style="height:6px;">
+            <div class="progress-bar bg-primary" style="width:80%"></div>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <a routerLink="#" class="text-dark text-decoration-none">
+              <i class="bi bi-pencil-square"></i> Reschedule
+            </a>
+            <a routerLink="#" class="text-primary text-decoration-none">
+              <i class="bi bi-share"></i> Share
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="col-lg-3 col-md-6">
+      <div class="card h-100 border">
+
+        <div class="text-center fw-bold p-3 rounded m-3 bg-danger-subtle text-danger">
+          <h5>Class V, A</h5>
+        </div>
+
+        <div class="card-body">
+          <h6 class="fw-semibold mb-3">
+            Enhance vocabulary and grammar skills
+          </h6>
+
+          <div class="progress mb-3" style="height:6px;">
+            <div class="progress-bar bg-danger" style="width:30%"></div>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <a routerLink="#" class="text-dark text-decoration-none">
+              <i class="bi bi-pencil-square"></i> Reschedule
+            </a>
+            <a routerLink="#" class="text-primary text-decoration-none">
+              <i class="bi bi-share"></i> Share
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+      </td>
+
+    </tr>
+
+  </ng-container>
+
+</tbody>
+
+</table>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= EMPTY ================= -->
+  <ng-template #emptyState>
+
+    <div class="d-flex flex-column justify-content-center align-items-center text-center empty"
+         style="height:400px;">
+
+      <h3 class="fw-bold text-dark">
+        No Teachers at this time
+      </h3>
+
+      <p class="text-secondary mt-2">
+        Teachers will appear here after they enroll in school.
+      </p>
+
+      <button class="btn text-white rounded-pill px-4 py-2 position-fixed bottom-0 end-0 m-4"
+              style="background:#0e1b63;">
+
+        <i class="bi bi-headset me-2"></i>
+
+        Support
+
+      </button>
+
+    </div>
+
+  </ng-template>
+
+</div>

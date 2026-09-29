@@ -1,0 +1,266 @@
+/* =========================================
+   GLOBAL
+========================================= */
+
+.students-page{
+  width:100%;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+.object-fit-cover{
+  object-fit:cover;
+}
+
+.table-responsive{
+  overflow-x:auto;
+  width:100%;
+}
+
+.table{
+  width:100%;
+  margin-bottom:0;
+}
+
+.table th,
+.table td{
+  vertical-align:middle !important;
+  white-space:nowrap;
+}
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.search-wrapper{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  width:100%;
+}
+
+.search-box{
+  flex:1;
+}
+
+.search-input{
+  border-radius:12px 0 0 12px;
+}
+
+/* =========================================
+   DROPDOWN DETAILS
+========================================= */
+
+.table tbody tr td[colspan]{
+  padding:0 !important;
+  border:none !important;
+}
+
+.table tbody tr td[colspan] .container-fluid{
+  width:100%;
+  padding:24px !important;
+}
+
+/* =========================================
+   PROFILE HEADER
+========================================= */
+
+.profile-header{
+  background-image: url('https://tse1.mm.bing.net/th/id/OIP.pxZ82hP2jtRByGg9duaEGgHaEK?rs=1&pid=ImgDetMain&o=7&rm=3');
+  background-size: cover;
+  background-position: center;
+  border-radius:20px;
+  padding:24px;
+  color:white;
+}
+
+.profile-img{
+  width:100px;
+  height:100px;
+  object-fit:cover;
+  border-radius:16px;
+}
+
+.student-profile-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.bg-white.rounded-4.shadow-sm,
+.card.border-0.shadow-sm{
+  border-radius:20px !important;
+}
+
+.card{
+  overflow:hidden;
+}
+
+/* =========================================
+   ATTENDANCE
+========================================= */
+
+.attendance-circle{
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  background:
+  conic-gradient(
+    green 0% 75%,
+    red 75% 90%,
+    #dee2e6 90% 100%
+  );
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:auto;
+}
+
+.attendance-inner{
+  width:140px;
+  height:140px;
+  background:#fff;
+  border-radius:50%;
+}
+
+/* =========================================
+   PARENT CARDS
+========================================= */
+
+.parent-card,
+.guardian-card{
+  height:100%;
+}
+
+.parent-card .border,
+.guardian-card .border{
+  height:100%;
+}
+
+/* =========================================
+   FACULTY CARDS
+========================================= */
+
+.faculty-card{
+  height:100%;
+}
+
+.faculty-card img{
+  object-fit:cover;
+}
+
+/* =========================================
+   EXAM CARDS
+========================================= */
+
+.exam-card{
+  height:100%;
+}
+ .table th {
+  font-family: 'Kumbh Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #4F4F4F;
+}
+
+.table td {
+  font-family: 'Kumbh Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #4F4F4F;
+}
+/* =========================================
+   BUTTONS
+========================================= */
+
+.student-action-buttons{
+  display:flex;
+  gap:16px;
+}
+
+.student-action-buttons .btn{
+  flex:1;
+}
+
+/* =========================================
+   ROW FIX
+========================================= */
+
+.row.g-4{
+  --bs-gutter-x:1.5rem;
+  --bs-gutter-y:1.5rem;
+}
+
+/* =========================================
+   LAPTOP
+========================================= */
+
+@media(max-width:1200px){
+
+  .profile-img{
+    width:90px;
+    height:90px;
+  }
+
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media(max-width:992px){
+
+  .search-wrapper{
+    flex-wrap:wrap;
+  }
+
+  .table{
+    min-width:900px;
+  }
+
+  .student-profile-header{
+    flex-direction:column;
+    text-align:center;
+  }
+
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:768px){
+
+  .students-page{
+    min-height:auto;
+  }
+
+  .search-wrapper{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .search-box{
+    width:100%;
+  }
+
+  .profile-img{
+    width:80px;
+    height:80px;
+  }
+
+  .table{
+    min-width:950px;
+  }
+
+  .student-action-buttons{
+    flex-direction:column;
+  }
+
+}

@@ -1,0 +1,241 @@
+<div class="settings-profile-page">
+  <div class="page-header">
+    <h2>Settings & Profile</h2>
+    <p>Manage account details, preferences, security, notifications, and activity from one dashboard.</p>
+  </div>
+
+  <div class="tabs-wrapper">
+    <button type="button" class="tab-button" [class.active]="activeTab === 'profile'" (click)="selectTab('profile')">Profile</button>
+    <button type="button" class="tab-button" [class.active]="activeTab === 'preferences'" (click)="selectTab('preferences')">Preferences</button>
+    <button type="button" class="tab-button" [class.active]="activeTab === 'security'" (click)="selectTab('security')">Security</button>
+    <button type="button" class="tab-button" [class.active]="activeTab === 'notifications'" (click)="selectTab('notifications')">Notifications</button>
+    <button type="button" class="tab-button" [class.active]="activeTab === 'activity'" (click)="selectTab('activity')">Activity</button>
+  </div>
+
+  <div class="main-grid">
+    <aside class="summary-panel">
+      <div class="profile-card summary-card">
+        <div class="profile-avatar">
+  <img
+    [src]="profile.image || 'assets/default-avatar.png'"
+    alt="Profile Image"
+    class="profile-image"
+  />
+</div>
+        <div class="profile-meta">
+          <h3>{{ profile.fullName }}</h3>
+          <p class="badge">{{ profile.role }}</p>
+        </div>
+        <div class="summary-details">
+          <div><strong>School</strong><span>{{ profile.school }}</span></div>
+          <div><strong>Email</strong><span>{{ profile.email }}</span></div>
+          <div><strong>Phone</strong><span>{{ profile.phone }}</span></div>
+          <div><strong>Joined</strong><span>{{ profile.joined }}</span></div>
+        </div>
+        <label class="upload-label">
+          Upload avatar
+          <input type="file" accept="image/*" (change)="uploadAvatar($event)" />
+        </label>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span>{{ teacherCount }}</span>
+          <p>Teachers</p>
+        </div>
+        <div class="stat-card">
+          <span>{{ staffCount }}</span>
+          <p>Staff</p>
+        </div>
+        <div class="stat-card">
+          <span>{{ studentCount }}</span>
+          <p>Students</p>
+        </div>
+      </div>
+    </aside>
+
+    <section class="content-panel">
+      <div *ngIf="message" class="alert-box" [class.error]="messageType === 'error'">{{ message }}</div>
+
+      <div *ngIf="activeTab === 'profile'" class="card">
+        <div class="card-header">
+          <h3>Profile Information</h3>
+          <p>Keep your key account details up to date.</p>
+        </div>
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="form-grid">
+          <label>
+            Full name
+            <input type="text" formControlName="fullName" />
+            <span class="field-error" *ngIf="profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched">Please enter at least 3 characters.</span>
+          </label>
+
+          <label>
+            Role
+            <input type="text" formControlName="role" />
+          </label>
+
+          <label>
+            Email address
+            <input type="email" formControlName="email" />
+            <span class="field-error" *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">Enter a valid email address.</span>
+          </label>
+
+          <label>
+            Phone number
+            <input type="tel" formControlName="phone" />
+            <span class="field-error" *ngIf="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched">Enter a valid phone number.</span>
+          </label>
+
+          <label>
+            School name
+            <input type="text" formControlName="school" />
+          </label>
+
+          <label>
+            Address
+            <textarea rows="2" formControlName="address"></textarea>
+          </label>
+
+          <label class="full-width">
+            Profile summary
+            <textarea rows="4" formControlName="bio"></textarea>
+            <span class="field-note">Max 250 characters.</span>
+          </label>
+
+          <div class="button-row">
+            <button type="submit" class="btn-primary">Save profile</button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="activeTab === 'preferences'" class="card">
+        <div class="card-header">
+          <h3>Preferences</h3>
+          <p>Adjust the app behavior and visibility settings.</p>
+        </div>
+        <form [formGroup]="preferencesForm" (ngSubmit)="savePreferences()" class="form-grid">
+          <label class="switch-row">
+            <span>Email notifications</span>
+            <input type="checkbox" formControlName="emailNotifications" />
+          </label>
+
+          <label class="switch-row">
+            <span>SMS alerts</span>
+            <input type="checkbox" formControlName="smsAlerts" />
+          </label>
+
+          <label class="switch-row">
+            <span>Dark mode</span>
+            <input type="checkbox" formControlName="darkMode" />
+          </label>
+
+          <label class="switch-row">
+            <span>Profile visible to staff</span>
+            <input type="checkbox" formControlName="profileVisibleToStaff" />
+          </label>
+
+          <label>
+            Weekly summary delivery
+            <select formControlName="weeklySummary">
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </label>
+
+          <div class="button-row">
+            <button type="submit" class="btn-primary">Save preferences</button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="activeTab === 'security'" class="card">
+        <div class="card-header">
+          <h3>Security</h3>
+          <p>Protect your account with password controls and active session management.</p>
+        </div>
+        <div class="session-panel">
+          <h4>Active sessions</h4>
+          <div *ngFor="let session of sessions" class="session-row">
+            <div>
+              <strong>{{ session.device }}</strong>
+              <p>{{ session.location }}</p>
+            </div>
+            <span>{{ session.lastActive }}</span>
+          </div>
+        </div>
+        <form [formGroup]="securityForm" (ngSubmit)="updateSecurity()" class="form-grid">
+          <label>
+            Current password
+            <input type="password" formControlName="currentPassword" />
+          </label>
+
+          <label>
+            New password
+            <input type="password" formControlName="newPassword" />
+            <span class="field-error" *ngIf="securityForm.get('newPassword')?.invalid && securityForm.get('newPassword')?.touched">Password must be at least 8 characters.</span>
+          </label>
+
+          <label>
+            Confirm new password
+            <input type="password" formControlName="confirmPassword" />
+          </label>
+
+          <label class="switch-row full-width">
+            <span>Enable two-factor authentication</span>
+            <input type="checkbox" formControlName="twoFactorAuth" />
+          </label>
+
+          <div class="button-row">
+            <button type="submit" class="btn-primary">Update security</button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="activeTab === 'notifications'" class="card">
+        <div class="card-header">
+          <h3>Notifications</h3>
+          <p>Control how and when alerts are delivered.</p>
+        </div>
+        <form [formGroup]="notificationsForm" (ngSubmit)="saveNotifications()" class="form-grid">
+          <label class="switch-row">
+            <span>Message alerts</span>
+            <input type="checkbox" formControlName="messageAlerts" />
+          </label>
+
+          <label class="switch-row">
+            <span>Event updates</span>
+            <input type="checkbox" formControlName="eventUpdates" />
+          </label>
+
+          <label class="switch-row">
+            <span>Newsletter</span>
+            <input type="checkbox" formControlName="newsletter" />
+          </label>
+
+          <label>
+            Daily reminder time
+            <input type="time" formControlName="reminderTime" />
+          </label>
+
+          <div class="button-row">
+            <button type="submit" class="btn-primary">Save notifications</button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="activeTab === 'activity'" class="card activity-card">
+        <div class="card-header">
+          <h3>Recent activity</h3>
+          <p>A snapshot of your most recent account actions.</p>
+        </div>
+        <ul class="activity-list">
+          <li *ngFor="let item of activity">
+            <span class="activity-time">{{ item.time }}</span>
+            <p>{{ item.event }}</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>

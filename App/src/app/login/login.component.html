@@ -1,0 +1,90 @@
+<div class="container-fluid vh-100 d-flex flex-column justify-content-center align-items-center bg-light login">
+
+  <!-- TITLE -->
+  <h1 class="text-center fw-semibold mb-4 text-secondary title">
+    Welcome, Log into your account
+  </h1>
+
+  <!-- LOGIN CARD -->
+  <div class="card shadow-lg border-0 rounded-3 p-4 login-card" >
+
+    <!-- SUBTITLE -->
+    <p class="text-center text-muted fw-medium mb-4 subtitle">
+      It is our great pleasure to have<br>
+      you on board
+    </p>
+
+    <!-- FORM -->
+  <form (ngSubmit)="Login()">
+   <div class="field-error mb-2" *ngIf="loginError">
+    <i class="bi bi-exclamation-circle-fill"></i> {{ loginError }}
+   </div>
+
+ <div class="mb-3">
+
+  <input
+    type="text"
+    class="form-control"
+    [class.is-invalid]="emailError"
+    placeholder="Enter Email"
+    [(ngModel)]="email"
+    name="email">
+
+  <div class="field-error" *ngIf="emailError">
+    <i class="bi bi-exclamation-circle-fill"></i> {{ emailError }}
+  </div>
+
+</div>
+
+<div class="mb-3">
+
+  <input
+    type="password"
+    class="form-control"
+    [class.is-invalid]="passwordError"
+    placeholder="Enter Password"
+    [(ngModel)]="password"
+    name="password">
+
+  <div class="field-error" *ngIf="passwordError">
+    <i class="bi bi-exclamation-circle-fill"></i> {{ passwordError }}
+  </div>
+
+</div>
+  <!-- Forgot Password -->
+  <div class="text-end mb-1">
+    <a
+      [routerLink]="['/forgot-password']"
+      class="text-decoration-none fw-semibold small forgot-link" (click)="forgot()">
+      Forgot Password?
+    </a>
+  </div>
+
+  <button
+    type="submit"
+    class="w-100 fw-bold Login-btn">
+    Login
+  </button>
+   <small
+    class="text-success error-text"
+    [style.visibility]="loginSuccess ? 'visible' : 'hidden'">
+    {{ loginSuccess || 'Login successful!' }}
+  </small>
+
+
+</form>
+
+    <p class="text-center mt-3 small text-muted">
+      Need an employee account?
+      <a routerLink="/employee-signup" class="fw-bold text-primary text-decoration-none Signin-a">
+        Sign up as Employee
+      </a>
+    </p>
+ <p class="text-center mt-1 small text-muted ">
+      Are you the administrator?
+      <a routerLink="Admin-login" class="fw-bold text-primary text-decoration-none Signin-a">
+        Admin
+      </a>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,173 @@
+<div class="container-fluid p-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold">Holidays</h3>
+
+    <button
+      *ngIf="role === 'school'"
+      class="btn add-btn"
+      (click)="openAddHoliday()">
+      + Add Holiday
+    </button>
+  </div>
+
+  <!-- Holiday Cards -->
+  <div class="row g-4">
+
+    <div
+      class="col-lg-4 col-md-6"
+      *ngFor="let holiday of holidays">
+
+      <div class="card border-0 shadow-sm h-100 holiday-card">
+
+        <div class="card-body">
+
+          <div class="d-flex justify-content-between align-items-start">
+
+            <div>
+              <h5 class="fw-bold mb-1">
+                {{ holiday.holiday }}
+              </h5>
+
+              <p class="text-muted mb-2">
+                {{ holiday.date | date:'mediumDate' }}
+              </p>
+
+              <p *ngIf="holiday.description" class="text-muted mb-0">
+                {{ holiday.description }}
+              </p>
+            </div>
+
+            <div class="holiday-icon">
+              <i class="bi bi-calendar-event fs-2"></i>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Admin Actions -->
+        <div
+          *ngIf="role === 'school'"
+          class="card-footer bg-white border-0">
+
+          <button
+            class="btn btn-outline-primary btn-sm me-2"
+            (click)="editHoliday(holiday)">
+            <i class="bi bi-pencil-fill me-1"></i>
+            Edit
+          </button>
+
+          <button
+            class="btn btn-outline-danger btn-sm"
+            (click)="deleteHoliday(holiday.id)">
+            <i class="bi bi-trash-fill me-1"></i>
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Add/Edit Holiday Modal -->
+<div
+  class="modal fade"
+  id="holidayModal"
+  tabindex="-1"
+  aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered">
+
+    <div class="modal-content border-0 shadow-lg">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title fw-bold">
+          {{ isEditMode ? 'Edit Holiday' : 'Add Holiday' }}
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">
+            Holiday Name
+          </label>
+
+          <input
+            type="text"
+            class="form-control"
+            [class.is-invalid]="holidayError"
+            placeholder="Enter holiday name"
+            [(ngModel)]="holidayForm.holiday">
+          <div class="field-error" *ngIf="holidayError">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ holidayError }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">
+            Date
+          </label>
+
+          <input
+            type="date"
+            class="form-control"
+            [class.is-invalid]="dateError"
+            [(ngModel)]="holidayForm.date">
+          <div class="field-error" *ngIf="dateError">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ dateError }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Description</label>
+          <textarea
+            class="form-control"
+            rows="3"
+            placeholder="Optional details"
+            [(ngModel)]="holidayForm.description"></textarea>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="saveHoliday()">
+
+          {{ isEditMode ? 'Update Holiday' : 'Save Holiday' }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+

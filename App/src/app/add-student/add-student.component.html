@@ -1,0 +1,762 @@
+<div class="container-fluid bg-light min-vh-100 p-0">
+
+  <!-- HEADER -->
+  <div class="text-white py-5 px-5 header">
+
+    <div class="d-flex align-items-center gap-5 flex-wrap">
+
+      <!-- SCHOOL -->
+      <div class="d-flex align-items-center gap-3">
+
+        <div
+          class="border border-2 rounded-4 d-flex justify-content-center align-items-center header-left"
+        >
+          <span class="fs-1"><i class="bi bi-mortarboard-fill"></i></span>
+        </div>
+
+        <div>
+          <h2 class="fw-bold mb-0">Eduaide</h2>
+          <p class="text-white mb-0">
+            Nurturing Minds, Building Futures
+          </p>
+        </div>
+
+      </div>
+
+      <!-- DIVIDER -->
+      <div
+        class="bg-white opacity-50 divider"
+      ></div>
+
+      <!-- TITLE -->
+      <div>
+        <h2 class="fw-bold">
+          Student Admission Form
+        </h2>
+
+        <p class="mb-0 text-light">
+          Fill in the details below to apply for admission.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MAIN CARD -->
+  <div class="container-fluid px-4">
+
+    <div
+      class="bg-white rounded-4 shadow-lg overflow-hidden form "
+    >
+
+      <div class="row g-0">
+
+
+        <!-- FORM -->
+        <div class="col-lg-12 ">
+            
+
+          <div class="p-4 p-lg-5">
+<!-- TITLE -->
+<h2 class="fw-bold text-dark mb-4">
+  Student Details
+</h2>
+<div class="row g-4 align-items-start">
+
+  <!-- LEFT SIDE FORM -->
+  <div class="col-lg-8">
+
+    <div class="row g-4">
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">
+          First Name 
+        </label>
+
+       <input
+  type="text"
+  class="form-control form-control-lg"
+  [class.is-invalid]="firstNameError"
+  placeholder="Enter first name"
+  [(ngModel)]="firstName"
+>
+        <div class="field-error" *ngIf="firstNameError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ firstNameError }}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">
+          Last Name
+        </label>
+
+       <input
+  type="text"
+  class="form-control form-control-lg"
+  [class.is-invalid]="lastNameError"
+  placeholder="Enter last name"
+  [(ngModel)]="lastName"
+>
+        <div class="field-error" *ngIf="lastNameError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ lastNameError }}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">
+          Date of Birth
+        </label>
+
+        <input
+          type="date"
+          class="form-control form-control-lg"
+        >
+      </div>
+      <!-- STUDENT ID -->
+<div class="col-md-6">
+  <label class="form-label fw-semibold">
+    Student ID 
+  </label>
+
+  <input
+    type="text"
+    class="form-control form-control-lg"
+    [class.is-invalid]="studentIdError"
+    placeholder="Enter student ID"
+    [(ngModel)]="studentId"
+  >
+  <div class="field-error" *ngIf="studentIdError">
+    <i class="bi bi-exclamation-circle-fill"></i> {{ studentIdError }}
+  </div>
+</div>
+
+<!-- EMAIL -->
+<div class="col-md-6">
+  <label class="form-label fw-semibold">
+    Email Address 
+  </label>
+
+  <input
+    type="email"
+    class="form-control form-control-lg"
+    [class.is-invalid]="emailError"
+    placeholder="Enter email address"
+    [(ngModel)]="email"
+  >
+  <div class="field-error" *ngIf="emailError">
+    <i class="bi bi-exclamation-circle-fill"></i> {{ emailError }}
+  </div>
+</div>
+
+<!-- CLASS -->
+<div class="col-md-6">
+  <label class="form-label fw-semibold">
+    Class 
+  </label>
+
+  <select
+    class="form-select form-select-lg"
+    [class.is-invalid]="classError"
+    [(ngModel)]="studentClass"
+  >
+    <option value="">Select class</option>
+    <option>1st Class</option>
+    <option>2nd Class</option>
+    <option>3rd Class</option>
+    <option>4th Class</option>
+    <option>5th Class</option>
+    <option>6th Class</option>
+    <option>7th Class</option>
+    <option>8th Class</option>
+    <option>9th Class</option>
+    <option>10th Class</option>
+  </select>
+  <div class="field-error" *ngIf="classError">
+    <i class="bi bi-exclamation-circle-fill"></i> {{ classError }}
+  </div>
+</div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">
+          Gender
+        </label>
+
+       <select
+  class="form-select form-select-lg"
+  [class.is-invalid]="genderError"
+  [(ngModel)]="gender"
+>
+  <option value="">Select gender</option>
+  <option>Male</option>
+  <option>Female</option>
+</select>
+        <div class="field-error" *ngIf="genderError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ genderError }}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">
+          Nationality
+        </label>
+
+        <input
+          type="text"
+          class="form-control form-control-lg"
+          placeholder="Select nationality"
+        >
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">
+          Mother Tongue
+        </label>
+
+        <input
+          type="text"
+          class="form-control form-control-lg"
+          placeholder="Enter mother tongue"
+        >
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">
+          Aadhaar / ID Number
+        </label>
+
+        <input
+          type="text"
+          class="form-control form-control-lg"
+          placeholder="Enter Aadhaar number"
+        >
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">
+          Religion
+        </label>
+
+        <input
+          type="text"
+          class="form-control form-control-lg"
+          placeholder="Select religion"
+        >
+      </div>
+
+    </div>
+
+  </div>
+
+  <!--  STUDENT PHOTO -->
+<div class="col-lg-4">
+
+  <label class="form-label fw-semibold">
+    Student Photo
+  </label>
+
+  <div class="border rounded-4 p-4 text-center bg-light">
+
+    <!-- PREVIEW -->
+    <div
+      class=" rounded-circle shadow-sm overflow-hidden d-flex justify-content-center align-items-center mx-auto mb-3"
+      style="width:170px;height:170px;"
+    >
+
+      <i
+        *ngIf="!studentImagePreview"
+        class="bi bi-person-circle text-secondary"
+        style="font-size:170px;"
+      ></i>
+
+      <img
+        *ngIf="studentImagePreview"
+        [src]="studentImagePreview"
+        class="w-100 h-100 object-fit-cover"
+      >
+
+    </div>
+    <!-- UPLOAD BUTTON -->
+    <label class="btn text-white upload-btn">
+
+      Upload Student Image
+
+      <input
+        type="file"
+        hidden
+        accept="image/*"
+        (change)="onImageChange($event, 'student')"
+      >
+
+    </label>
+
+  </div>
+
+</div>
+
+  <!-- ADDRESS -->
+  <div class="col-12">
+
+    <label class="form-label fw-semibold">
+      Address 
+    </label>
+
+    <textarea
+      rows="4"
+      class="form-control"
+      placeholder="Enter full address"
+    ></textarea>
+
+  </div>
+
+  <!-- CITY -->
+  <div class="col-md-4">
+
+    <label class="form-label fw-semibold">
+      City 
+    </label>
+
+    <input
+      type="text"
+      class="form-control form-control-lg"
+      placeholder="Enter city"
+    >
+
+  </div>
+
+  <div class="col-md-4">
+
+    <label class="form-label fw-semibold">
+      State 
+    </label>
+
+    <input
+      type="text"
+      class="form-control form-control-lg"
+      placeholder="Select state"
+    >
+
+  </div>
+
+  <div class="col-md-4">
+
+    <label class="form-label fw-semibold">
+      Pin Code 
+    </label>
+
+    <input
+      type="text"
+      class="form-control form-control-lg"
+      placeholder="Enter pin code"
+    >
+
+  </div>
+
+</div>
+
+          <!-- PARENT / GUARDIAN DETAILS -->
+<h2 class="fw-bold text-dark mt-5 mb-4">
+ Parent / Guardian Details
+</h2>
+
+<div class="row g-4">
+
+  <!-- FATHER -->
+  <div class="col-12">
+
+    <div class="row g-4 align-items-start">
+
+      <!-- PHOTO -->
+      <div class="col-lg-3">
+
+        <label class="form-label fw-semibold">
+          Father's Photo
+        </label>
+
+        <div class="border rounded-4 p-4 text-center">
+
+          <div
+            class="bg-light rounded-circle d-flex justify-content-center align-items-center mx-auto mb-3"
+            style="width:90px;height:90px;"
+          >
+           <i
+        *ngIf="!fatherImagePreview"
+        class="bi bi-person-circle text-secondary"
+        style="font-size:70px;"
+      ></i>
+              <img
+        *ngIf="fatherImagePreview"
+        [src]="fatherImagePreview"
+        class="w-100 h-100 object-fit-cover"
+      >
+          </div>
+    <!-- BUTTON -->
+    <label class="btn text-white upload-btn">
+
+      Upload Photo
+
+      <input
+        type="file"
+        hidden
+        accept="image/*"
+        (change)="onImageChange($event, 'father')"
+      >
+
+    </label>
+
+
+        </div>
+
+      </div>
+
+      <!-- FIELDS -->
+      <div class="col-lg-9">
+
+        <div class="row g-4">
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Father's Name 
+            </label>
+
+          <input
+  type="text"
+  class="form-control form-control-lg"
+  placeholder="Enter father's name"
+  [(ngModel)]="fatherName"
+>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Father's Mobile Number 
+            </label>
+
+           <input
+  type="text"
+  class="form-control form-control-lg"
+  placeholder="Enter mobile number"
+  [(ngModel)]="fatherPhone"
+>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Father's Email
+            </label>
+<input
+  type="email"
+  class="form-control form-control-lg"
+  placeholder="Enter email address"
+  [(ngModel)]="fatherEmail"
+>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Occupation
+            </label>
+
+           <input
+  type="text"
+  class="form-control form-control-lg"
+  placeholder="Enter occupation"
+  [(ngModel)]="fatherOccupation"
+>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MOTHER -->
+  <div class="col-12">
+
+    <div class="row g-4 align-items-start">
+
+      <!-- PHOTO -->
+      <div class="col-lg-3">
+
+        <label class="form-label fw-semibold">
+          Mother's Photo
+        </label>
+
+        <div class="border rounded-4 p-4 text-center">
+
+          <div
+            class="bg-light rounded-circle d-flex justify-content-center align-items-center mx-auto mb-3"
+            style="width:90px;height:90px;"
+          >
+              <i
+        *ngIf="!motherImagePreview"
+        class="bi bi-person-circle text-secondary"
+        style="font-size:70px;"
+      ></i>
+
+      <img
+        *ngIf="motherImagePreview"
+        [src]="motherImagePreview"
+        class="w-100 h-100 object-fit-cover"
+      >
+          </div>
+
+              <!-- BUTTON -->
+    <label class="btn text-white upload-btn">
+
+      Upload Photo
+
+      <input
+        type="file"
+        hidden
+        accept="image/*"
+       (change)="onImageChange($event, 'mother')"
+      >
+
+    </label>
+
+
+        </div>
+
+      </div>
+
+      <!-- FIELDS -->
+      <div class="col-lg-9">
+
+        <div class="row g-4">
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Mother's Name 
+            </label>
+
+            <input
+  type="text"
+  class="form-control form-control-lg"
+  placeholder="Enter mother's name"
+  [(ngModel)]="motherName"
+>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Mother's Mobile Number 
+            </label>
+
+          <input
+  type="text"
+  class="form-control form-control-lg"
+  placeholder="Enter mobile number"
+  [(ngModel)]="motherPhone"
+>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Mother's Email
+            </label>
+
+           <input
+  type="email"
+  class="form-control form-control-lg"
+  placeholder="Enter email address"
+  [(ngModel)]="motherEmail"
+>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Occupation
+            </label>
+<input
+  type="text"
+  class="form-control form-control-lg"
+  placeholder="Enter occupation"
+  [(ngModel)]="motherOccupation"
+>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= GUARDIAN ================= -->
+   
+    <div class="col-12">
+
+  <div class="row g-4 align-items-start">
+
+    <!-- PHOTO -->
+    <div class="col-lg-3">
+
+      <label class="form-label fw-semibold">
+        Guardian's Photo
+      </label>
+
+      <div class="border rounded-4 p-4 text-center">
+
+        <div
+          class="bg-light rounded-circle d-flex justify-content-center align-items-center mx-auto mb-3 overflow-hidden"
+          style="width:90px;height:90px;"
+        >
+
+          <i
+            *ngIf="!guardianImagePreview"
+            class="bi bi-person-circle text-secondary"
+            style="font-size:70px;"
+          ></i>
+
+          <img
+            *ngIf="guardianImagePreview"
+            [src]="guardianImagePreview"
+            class="w-100 h-100 object-fit-cover"
+          >
+
+        </div>
+
+        <!-- BUTTON -->
+        <label
+          class="btn text-white upload-btn"
+          
+        >
+
+          Upload Photo
+
+          <input
+            type="file"
+            hidden
+            accept="image/*"
+            (change)="onImageChange($event, 'guardian')"
+          >
+
+        </label>
+
+      </div>
+
+    </div>
+
+    <!-- FIELDS -->
+    <div class="col-lg-9">
+
+      <div class="row g-4">
+
+        <!-- NAME -->
+        <div class="col-md-6">
+
+          <label class="form-label fw-semibold">
+            Guardian Name
+          </label>
+
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            placeholder="Enter guardian name"
+            [(ngModel)]="guardianName"
+          >
+
+        </div>
+
+        <!-- PHONE -->
+        <div class="col-md-6">
+
+          <label class="form-label fw-semibold">
+            Guardian Mobile Number
+          </label>
+
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            placeholder="Enter mobile number"
+            [(ngModel)]="guardianPhone"
+          >
+
+        </div>
+         <div class="col-md-6">
+
+          <label class="form-label fw-semibold">
+            Guardian Email
+          </label>
+
+          <input
+            type="email"
+            class="form-control form-control-lg"
+            placeholder="Enter guardian email"
+            [(ngModel)]="guardianEmail"
+          >
+
+        </div>
+
+       
+
+        <!-- OCCUPATION -->
+        <div class="col-md-6">
+
+          <label class="form-label fw-semibold">
+            Occupation
+          </label>
+
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            placeholder="Enter occupation"
+            [(ngModel)]="guardianOccupation"
+          >
+
+        </div>
+ <!-- RELATION -->
+        <div class="col-md-12">
+
+          <label class="form-label fw-semibold">
+            Relationship
+          </label>
+
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            placeholder="Enter relationship"
+            [(ngModel)]="guardianRelation"
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+            <!-- BUTTONS -->
+            <div class="d-flex justify-content-between mt-5">
+
+
+              <button
+                class="btn  px-5 py-3 ms-auto"
+                (click)="submitForm()"
+              >
+              Add New
+              </button>
+
+            </div>
+
+          </div>
+          
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

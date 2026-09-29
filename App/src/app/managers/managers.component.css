@@ -1,0 +1,34 @@
+.text{
+   display:flex;
+    justify-content:center;
+   font-size: 30px;
+}
+.validation-space {
+  min-height: 22px;   /* Reserve space for error message */
+}
+
+.validation-space small {
+  font-size: 13px;
+  display: block;
+}
+.modal-content{
+    border-radius:15px;
+}
+
+.modal-header{
+    border-top-left-radius:15px;
+    border-top-right-radius:15px;
+}
+
+.modal-body .row{
+    border-bottom:1px solid #ececec;
+    padding:10px 0;
+}
+
+.modal-body .row:last-child{
+    border-bottom:none;
+}
+
+.modal-body .fw-bold{
+    color:#555;
+}

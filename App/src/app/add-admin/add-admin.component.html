@@ -1,0 +1,426 @@
+<div class="container-fluid bg-light min-vh-100 p-0">
+
+  <!-- HEADER -->
+  <div class="text-white py-5 px-5 header">
+
+    <div class="d-flex align-items-center gap-5 flex-wrap">
+
+      <div class="d-flex align-items-center gap-3">
+
+        <div
+          class="border border-2 rounded-4 d-flex justify-content-center align-items-center header-left">
+          <span class="fs-1">
+          <i class="bi bi-mortarboard-fill"></i>
+          </span>
+        </div>
+
+        <div>
+          <h2 class="fw-bold mb-0">Eduaide</h2>
+          <p class="mb-0 text-white">
+            School Management System
+          </p>
+        </div>
+
+      </div>
+
+      <div class="bg-white opacity-50 divider"></div>
+
+      <div>
+        <h2 class="fw-bold">Administrator Registration</h2>
+        <p class="mb-0 text-light">
+          Create a new administrator account
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CARD -->
+  <div class="container-fluid px-4">
+
+    <div class="bg-white rounded-4 shadow-lg overflow-hidden form">
+
+      <div class="p-4 p-lg-5">
+
+        <h2 class="fw-bold text-dark mb-4">
+          Administrator Details
+        </h2>
+
+        <div class="row g-4">
+
+          <!-- PHOTO -->
+          <div class="col-lg-3">
+
+            <label class="form-label fw-semibold">
+              Profile Photo
+            </label>
+
+            <div class="border rounded-4 p-4 text-center bg-light">
+
+              <div
+                class="rounded-circle overflow-hidden mx-auto mb-3"
+                style="width:140px;height:140px;">
+
+                <i
+                  *ngIf="!adminImagePreview"
+                  class="bi bi-person-circle text-secondary"
+                  style="font-size:100px;">
+                </i>
+
+                <img
+                  *ngIf="adminImagePreview"
+                  [src]="adminImagePreview"
+                  class="w-100 h-100 object-fit-cover">
+
+              </div>
+
+              <label class="btn text-white upload-btn">
+
+                Upload Photo
+
+                <input
+                  hidden
+                  type="file"
+                  accept="image/*"
+                  (change)="onImageChange($event)">
+              </label>
+
+            </div>
+
+          </div>
+
+          <!-- FORM -->
+          <div class="col-lg-9">
+
+            <div class="row g-4">
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Full Name
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="fullNameError"
+                  placeholder="Enter full name"
+                  [(ngModel)]="fullName">
+                <div class="field-error" *ngIf="fullNameError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ fullNameError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Email Address
+                </label>
+
+                <input
+                  type="email"
+                  class="form-control"
+                  [class.is-invalid]="emailError"
+                  placeholder="Enter email"
+                  [(ngModel)]="email">
+                <div class="field-error" *ngIf="emailError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ emailError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Mobile Number
+                </label>
+
+                <input
+                  type="tel"
+                  class="form-control"
+                  [class.is-invalid]="phoneError"
+                  placeholder="Enter mobile number"
+                  [(ngModel)]="phone">
+                <div class="field-error" *ngIf="phoneError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ phoneError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Password
+                </label>
+
+                <input
+                  type="password"
+                  class="form-control"
+                  [class.is-invalid]="passwordError"
+                  placeholder="Enter password"
+                  [(ngModel)]="password">
+                <div class="field-error" *ngIf="passwordError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ passwordError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Confirm Password
+                </label>
+
+                <input
+                  type="password"
+                  class="form-control"
+                  [class.is-invalid]="confirmPasswordError"
+                  placeholder="Confirm password"
+                  [(ngModel)]="confirmPassword">
+                <div class="field-error" *ngIf="confirmPasswordError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ confirmPasswordError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Role
+                </label>
+
+                <select
+                  class="form-select"
+                  [class.is-invalid]="roleError"
+                  [(ngModel)]="role">
+
+                  <option value="">Select Role</option>
+                  <option>school</option>
+                  <option>office</option>
+
+                </select>
+                <div class="field-error" *ngIf="roleError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ roleError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Department/position
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter department"
+                  [(ngModel)]="department">
+              </div>
+
+              <div class="col-12">
+                <label class="form-label fw-semibold">
+                  Address
+                </label>
+
+                <textarea
+                  rows="4"
+                  class="form-control"
+                  placeholder="Enter address"
+                  [(ngModel)]="address">
+                </textarea>
+              </div>
+              <!-- SCHOOL DETAILS -->
+<!-- ORGANIZATION TYPE -->
+
+<div class="col-12 mt-4">
+
+  <h5 class="fw-bold text-dark mb-3">
+    Organization Type
+  </h5>
+
+  <div class="d-flex gap-4">
+
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        name="organizationType"
+        value="school"
+        [(ngModel)]="organizationType">
+
+      <label class="form-check-label">
+        School
+      </label>
+    </div>
+
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        name="organizationType"
+        value="office"
+        [(ngModel)]="organizationType">
+
+      <label class="form-check-label">
+        Office
+      </label>
+    </div>
+
+  </div>
+  <div class="field-error mt-2" *ngIf="organizationTypeError">
+    <i class="bi bi-exclamation-circle-fill"></i> {{ organizationTypeError }}
+  </div>
+
+</div>
+
+<!-- SCHOOL DETAILS -->
+
+<ng-container *ngIf="organizationType === 'school'">
+
+  <div class="col-12 mt-4">
+
+    <h5 class="fw-bold text-dark mb-3">
+      School Details
+    </h5>
+
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label fw-semibold">
+      School Name
+    </label>
+
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Enter school name"
+      [(ngModel)]="schoolName">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label fw-semibold">
+      School Code
+    </label>
+
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Enter school code"
+      [(ngModel)]="schoolCode">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label fw-semibold">
+      School Type
+    </label>
+
+    <select
+      class="form-select"
+      [(ngModel)]="schoolType">
+
+      <option value="">Select Type</option>
+      <option value="Primary">Primary</option>
+      <option value="High School">High School</option>
+      <option value="College">College</option>
+
+    </select>
+
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label fw-semibold">
+      School Address
+    </label>
+
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Enter school address"
+      [(ngModel)]="schoolAddress">
+  </div>
+
+</ng-container>
+
+<!-- OFFICE DETAILS -->
+
+<ng-container *ngIf="organizationType === 'office'">
+
+  <div class="col-12 mt-4">
+
+    <h5 class="fw-bold text-dark mb-3">
+      Office Details
+    </h5>
+
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label fw-semibold">
+      Office Name
+    </label>
+
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Enter office name"
+      [(ngModel)]="officeName">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label fw-semibold">
+      Office Code
+    </label>
+
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Enter office code"
+      [(ngModel)]="officeCode">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label fw-semibold">
+      Office Type
+    </label>
+
+    <select
+      class="form-select"
+      [(ngModel)]="officeType">
+
+      <option value="">Select Type</option>
+      <option value="Startup">Startup</option>
+      <option value="Middleware">Middleware</option>
+      <option value="MNC">MNC</option>
+      <option value="Product Based">Product Based</option>
+      <option value="Service Based">Service Based</option>
+
+    </select>
+
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label fw-semibold">
+      Office Address
+    </label>
+
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Enter office address"
+      [(ngModel)]="officeAddress">
+  </div>
+
+</ng-container>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- BUTTON -->
+        <div class="d-flex justify-content-end mt-5">
+
+          <button
+            class="btn px-5 py-3"
+            (click)="registerAdmin()">
+            Add New
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

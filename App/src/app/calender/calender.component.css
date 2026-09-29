@@ -1,0 +1,112 @@
+.calendar-table{
+    width:100%;
+    table-layout:fixed;
+}
+
+.calendar-table th{
+    text-align:center;
+    background:#f4f7f3;
+    height:50px;
+}
+.AddModal{
+    width:100% !important;
+}
+.calendar-cell{
+    height:110px;
+    vertical-align:top;
+    position:relative;
+    padding:6px;
+}
+
+.date-number{
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+.meeting-card{
+    background:#d1fae5;
+    color:#065f46;
+    border-left:4px solid #10b981;
+    border-radius:6px;
+    padding:4px 6px;
+    margin-bottom:4px;
+    font-size:12px;
+}
+
+.holiday-card{
+    background:#fde68a;
+    color:#92400e;
+    border-left:4px solid orange;
+    border-radius:6px;
+    padding:4px 6px;
+    margin-bottom:4px;
+    font-size:12px;
+}
+
+.day-box{
+    height:38px;
+    line-height:42px;
+}
+
+.card{
+    border-radius:12px;
+}
+
+.container-fluid{
+    min-height:100vh;
+}
+
+.calendar-wrapper{
+    height:calc(100vh);
+}
+
+.calendar-table tbody tr{
+    height:20%;
+}
+.upcoming-meeting{
+
+    background:#d1fae5;
+
+    border-left:5px solid #22c55e;
+
+    color:#166534;
+
+    padding:6px;
+
+    margin-bottom:6px;
+
+    border-radius:6px;
+
+}
+
+.progress-meeting{
+
+    background:#fef3c7;
+
+    border-left:5px solid #f59e0b;
+
+    color:#92400e;
+
+    padding:6px;
+
+    margin-bottom:6px;
+
+    border-radius:6px;
+
+}
+
+.completed-meeting{
+
+    background:#fee2e2;
+
+    border-left:5px solid #ef4444;
+
+    color:#991b1b;
+
+    padding:6px;
+
+    margin-bottom:6px;
+
+    border-radius:6px;
+
+}

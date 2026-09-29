@@ -1,0 +1,426 @@
+<div class="timesheet-container py-4 px-3 px-md-4">
+
+  <!-- ============================================== -->
+  <!-- PROJECT LIST VIEW (When no project is chosen) -->
+  <!-- ============================================== -->
+  <div *ngIf="!selectedProject" class="animate-fade-in">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h2 class="fw-bold mb-1 d-flex align-items-center gap-2 text-dark">
+          <span class="icon-title-badge"><i class="bi bi-stopwatch-fill"></i></span>
+          Project Timesheets
+        </h2>
+        <p class="text-muted mb-0">Select a project to track work hours, manage tasks, and log timesheets.</p>
+      </div>
+      <div class="mt-3 mt-md-0">
+        <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill shadow-xs fs-6">
+          <i class="bi bi-folder2-open text-primary me-1"></i> {{projects.length}} Projects Available
+        </span>
+      </div>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="row g-4">
+      <div *ngFor="let project of projects" class="col-12 col-md-6 col-xl-4">
+        <div class="card project-card h-100 border-0 shadow-sm" (click)="selectProject(project)">
+          <div class="card-body p-4 d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="project-icon-box">
+                  <i class="bi bi-kanban"></i>
+                </div>
+                <span class="badge rounded-pill px-3 py-2" [ngClass]="{
+                  'bg-success-subtle text-success border border-success-subtle': project.status === 'Active' || project.status === 'Completed',
+                  'bg-warning-subtle text-warning-emphasis border border-warning-subtle': project.status === 'On Hold',
+                  'bg-secondary-subtle text-secondary border border-secondary-subtle': !project.status || project.status === 'Cancelled'
+                }">
+                  {{ project.status || 'Active' }}
+                </span>
+              </div>
+
+              <h4 class="fw-bold text-dark mb-2 project-title">{{project.projectName}}</h4>
+              <p class="text-muted small mb-3 description-truncate">{{project.description || 'No description provided for this project.'}}</p>
+            </div>
+
+            <div class="pt-3 border-top mt-auto">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="badge rounded-pill" [ngClass]="getPriorityBadgeClass(project.priority)">
+                  <i class="bi bi-flag-fill me-1"></i> {{project.priority || 'Medium'}} Priority
+                </span>
+                <span class="btn-open-project text-primary fw-semibold small d-flex align-items-center gap-1">
+                  Open Timesheet <i class="bi bi-arrow-right"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State for Projects -->
+      <div *ngIf="projects.length === 0" class="col-12 text-center py-5">
+        <div class="empty-state-box p-5 bg-white rounded-4 shadow-sm border">
+          <i class="bi bi-folder-x text-muted display-3 mb-3 d-block"></i>
+          <h4 class="fw-bold text-dark">No Projects Found</h4>
+          <p class="text-muted mb-0">There are no projects assigned to you or in the system yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- TASK & TIMESHEET WORKSPACE (When project chosen) -->
+  <!-- ============================================== -->
+  <div *ngIf="selectedProject" class="animate-fade-in">
+    
+    <!-- Top Action & Navigation Bar -->
+    <div class="timesheet-project-header d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3 bg-white p-3 rounded-4 shadow-sm border">
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-outline-secondary rounded-pill d-flex align-items-center gap-2 px-3 py-2" (click)="closeTasks()">
+          <i class="bi bi-arrow-left"></i> <span>Back to Projects</span>
+        </button>
+        <div>
+          <h3 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+            <span>{{selectedProject.projectName}}</span>
+            <span class="badge rounded-pill fs-7" [ngClass]="getPriorityBadgeClass(selectedProject.priority)">
+              {{selectedProject.priority || 'Medium'}}
+            </span>
+          </h3>
+          <span class="text-muted small">{{selectedProject.description || 'Project Tasks & Time Tracking'}}</span>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill font-monospace fw-semibold">
+          <i class="bi bi-hourglass-split me-1"></i> Total Logged: {{totalHoursLogged}} hrs
+        </span>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SUMMARY KPI CARDS (Live counts & statuses)     -->
+    <!-- ============================================== -->
+    <div class="row g-3 mb-4">
+      
+      <!-- Total Tasks -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="kpi-card kpi-total shadow-sm">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="kpi-label mb-1">Total Tasks</p>
+              <h2 class="kpi-value mb-0">{{totalTasks}}</h2>
+            </div>
+            <div class="kpi-icon-circle kpi-icon-total">
+              <i class="bi bi-list-task"></i>
+            </div>
+          </div>
+          <div class="kpi-footer mt-3 pt-2 border-top border-white-10">
+            <span class="small opacity-85">All tasks in sprint/project</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- To Do (Not Started in Development) -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="kpi-card kpi-todo shadow-sm">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="kpi-label mb-1">To Do</p>
+              <h2 class="kpi-value mb-0">{{ToDo}}</h2>
+            </div>
+            <div class="kpi-icon-circle kpi-icon-todo">
+              <i class="bi bi-clock-history"></i>
+            </div>
+          </div>
+          <div class="kpi-footer mt-3 pt-2 border-top border-white-10">
+            <span class="small opacity-85">Not started in development</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Progress (Started in Development) -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="kpi-card kpi-progress shadow-sm">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="kpi-label mb-1">In Progress</p>
+              <h2 class="kpi-value mb-0">{{progress}}</h2>
+            </div>
+            <div class="kpi-icon-circle kpi-icon-progress">
+              <i class="bi bi-arrow-repeat"></i>
+            </div>
+          </div>
+          <div class="kpi-footer mt-3 pt-2 border-top border-white-10">
+            <span class="small opacity-85">Active development & review</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completed (Finished) -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="kpi-card kpi-completed shadow-sm">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="kpi-label mb-1">Completed</p>
+              <h2 class="kpi-value mb-0">{{completed}}</h2>
+            </div>
+            <div class="kpi-icon-circle kpi-icon-completed">
+              <i class="bi bi-check2-circle"></i>
+            </div>
+          </div>
+          <div class="kpi-footer mt-3 pt-2 border-top border-white-10">
+            <span class="small opacity-85">{{completionPercentage}}% project completed</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Project Progress Bar -->
+    <div class="card border-0 shadow-sm p-3 mb-4 rounded-4 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="fw-semibold text-dark small"><i class="bi bi-pie-chart-fill text-primary me-2"></i>Sprint Completion Progress</span>
+        <span class="fw-bold text-primary small">{{completed}} / {{totalTasks}} Tasks ({{completionPercentage}}%)</span>
+      </div>
+      <div class="progress" style="height: 10px; border-radius: 8px;">
+        <div class="progress-bar bg-gradient-success progress-bar-striped progress-bar-animated" role="progressbar" [style.width.%]="completionPercentage"></div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- FILTER TABS & SEARCH BAR                       -->
+    <!-- ============================================== -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white timesheet-filter-panel">
+      <div class="row g-3 align-items-center justify-content-between">
+        <!-- Filter Tabs -->
+        <div class="col-12 col-lg-7">
+          <div class="nav nav-pills custom-filter-pills gap-2">
+            <button class="nav-link" [class.active]="activeFilter === 'ALL'" (click)="setFilter('ALL')">
+              All Tasks <span class="badge rounded-pill bg-light text-dark ms-1">{{totalTasks}}</span>
+            </button>
+            <button class="nav-link" [class.active]="activeFilter === 'TODO'" (click)="setFilter('TODO')">
+              To Do <span class="badge rounded-pill bg-light text-dark ms-1">{{ToDo}}</span>
+            </button>
+            <button class="nav-link" [class.active]="activeFilter === 'IN_PROGRESS'" (click)="setFilter('IN_PROGRESS')">
+              In Progress <span class="badge rounded-pill bg-light text-dark ms-1">{{progress}}</span>
+            </button>
+            <button class="nav-link" [class.active]="activeFilter === 'COMPLETED'" (click)="setFilter('COMPLETED')">
+              Completed <span class="badge rounded-pill bg-light text-dark ms-1">{{completed}}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Input -->
+        <div class="col-12 col-lg-4">
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0 text-muted rounded-start-pill ps-3">
+              <i class="bi bi-search"></i>
+            </span>
+            <input type="text" [(ngModel)]="searchTerm" class="form-control bg-light border-start-0 rounded-end-pill" placeholder="Search tasks or assignees...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MAIN TASKS & TIMESHEET TABLE                   -->
+    <!-- ============================================== -->
+    <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden mb-4 timesheet-task-panel">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 timesheet-table">
+          <thead>
+            <tr>
+              <th class="ps-4">Task</th>
+              <th>Assignee</th>
+              <th>Due</th>
+              <th>Status</th>
+              <th>Logged</th>
+              <th class="text-center" style="min-width: 190px;">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let task of filteredTasks" [class.table-active-task]="task.running">
+              
+              <!-- Task Name & Info -->
+              <td class="ps-4">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="task-status-indicator" [ngClass]="{
+                    'indicator-completed': getNormalizedStatus(task) === 'Completed',
+                    'indicator-inprogress': getNormalizedStatus(task) === 'In Progress',
+                    'indicator-todo': getNormalizedStatus(task) === 'To Do'
+                  }"></div>
+                  <div>
+                    <h6 class="fw-bold mb-0 text-dark">{{task.taskName || task.TaskName || task.Title}}</h6>
+                    <small class="text-muted d-block text-truncate" style="max-width: 250px;">
+                      {{task.description || 'No description'}}
+                    </small>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Assignee -->
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="avatar-circle-sm">
+                    {{ getEmployeeInitials(task.assignedTo || task.AssignedTo) }}
+                  </div>
+                  <span class="fw-medium text-dark small">
+                    {{ getEmployeeName(task.assignedTo || task.AssignedTo) }}
+                  </span>
+                </div>
+              </td>
+
+              <!-- Due Date -->
+              <td>
+                <span class="text-muted small">
+                  <i class="bi bi-calendar3 me-1"></i>
+                  {{(task.dueDate || task.DueDate) ? ((task.dueDate || task.DueDate) | date:'mediumDate') : 'No due date'}}
+                </span>
+              </td>
+
+              <!-- Read-only status supplied by Jira -->
+              <td>
+                <span class="badge status-pill-btn" [ngClass]="getStatusBadgeClass(task)">
+                  {{getTaskStatusLabel(task)}}
+                </span>
+              </td>
+
+              <!-- Total Logged Time on this Task -->
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-bold font-monospace">
+                    {{task.hours || 0}} hrs
+                  </span>
+                  <button *ngIf="task.taskLogs && task.taskLogs.length > 0" 
+                          class="btn btn-sm btn-light border rounded-circle p-1" 
+                          title="View time logs"
+                          (click)="viewTaskLogs(task)">
+                    <i class="bi bi-journal-text text-primary"></i>
+                  </button>
+                </div>
+              </td>
+
+              <!-- Live Timer Actions -->
+              <td class="timesheet-time-actions">
+                <div class="d-flex align-items-center justify-content-center gap-2 timesheet-time-controls">
+                  
+                  <!-- Start Timer -->
+                  <button *ngIf="!task.running && !task.paused" 
+                          class="btn btn-sm btn-success rounded-pill px-3 d-flex align-items-center gap-1 timer-btn" 
+                          (click)="startTimer(task)">
+                    <i class="bi bi-play-fill"></i> Start
+                  </button>
+
+                  <!-- Pause Timer -->
+                  <button *ngIf="task.running" 
+                          class="btn btn-sm btn-warning text-dark rounded-pill px-3 d-flex align-items-center gap-1 timer-btn" 
+                          (click)="pauseTimer(task)">
+                    <i class="bi bi-pause-fill"></i> Pause
+                  </button>
+
+                  <!-- Resume Timer -->
+                  <button *ngIf="task.paused" 
+                          class="btn btn-sm btn-success rounded-pill px-3 d-flex align-items-center gap-1 timer-btn" 
+                          (click)="resumeTimer(task)">
+                    <i class="bi bi-play-fill"></i> Resume
+                  </button>
+
+                  <!-- Stop & Log -->
+                  <button *ngIf="task.running || task.paused" 
+                          class="btn btn-sm btn-danger rounded-pill px-3 d-flex align-items-center gap-1 timer-btn" 
+                          (click)="stopTimer(task)">
+                    <i class="bi bi-stop-fill"></i> Stop & Save
+                  </button>
+
+                  <!-- Live Counter -->
+                  <span *ngIf="task.running" class="badge bg-dark text-white rounded-pill px-3 py-2 font-monospace timer-counter animate-pulse">
+                    <i class="bi bi-stopwatch me-1 text-danger"></i> {{formatTime(task.elapsedTime)}}
+                  </span>
+
+                  <!-- Manual Log Field -->
+                <div class="input-group input-group-sm manual-log-group">
+                  <input type="number" step="0.25" min="0.25" #manualHrs class="form-control" placeholder="Hrs">
+                  <button class="btn btn-primary px-3" (click)="logManualTime(task, manualHrs.value); manualHrs.value=''">
+                    <i class="bi bi-plus-lg"></i> Log
+                  </button>
+                </div>
+                </div>
+              </td>
+
+            </tr>
+
+            <!-- Empty Row Filter State -->
+            <tr *ngIf="filteredTasks.length === 0">
+              <td colspan="6" class="text-center py-5 text-muted">
+                <i class="bi bi-inbox display-6 d-block mb-2 text-secondary"></i>
+                No tasks match the selected filter or search.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- RECENT TIMESHEET ENTRIES ACCORDION / LIST      -->
+    <!-- ============================================== -->
+    <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+          <i class="bi bi-clock-history text-primary"></i> Recent Logged Timesheets
+        </h5>
+        <span class="badge bg-light text-muted border px-3 py-2 rounded-pill">
+          {{timesheetLogs.length}} Logged Entries
+        </span>
+      </div>
+
+      <div class="table-responsive" *ngIf="timesheetLogs.length > 0">
+        <table class="table table-sm align-middle table-borderless table-striped">
+          <thead class="table-light rounded-3">
+            <tr>
+              <th class="ps-3">Date</th>
+              <th>Task</th>
+              <th>Employee</th>
+              <th>Hours</th>
+              <th>Notes</th>
+              <th class="text-end pe-3">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of timesheetLogs">
+              <td class="ps-3 text-muted small">
+                {{(log.loggedDate || log.LoggedDate || log.createdDate) | date:'mediumDate'}}
+              </td>
+              <td>
+                <span class="fw-semibold text-dark">{{log.taskName || 'Task #' + (log.taskId || log.TaskID)}}</span>
+              </td>
+              <td>
+                <span class="small text-muted">{{log.employeeName || getEmployeeName(log.employeeId || log.EmployeeID)}}</span>
+              </td>
+              <td>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace px-2 py-1">
+                  {{log.loggedHours || log.LoggedHours}} hrs
+                </span>
+              </td>
+              <td class="text-muted small">
+                {{log.description || log.Description || 'Time entry'}}
+              </td>
+              <td class="text-end pe-3">
+                <button class="btn btn-sm btn-outline-danger border-0 p-1" title="Delete log" (click)="deleteTimesheetLog(log.timesheetId || log.TimesheetID)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="timesheetLogs.length === 0" class="text-center py-4 text-muted small">
+        No timesheet entries logged for this project yet. Start the stopwatch timer or enter manual hours above.
+      </div>
+    </div>
+
+  </div>
+
+</div>

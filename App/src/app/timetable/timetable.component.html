@@ -1,0 +1,337 @@
+<div class="container-fluid py-4">
+
+  <!-- FILTER CARD -->
+  <div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-body">
+
+      <h3 class="fw-bold mb-4">
+        Class Timetable
+      </h3>
+
+      <div class="row g-3">
+
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">
+            Class
+          </label>
+
+          <select
+            class="form-select"
+            [class.is-invalid]="classError"
+            [(ngModel)]="selectedClass">
+
+            <option value="">Select Class</option>
+            <option value="9">9th</option>
+            <option value="10">10th</option>
+
+          </select>
+          <div class="field-error" *ngIf="classError">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ classError }}
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">
+            Section
+          </label>
+
+          <select
+            class="form-select"
+            [class.is-invalid]="sectionError"
+            [(ngModel)]="selectedSection">
+
+            <option value="">Select Section</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+
+          </select>
+          <div class="field-error" *ngIf="sectionError">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ sectionError }}
+          </div>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+
+          <button
+            class="btn w-100"
+            (click)="showTimetable()">
+
+            View Timetable
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TIMETABLE -->
+  <div
+    *ngIf="isTableVisible"
+    class="card border-0 shadow-sm rounded-4">
+
+    <div class="card-body">
+
+      <div
+        class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+
+        <h4 class="fw-bold">
+          Class {{ selectedClass }} -
+          Section {{ selectedSection }}
+        </h4>
+
+        <button
+          *ngIf="role === 'school' || role === 'teacher'"
+          class="btn btn-success"
+          data-bs-toggle="modal"
+          data-bs-target="#timetableModal"
+          (click)="openAddModal()">
+
+          Add Period
+
+        </button>
+
+      </div>
+
+      <div class="table-responsive">
+
+        <table
+          class="table table-bordered table-hover text-center align-middle">
+
+          <thead class="table-dark">
+
+            <tr>
+
+              <th>Time</th>
+              <th>Monday</th>
+              <th>Tuesday</th>
+              <th>Wednesday</th>
+              <th>Thursday</th>
+              <th>Friday</th>
+              <th>Teacher</th>
+
+              <th
+                *ngIf="role === 'school' || role === 'teacher'">
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let row of filteredTimetable">
+
+              <td>{{ row.time }}</td>
+              <td>{{ row.Monday }}</td>
+              <td>{{ row.Tuesday }}</td>
+              <td>{{ row.Wednesday }}</td>
+              <td>{{ row.Thursday }}</td>
+              <td>{{ row.Friday }}</td>
+              <td>{{ row.teacher }}</td>
+
+              <td
+                *ngIf="role === 'school' || role === 'teacher'">
+
+                <button
+                  class="btn btn-warning btn-sm me-2 text-white"
+                  data-bs-toggle="modal"
+                  data-bs-target="#timetableModal"
+                  (click)="openEditModal(row)">
+
+                  Edit
+
+                </button>
+
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="deleteRow(row)">
+
+                  Delete
+
+                </button>
+
+              </td>
+
+            </tr>
+
+            <tr *ngIf="filteredTimetable.length === 0">
+
+              <td
+                [attr.colspan]="role === 'school' || role === 'teacher' ? 8 : 7"
+                class="text-center text-muted py-4">
+
+                No timetable available
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ADD / EDIT MODAL -->
+
+<div
+  class="modal fade"
+  id="timetableModal"
+  tabindex="-1">
+
+  <div class="modal-dialog modal-lg">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">
+
+          {{ isEditMode ? 'Edit Period' : 'Add Period' }}
+
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Time
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="timeError"
+              [(ngModel)]="periodForm.time">
+            <div class="field-error" *ngIf="timeError">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ timeError }}
+            </div>
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Teacher
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="teacherError"
+              [(ngModel)]="periodForm.teacher">
+            <div class="field-error" *ngIf="teacherError">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ teacherError }}
+            </div>
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Monday
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="periodForm.Monday">
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Tuesday
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="periodForm.Tuesday">
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Wednesday
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="periodForm.Wednesday">
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Thursday
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="periodForm.Thursday">
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Friday
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="periodForm.Friday">
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="savePeriod()"
+          data-bs-dismiss="modal">
+
+          {{ isEditMode ? 'Update' : 'Save' }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

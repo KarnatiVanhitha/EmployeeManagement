@@ -1,0 +1,1376 @@
+<!-- ================= PAGE ================= -->
+
+<div
+  class="students-page container-fluid py-4 bg-light vh-100 "
+>
+
+  <div class="row g-4 align-items-start">
+
+    <!-- ================= LEFT SIDE ================= -->
+<div [ngClass]="selectedStudent ? 'col-lg-8' : 'col-12'">
+
+      <!-- SEARCH -->
+
+     <div class="d-flex align-items-center gap-4 mb-4 search-wrapper">
+
+  <!-- Filter Button -->
+ <button
+  class="btn btn-link text-secondary text-decoration-none p-0 d-flex align-items-center filter-btn"
+>
+  <span>Add filter</span>
+  <i class="bi bi-chevron-down ms-2 small"></i>
+</button>
+
+  <!-- Search Box -->
+  <div class="input-group search-box">
+
+    <span class="input-group-text bg-white border-0 ps-4 search-input">
+      <i class="bi bi-search text-muted"></i>
+    </span>
+
+    <input
+      type="text"
+      class="form-control border-0 shadow-none"
+      placeholder="Search"
+    >
+
+  </div>
+
+</div>
+
+      <!-- TABLE -->
+
+    <div
+  *ngIf="students.length > 0; else emptyState"
+  class="table-responsive"
+>
+
+  <table class="table align-middle">
+
+    <thead class="table-light">
+
+      <tr>
+
+        <th>Name</th>
+        <th>Student ID</th>
+        <th>Email</th>
+        <th>Class</th>
+        <th>Gender</th>
+        <th class="text-center">View</th>
+        <th>Delete</th>
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <ng-container *ngFor="let t of students; let i = index">
+
+        <!-- MAIN ROW -->
+
+        <tr class="bg-white">
+
+          <!-- NAME -->
+
+          <td>
+
+            <div class="d-flex align-items-center gap-3">
+
+              <img
+                [src]="t.image || 'assets/default.png'"
+                class="rounded-circle border object-fit-cover"
+                width="45"
+                height="45"
+              >
+
+              <div>
+
+                <div class="fw-semibold">
+                  {{ t.name }}
+                </div>
+
+                <small class="text-muted">
+                  {{ t.designation }}
+                </small>
+
+              </div>
+
+            </div>
+
+          </td>
+
+          <!-- ID -->
+
+          <td>
+            {{ t.studentid }}
+          </td>
+
+          <!-- EMAIL -->
+
+          <td>
+            {{ t.email }}
+          </td>
+
+          <!-- CLASS -->
+
+          <td>
+            {{ t.class }}
+          </td>
+
+          <!-- GENDER -->
+
+          <td>
+            {{ t.gender}}
+          </td>
+
+          <!-- ACTIONS -->
+
+          <td>
+
+            <div class="d-flex justify-content-center gap-2">
+
+              <!-- DROPDOWN -->
+
+              <button
+                class="btn btn-light btn-sm border"
+                (click)="toggleDropdown(i)"
+              >
+
+                <i
+                  class="bi"
+                  [ngClass]="expandedRow === i
+                  ? 'bi-chevron-up'
+                  : 'bi-chevron-down'"
+                ></i>
+
+              </button>
+
+              <!-- DELETE -->
+
+              
+
+            </div>
+
+          </td>
+          <td>
+            <div>
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="deleteStudent(i)"
+              >
+
+                <i class="bi bi-trash-fill"></i>
+
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- DROPDOWN CONTENT -->
+
+        <tr *ngIf="expandedRow === i">
+
+         <td colspan="7" class="p-0 border-0">
+
+            <div class="p-3">
+
+              <div class="row align-items-center g-4">
+
+                <!-- IMAGE
+
+                <div class="col-md-2 text-center">
+
+                  <img
+                    [src]="t.image || 'assets/default.png'"
+                    class="rounded-circle border"
+                    width="90"
+                    height="90"
+                  >
+
+                </div> -->
+
+                <!-- DETAILS -->
+
+              <div class="container-fluid py-4 bg-light">
+
+  <!-- ================= PROFILE CARD FULL WIDTH ================= -->
+ <button
+      class="btn btn-primary btn-sm mb-3 " style="margin-left: 90%;"
+      (click)="openEditStudent(t); $event.stopPropagation()"
+      data-bs-toggle="modal"
+      data-bs-target="#editStudentModal"
+    >
+      Edit Profile
+    </button>
+      <!-- ================= EDIT STUDENT MODAL ================= -->
+<div class="modal fade" id="editStudentModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Student</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label class="form-label">Name</label>
+            <input class="form-control"
+                   [(ngModel)]="editStudent.name">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Student ID</label>
+            <input class="form-control"
+                   [(ngModel)]="editStudent.studentid">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input class="form-control"
+                   [(ngModel)]="editStudent.email">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Class</label>
+            <input class="form-control"
+                   [(ngModel)]="editStudent.class">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Gender</label>
+            <select class="form-select"
+                    [(ngModel)]="editStudent.gender">
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Designation</label>
+            <input class="form-control"
+                   [(ngModel)]="editStudent.designation">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Image URL</label>
+            <input class="form-control"
+                   [(ngModel)]="editStudent.image">
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button class="btn btn-primary"
+                (click)="saveStudent()"
+                data-bs-dismiss="modal">
+          Save Changes
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+  <div class="row mb-4">
+
+    <div class="col-12">
+       
+      <div
+        class="rounded-4 p-4 text-white position-relative overflow-hidden"
+        style="background:#dcefe6 ;"
+      >
+
+        <div class="row align-items-center ">
+
+          <!-- LEFT -->
+          <div class="col-lg-12">
+
+           <div class="d-flex align-items-center gap-4 flex-wrap justify-content-between">
+
+            
+              <!-- INFO -->
+              <div>
+
+                <span class="badge bg-white text-primary px-3 py-2 mb-2">
+                  #ST123456
+                </span>
+
+                <h2 class="fw-bold mb-1">
+                {{t.name}}
+                </h2>
+
+                <p class="mb-0 fs-5">
+                  {{t.class}}
+                  {{t.studentid}}
+                </p>
+
+              </div>
+              <img
+  [src]="t.image"
+  class="ms-auto rounded-4 object-fit-cover"
+  width="100"
+  height="100"
+/>
+
+            </div>
+
+          </div>
+
+          <!-- RIGHT -->
+          <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+
+            <!-- <button class="btn btn-primary px-4 py-3 rounded-3">
+              Edit Profile
+            </button> -->
+              <!-- IMAGE -->
+             
+
+
+          </div>
+
+        </div>
+
+        <!-- BOTTOM -->
+        <hr class="border-light opacity-50 my-4">
+
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+
+          <h4 class="fw-bold mb-0">
+            1st Quarterly
+          </h4>
+
+          <span class="badge bg-success px-3 py-2">
+            Pass
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= BOTTOM SECTION ================= -->
+
+  <div class="row g-4">
+
+    <!-- TODAY CLASSES -->
+    <div class="col-lg-6">
+
+      <div class="bg-white rounded-4 shadow-sm h-100">
+
+        <!-- HEADER -->
+        <div
+          class="d-flex justify-content-between align-items-center p-4 border-bottom"
+        >
+
+          <h3 class="fw-bold mb-0">
+            Today’s Class
+          </h3>
+
+          <span class="text-secondary">
+            16 May 2024
+          </span>
+
+        </div>
+
+        <!-- CLASS ITEM -->
+        <div class="p-4">
+
+          <div
+            class="border rounded-4 p-3 d-flex justify-content-between align-items-center mb-3"
+          >
+
+            <div class="d-flex align-items-center gap-3">
+
+              <img
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                class="rounded-3"
+                width="55"
+                height="55"
+              >
+
+              <div>
+
+                <h5 class="fw-bold mb-1">
+                  English
+                </h5>
+
+                <span class="text-secondary">
+                  09:00 AM- 10:30 AM
+                </span>
+
+              </div>
+
+            </div>
+
+            <span class="badge bg-success-subtle text-success px-3 py-2">
+              Completed
+            </span>
+
+          </div>
+
+          <!-- SECOND -->
+
+          <div
+            class="border rounded-4 p-3 d-flex justify-content-between align-items-center mb-3"
+          >
+
+            <div class="d-flex align-items-center gap-3">
+
+              <img
+                src="https://randomuser.me/api/portraits/women/65.jpg"
+                class="rounded-3"
+                width="55"
+                height="55"
+              >
+
+              <div>
+
+                <h5 class="fw-bold mb-1">
+                  Chemistry
+                </h5>
+
+                <span class="text-secondary">
+                  10:30 AM - 12:00 PM
+                </span>
+
+              </div>
+              
+
+            </div>
+
+            <span class="badge bg-success-subtle text-success px-3 py-2">
+              Completed
+            </span>
+
+          </div>
+           <div
+            class="border rounded-4 p-3 d-flex justify-content-between align-items-center mb-3"
+          >
+
+            <div class="d-flex align-items-center gap-3">
+
+              <img
+                src="https://randomuser.me/api/portraits/women/65.jpg"
+                class="rounded-3"
+                width="55"
+                height="55"
+              >
+
+              <div>
+
+                <h5 class="fw-bold mb-1">
+                  
+                  Physics
+                </h5>
+
+                <span class="text-secondary">
+                 01:00 PM- 02:30 PM
+                </span>
+
+              </div>
+              
+
+            </div>
+
+            <span class="badge bg-warning-subtle text-warning px-3 py-2">
+             InProgress
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ATTENDANCE -->
+    <div class="col-lg-6">
+
+      <div class="bg-white rounded-4 shadow-sm h-100">
+
+        <!-- HEADER -->
+        <div
+          class="d-flex justify-content-between align-items-center p-4 border-bottom"
+        >
+
+          <h3 class="fw-bold mb-0">
+            Attendance
+          </h3>
+
+          <span class="text-secondary">
+            This Week
+          </span>
+
+        </div>
+
+        <div class="p-4">
+
+          <!-- STATS -->
+          <div class="row text-center g-3 mb-4">
+
+            <div class="col-4">
+
+              <div class="border rounded-4 p-3">
+
+                <h5 class="text-secondary">
+                  Present
+                </h5>
+
+                <h2 class="fw-bold">
+                  25
+                </h2>
+
+              </div>
+
+            </div>
+
+            <div class="col-4">
+
+              <div class="border rounded-4 p-3">
+
+                <h5 class="text-secondary">
+                  Absent
+                </h5>
+
+                <h2 class="fw-bold">
+                  2
+                </h2>
+
+              </div>
+
+            </div>
+
+            <div class="col-4">
+
+              <div class="border rounded-4 p-3">
+
+                <h5 class="text-secondary">
+                  Halfday
+                </h5>
+
+                <h2 class="fw-bold">
+                  0
+                </h2>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ATTENDANCE CIRCLE -->
+          <div class="text-center">
+
+            <div
+              class="rounded-circle mx-auto d-flex align-items-center justify-content-center"
+              style="
+                width:220px;
+                height:220px;
+                background:
+                conic-gradient(
+                  green 0% 75%,
+                  red 75% 90%,
+                  #dee2e6 90% 100%
+                );
+              "
+            >
+
+              <div
+                class="bg-white rounded-circle"
+                style="width:140px;height:140px;"
+              ></div>
+
+            </div>
+
+          </div>
+          
+        </div>
+        
+
+      </div>
+      
+
+    </div>
+    <!-- ================= PARENT DETAILS ================= -->
+     <div class="col-12">
+      <div class="row g-4 mt-1">
+
+  <!-- FATHER CARD -->
+  <div class="col-lg-4">
+
+    <div class="bg-white rounded-4 shadow-sm p-4 h-100 border-0">
+
+      <!-- HEADER -->
+      <div class="d-flex align-items-center gap-3 mb-4">
+
+       <img
+          [src]="t.fatherImage || 'assets/default-parent.png'"
+          class="rounded-circle border object-fit-cover"
+          width="70"
+          height="70"
+        >
+
+        <div>
+
+          <h4 class="fw-bold mb-1">
+            {{ t.fatherName }}
+          </h4>
+
+          <span class="text-secondary">
+            Father
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- DETAILS -->
+
+      <div class="row g-3">
+
+        <div class="col-6">
+
+          <div class="border rounded-4 p-3">
+
+            <small class="text-secondary d-block">
+              Phone
+            </small>
+
+            <h6 class="fw-semibold mb-0">
+              {{ t.fatherPhone }}
+            </h6>
+
+          </div>
+
+        </div>
+
+        <div class="col-6">
+
+          <div class="border rounded-4 p-3">
+
+            <small class="text-secondary d-block">
+              Occupation
+            </small>
+
+            <h6 class="fw-semibold mb-0">
+              {{ t.fatherOccupation }}
+            </h6>
+
+          </div>
+
+        </div>
+
+        <div class="col-12">
+
+          <div class="border rounded-4 p-3">
+
+            <small class="text-secondary d-block">
+              Email
+            </small>
+
+            <h6 class="fw-semibold mb-0">
+              {{ t.fatherEmail }}
+            </h6>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MOTHER CARD -->
+  <div class="col-lg-4">
+
+    <div class="bg-white rounded-4 shadow-sm p-4 h-100 border-0">
+
+      <!-- HEADER -->
+      <div class="d-flex align-items-center gap-3 mb-4">
+
+        <img
+          [src]="t.motherImage || 'assets/default-parent.png'"
+          class="rounded-circle border object-fit-cover"
+          width="70"
+          height="70"
+        >
+
+        <div>
+
+          <h4 class="fw-bold mb-1">
+            {{ t.motherName }}
+          </h4>
+
+          <span class="text-secondary">
+            Mother
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- DETAILS -->
+
+      <div class="row g-3">
+
+        <div class="col-6">
+
+          <div class="border rounded-4 p-3">
+
+            <small class="text-secondary d-block">
+              Phone
+            </small>
+
+            <h6 class="fw-semibold mb-0">
+              {{ t.motherPhone }}
+            </h6>
+
+          </div>
+
+        </div>
+
+        <div class="col-6">
+
+          <div class="border rounded-4 p-3">
+
+            <small class="text-secondary d-block">
+              Occupation
+            </small>
+
+            <h6 class="fw-semibold mb-0">
+              {{ t.motherOccupation }}
+            </h6>
+
+          </div>
+
+        </div>
+
+        <div class="col-12">
+
+          <div class="border rounded-4 p-3">
+
+            <small class="text-secondary d-block">
+              Email
+            </small>
+
+            <h6 class="fw-semibold mb-0">
+              {{ t.motherEmail }}
+            </h6>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <!-- ================= GUARDIAN ================= -->
+  <div class="col-lg-4">
+
+    <div class="bg-white rounded-4 shadow-sm p-4 h-100 border-0">
+
+      <!-- HEADER -->
+      <div class="d-flex align-items-center gap-3 mb-4">
+
+        <img
+          [src]="t.guardianImage || 'assets/default-parent.png'"
+          class="rounded-circle border object-fit-cover"
+          width="70"
+          height="70"
+        >
+
+        <div>
+
+          <h4 class="fw-bold mb-1">
+            {{ t.guardianName }}
+          </h4>
+
+          <span class="text-secondary">
+            Mother
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- DETAILS -->
+
+      <div class="row g-3">
+
+        <div class="col-6">
+
+          <div class="border rounded-4 p-3">
+
+            <small class="text-secondary d-block">
+              Phone
+            </small>
+
+            <h6 class="fw-semibold mb-0">
+              {{ t.guardianPhone }}
+            </h6>
+
+          </div>
+
+        </div>
+
+        <div class="col-6">
+
+          <div class="border rounded-4 p-3">
+
+            <small class="text-secondary d-block">
+              Occupation
+            </small>
+
+            <h6 class="fw-semibold mb-0">
+              {{ t.guardianOccupation }}
+            </h6>
+
+          </div>
+
+        </div>
+
+        <div class="col-12">
+
+          <div class="border rounded-4 p-3">
+
+            <small class="text-secondary d-block">
+              Email
+            </small>
+
+            <h6 class="fw-semibold mb-0">
+              {{ t.guardianEmail }}
+            </h6>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+     </div>
+
+ 
+<!-- ================= CLASS FACULTIES ================= -->
+
+<div class="card border-0 shadow-sm rounded-4 p-4">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h4 class="fw-bold text-dark mb-0">
+      Class Faculties
+    </h4>
+
+    <!-- ARROWS -->
+    <div class="d-flex gap-2">
+
+      <button class="btn btn-light rounded-circle border">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+
+      <button class="btn btn-light rounded-circle border">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- FACULTY LIST -->
+  <div class="row g-4 ">
+
+    <!-- CARD 1 -->
+    <div class="col-md-3">
+
+      <div class="border rounded-4 p-4 bg-white h-100">
+
+        <!-- TOP -->
+        <div class="d-flex align-items-center gap-3 mb-4">
+
+          <img
+            src="https://randomuser.me/api/portraits/men/32.jpg"
+            class="rounded-3"
+            width="56"
+            height="56"
+          >
+
+          <div>
+            <h5 class="fw-bold mb-1">Aaron</h5>
+            <p class="text-secondary mb-0">Chemistry</p>
+          </div>
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="d-flex gap-2">
+
+          <button class="btn btn-light border flex-fill">
+            <i class="bi bi-envelope me-2"></i>
+            Email
+          </button>
+
+          <button class="btn btn-light border flex-fill">
+            <i class="bi bi-chat-square-text me-2"></i>
+            Chat
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="col-md-3">
+
+      <div class="border rounded-4 p-4 bg-white h-100">
+
+        <div class="d-flex align-items-center gap-3 mb-4">
+
+          <img
+            src="https://randomuser.me/api/portraits/women/44.jpg"
+            class="rounded-3"
+            width="56"
+            height="56"
+          >
+
+          <div>
+            <h5 class="fw-bold mb-1">Hellana</h5>
+            <p class="text-secondary mb-0">English</p>
+          </div>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+          <button class="btn btn-light border flex-fill">
+            <i class="bi bi-envelope me-2"></i>
+            Email
+          </button>
+
+          <button class="btn btn-light border flex-fill">
+            <i class="bi bi-chat-square-text me-2"></i>
+            Chat
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="col-md-3">
+
+      <div class="border rounded-4 p-4 bg-white h-100">
+
+        <div class="d-flex align-items-center gap-3 mb-4">
+
+          <img
+            src="https://randomuser.me/api/portraits/women/65.jpg"
+            class="rounded-3"
+            width="56"
+            height="56"
+          >
+
+          <div>
+            <h5 class="fw-bold mb-1">Morgan</h5>
+            <p class="text-secondary mb-0">Physics</p>
+          </div>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+          <button class="btn btn-light border flex-fill">
+            <i class="bi bi-envelope me-2"></i>
+            Email
+          </button>
+
+          <button class="btn btn-light border flex-fill">
+            <i class="bi bi-chat-square-text me-2"></i>
+            Chat
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="col-md-3">
+
+      <div class="border rounded-4 p-4 bg-white h-100">
+
+        <div class="d-flex align-items-center gap-3 mb-4">
+
+          <img
+            src="https://randomuser.me/api/portraits/men/75.jpg"
+            class="rounded-3"
+            width="56"
+            height="56"
+          >
+
+          <div>
+            <h5 class="fw-bold mb-1">Daniel Josua</h5>
+            <p class="text-secondary mb-0">Spanish</p>
+          </div>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+          <button class="btn btn-light border flex-fill">
+            <i class="bi bi-envelope me-2"></i>
+            Email
+          </button>
+
+          <button class="btn btn-light border flex-fill">
+            <i class="bi bi-chat-square-text me-2"></i>
+            Chat
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- ================= EXAM SCHEDULE ================= -->
+
+<div class="card border-0 shadow-sm rounded-4 p-4">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+      <h4 class="fw-bold mb-1">Exam Schedule</h4>
+      <p class="text-secondary mb-0">
+        Upcoming examinations
+      </p>
+    </div>
+
+    <button class="btn btn-primary rounded-3 px-3">
+      View All
+    </button>
+
+  </div>
+
+  <!-- EXAM LIST -->
+  <div class="row g-4">
+
+    <!-- CARD 1 -->
+    <div class="col-lg-4 ">
+
+      <div class="border rounded-4 p-4 bg-white h-100">
+
+        <!-- SUBJECT -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+
+          <div>
+            <h5 class="fw-bold mb-1">Mathematics</h5>
+            <p class="text-secondary mb-0">
+              Final Semester Exam
+            </p>
+          </div>
+
+          <span class="badge bg-primary-subtle text-primary px-3 py-2">
+            Upcoming
+          </span>
+
+        </div>
+
+        <!-- DATE -->
+        <div class="d-flex align-items-center gap-3 mb-3">
+
+          <div class="bg-light rounded-3 p-2">
+            <i class="bi bi-calendar-event fs-5"></i>
+          </div>
+
+          <div>
+            <small class="text-secondary">Date</small>
+            <h6 class="fw-semibold mb-0">
+              25 May 2026
+            </h6>
+          </div>
+
+        </div>
+
+        <!-- TIME -->
+        <div class="d-flex align-items-center gap-3 mb-3">
+
+          <div class="bg-light rounded-3 p-2">
+            <i class="bi bi-clock fs-5"></i>
+          </div>
+
+          <div>
+            <small class="text-secondary">Time</small>
+            <h6 class="fw-semibold mb-0">
+              10:00 AM - 1:00 PM
+            </h6>
+          </div>
+
+        </div>
+
+        <!-- ROOM -->
+        <div class="d-flex align-items-center gap-3">
+
+          <div class="bg-light rounded-3 p-2">
+            <i class="bi bi-geo-alt fs-5"></i>
+          </div>
+
+          <div>
+            <small class="text-secondary">Room</small>
+            <h6 class="fw-semibold mb-0">
+              Hall A-102
+            </h6>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="col-lg-4">
+
+      <div class="border rounded-4 p-4 bg-white h-100">
+
+        <div class="d-flex justify-content-between align-items-start mb-4">
+
+          <div>
+            <h5 class="fw-bold mb-1">Physics</h5>
+            <p class="text-secondary mb-0">
+              Mid Term Exam
+            </p>
+          </div>
+
+          <span class="badge bg-warning-subtle text-warning px-3 py-2">
+            Tomorrow
+          </span>
+
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+
+          <div class="bg-light rounded-3 p-2">
+            <i class="bi bi-calendar-event fs-5"></i>
+          </div>
+
+          <div>
+            <small class="text-secondary">Date</small>
+            <h6 class="fw-semibold mb-0">
+              26 May 2026
+            </h6>
+          </div>
+
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+
+          <div class="bg-light rounded-3 p-2">
+            <i class="bi bi-clock fs-5"></i>
+          </div>
+
+          <div>
+            <small class="text-secondary">Time</small>
+            <h6 class="fw-semibold mb-0">
+              2:00 PM - 5:00 PM
+            </h6>
+          </div>
+
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+
+          <div class="bg-light rounded-3 p-2">
+            <i class="bi bi-geo-alt fs-5"></i>
+          </div>
+
+          <div>
+            <small class="text-secondary">Room</small>
+            <h6 class="fw-semibold mb-0">
+              Hall B-204
+            </h6>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="col-lg-4">
+
+      <div class="border rounded-4 p-4 bg-white h-100">
+
+        <div class="d-flex justify-content-between align-items-start mb-4">
+
+          <div>
+            <h5 class="fw-bold mb-1">Chemistry</h5>
+            <p class="text-secondary mb-0">
+              Practical Exam
+            </p>
+          </div>
+
+          <span class="badge bg-success-subtle text-success px-3 py-2">
+            Next Week
+          </span>
+
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+
+          <div class="bg-light rounded-3 p-2">
+            <i class="bi bi-calendar-event fs-5"></i>
+          </div>
+
+          <div>
+            <small class="text-secondary">Date</small>
+            <h6 class="fw-semibold mb-0">
+              30 May 2026
+            </h6>
+          </div>
+
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+
+          <div class="bg-light rounded-3 p-2">
+            <i class="bi bi-clock fs-5"></i>
+          </div>
+
+          <div>
+            <small class="text-secondary">Time</small>
+            <h6 class="fw-semibold mb-0">
+              9:00 AM - 12:00 PM
+            </h6>
+          </div>
+
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+
+          <div class="bg-light rounded-3 p-2">
+            <i class="bi bi-geo-alt fs-5"></i>
+          </div>
+
+          <div>
+            <small class="text-secondary">Room</small>
+            <h6 class="fw-semibold mb-0">
+              Lab C-305
+            </h6>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- BUTTONS -->
+<div class="d-flex gap-3 mt-4">
+
+  <!-- PAY FEE -->
+  <button class="btn btn-primary w-50 py-3 rounded-3 fw-semibold">
+
+    <i class="bi bi-credit-card me-2"></i>
+    Pay Fee
+
+  </button>
+
+  <!-- EXAM RESULTS -->
+  <button class="btn btn-danger w-50 py-3 rounded-3 fw-semibold">
+
+    <i class="bi bi-file-earmark-text me-2"></i>
+    Exam Results
+
+  </button>
+
+</div>
+
+  </div>
+
+</div>
+
+              </div>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      </ng-container>
+
+    </tbody>
+
+  </table>
+
+</div>
+
+    </div>
+
+
+  </div>
+
+  <!-- ================= EMPTY STATE ================= -->
+
+  <ng-template #emptyState>
+
+    <div class="d-flex flex-column justify-content-center align-items-center text-center empty"
+         style="height:400px;">
+
+      <h3 class="fw-bold text-dark">
+        No Students at this time
+      </h3>
+
+      <p class="text-secondary mt-2">
+        Students will appear here after they enroll in school.
+      </p>
+
+      <button class="btn text-white rounded-pill px-4 py-2 position-fixed bottom-0 end-0 m-4"
+              style="background:#0e1b63;">
+
+        <i class="bi bi-headset me-2"></i>
+
+        Support
+
+      </button>
+
+    </div>
+
+  </ng-template>
+
+</div>

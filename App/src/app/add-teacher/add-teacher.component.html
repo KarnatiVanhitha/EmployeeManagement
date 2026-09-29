@@ -1,0 +1,476 @@
+<div class="container-fluid bg-light min-vh-100 p-0">
+
+  <!-- HEADER -->
+  <div class="text-white py-5 px-5 header">
+
+    <div class="d-flex align-items-center gap-5 flex-wrap">
+
+      <!-- SCHOOL -->
+      <div class="d-flex align-items-center gap-3">
+
+        <div
+          class="border border-2 rounded-4 d-flex justify-content-center align-items-center header-left"
+        >
+          <span class="fs-1">
+            <i class="bi bi-mortarboard-fill"></i>
+          </span>
+        </div>
+
+        <div>
+          <h2 class="fw-bold mb-0">Eduaide</h2>
+
+          <p class="text-white mb-0">
+            Nurturing Minds, Building Futures
+          </p>
+        </div>
+
+      </div>
+
+      <!-- DIVIDER -->
+      <div class="bg-white opacity-50 divider"></div>
+
+      <!-- TITLE -->
+      <div>
+
+        <h2 class="fw-bold">
+          Teacher Application Form
+        </h2>
+
+        <p class="mb-0 text-light">
+          Fill in the details below to apply for admission.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CARD -->
+  <div class="container-fluid px-4">
+
+    <div class="card-body p-lg-5 p-4 bg-white rounded-4 shadow-lg overflow-hidden form">
+
+      <form #teacherform="ngForm" (ngSubmit)=" addTeacher()" >
+
+        <div class="row g-4">
+              <h2 class="fw-bold text-dark">
+  Teacher Details
+</h2>
+            <div class="row g-4">
+
+  <!-- LEFT SIDE -->
+  <div class="col-lg-8">
+
+
+    <div class="row g-4">
+
+      <!-- Teacher ID -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Teacher ID
+        </label>
+
+        <input
+          type="text"
+          class="form-control input-box"
+          [(ngModel)]="teacher.teacherId"
+          name="teacherId"
+          placeholder="Teacher ID">
+      </div>
+
+      <!-- FIRST NAME -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          First Name
+        </label>
+
+        <input
+          type="text"
+          class="form-control input-box"
+          [class.is-invalid]="errors.firstName"
+          [(ngModel)]="teacher.firstName"
+          name="firstName"
+          placeholder="First Name">
+        <div class="field-error" *ngIf="errors.firstName">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ errors.firstName }}
+        </div>
+      </div>
+
+      <!-- LAST NAME -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Last Name
+        </label>
+
+        <input
+          type="text"
+          class="form-control input-box"
+          [class.is-invalid]="errors.lastName"
+          [(ngModel)]="teacher.lastName"
+          name="lastName"
+          placeholder="Last Name">
+        <div class="field-error" *ngIf="errors.lastName">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ errors.lastName }}
+        </div>
+      </div>
+
+      <!-- GENDER -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Gender
+        </label>
+
+        <select
+          class="form-select input-box"
+          [class.is-invalid]="errors.gender"
+          [(ngModel)]="teacher.gender"
+          name="gender">
+          <option value="">Select Gender</option>
+          <option>Female</option>
+          <option>Male</option>
+        </select>
+        <div class="field-error" *ngIf="errors.gender">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ errors.gender }}
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Primary Contact Number
+        </label>
+
+        <input
+          type="text"
+          class="form-control input-box"
+          [class.is-invalid]="errors.phone"
+          [(ngModel)]="teacher.phone"
+          name="phone"
+          placeholder="Phone Number">
+        <div class="field-error" *ngIf="errors.phone">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ errors.phone }}
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Email Address
+        </label>
+
+        <input
+          type="email"
+          class="form-control input-box"
+          [class.is-invalid]="errors.email"
+          [(ngModel)]="teacher.email"
+          name="email"
+          placeholder="Email">
+        <div class="field-error" *ngIf="errors.email">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ errors.email }}
+        </div>
+      </div>
+
+      <!-- CLASS -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Class
+        </label>
+
+        <input
+          type="text"
+          class="form-control input-box"
+          [class.is-invalid]="errors.class"
+          [(ngModel)]="teacher.class"
+          name="class"
+          placeholder="Class">
+        <div class="field-error" *ngIf="errors.class">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ errors.class }}
+        </div>
+      </div>
+
+      <!-- SUBJECT -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Subject
+        </label>
+
+        <input
+          type="text"
+          class="form-control input-box"
+          [class.is-invalid]="errors.subject"
+          [(ngModel)]="teacher.subject"
+          name="subject"
+          placeholder="Subject">
+        <div class="field-error" *ngIf="errors.subject">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ errors.subject }}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE PHOTO -->
+  <div class="col-lg-4">
+
+    <label class="form-label fw-semibold">
+      Teacher Photo
+    </label>
+
+    <div class="border rounded-4 p-4 text-center bg-light">
+
+      <div
+        class="rounded-circle shadow-sm overflow-hidden d-flex justify-content-center align-items-center mx-auto mb-3"
+        style="width:170px;height:170px;">
+
+        <i
+          *ngIf="!teacher.image"
+          class="bi bi-person-circle text-secondary"
+          style="font-size:170px;">
+        </i>
+
+        <img
+          *ngIf="teacher.image"
+          [src]="teacher.image"
+          class="w-100 h-100 object-fit-cover">
+      </div>
+
+      <label
+        class="btn text-white"
+        style="background-color:#438c71">
+
+        Upload Teacher Image
+
+        <input
+          type="file"
+          hidden
+          accept="image/*"
+          (change)="onImageChange($event,'teacher')">
+
+      </label>
+      <div class="field-error mt-2 justify-content-center" *ngIf="errors.file">
+        <i class="bi bi-exclamation-circle-fill"></i> {{ errors.file }}
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+        
+
+          <!-- BLOOD GROUP -->
+          <div class="col-md-3">
+
+            <label class="form-label form-label-custom">
+              Blood Group
+            </label>
+
+            <select
+              class="form-select input-box"
+              [(ngModel)]="teacher.bloodGroup"
+              name="bloodGroup"
+            >
+            <option value="">Select BloodGroup</option>
+              <option>O +ve</option>
+              <option>A +ve</option>
+              <option>B +ve</option>
+
+            </select>
+
+          </div>
+
+          <!-- FATHER NAME -->
+          <div class="col-md-3">
+
+            <label class="form-label form-label-custom">
+              Father’s Name
+            </label>
+
+            <input
+              type="text"
+              class="form-control input-box"
+              [(ngModel)]="teacher.fatherName"
+              name="fatherName"
+              placeholder="Father Name"
+            >
+
+          </div>
+
+          <!-- MOTHER NAME -->
+          <div class="col-md-3">
+
+            <label class="form-label form-label-custom">
+              Mother’s Name
+            </label>
+
+            <input
+              type="text"
+              class="form-control input-box"
+              [(ngModel)]="teacher.motherName"
+              name="motherName"
+              placeholder="Mother Name"
+            >
+
+          </div>
+
+          <!-- DATE OF BIRTH -->
+          <div class="col-md-3">
+
+            <label class="form-label form-label-custom">
+              Date of Birth
+            </label>
+
+            <input
+              type="date"
+              class="form-control input-box"
+              [(ngModel)]="teacher.dob"
+              name="dob"
+            >
+
+          </div>
+
+          <!-- MARITAL STATUS -->
+          <div class="col-md-3">
+
+            <label class="form-label form-label-custom">
+              Marital Status
+            </label>
+
+            <select
+              class="form-select input-box"
+              [(ngModel)]="teacher.maritalStatus"
+              name="maritalStatus"
+            >
+            <option value="">Select Status</option>
+
+              <option>Single</option>
+              <option>Married</option>
+
+            </select>
+
+          </div>
+
+          <!-- QUALIFICATION -->
+          <div class="col-md-3">
+
+            <label class="form-label form-label-custom">
+              Qualification
+            </label>
+
+            <input
+              type="text"
+              class="form-control input-box"
+              [(ngModel)]="teacher.qualification"
+              name="qualification"
+              placeholder="Qualification"
+            >
+
+          </div>
+
+          <!-- EXPERIENCE -->
+          <div class="col-md-6">
+
+            <label class="form-label form-label-custom">
+              Work Experience
+            </label>
+
+            <input
+              type="text"
+              class="form-control input-box"
+              [(ngModel)]="teacher.experience"
+              name="experience"
+              placeholder="Experience"
+            >
+
+          </div>
+          <!-- ADDRESS -->
+          <div class="col-md-6">
+
+            <label class="form-label form-label-custom">
+              Address
+            </label>
+
+            <textarea
+              rows="3"
+              class="form-control input-box"
+              [(ngModel)]="teacher.address"
+              name="address"
+              placeholder="Enter Address"
+            ></textarea>
+
+          </div>
+
+          <!-- PERMANENT ADDRESS -->
+          <div class="col-md-6">
+
+            <label class="form-label form-label-custom">
+              Permanent Address
+            </label>
+
+            <textarea
+              rows="3"
+              class="form-control input-box"
+              [(ngModel)]="teacher.permanentAddress"
+              name="permanentAddress"
+              placeholder="Permanent Address"
+            ></textarea>
+
+          </div>
+
+          <!-- PAN -->
+          <div class="col-md-6">
+
+            <label class="form-label form-label-custom">
+              PAN Number / ID Number
+            </label>
+
+            <input
+              type="text"
+              class="form-control input-box"
+              [(ngModel)]="teacher.pan"
+              name="pan"
+              placeholder="PAN Number"
+            >
+
+          </div>
+          <!-- SALARY -->
+<div class="col-md-6">
+
+  <label class="form-label form-label-custom">
+    Salary
+  </label>
+
+  <input
+    type="number"
+    class="form-control input-box"
+    [(ngModel)]="teacher.salary"
+    name="salary"
+    placeholder="Enter Salary"
+  >
+
+</div>
+        </div>
+
+        <!-- BUTTON -->
+        <button
+          class="btn submit-btn d-flex align-items-center justify-content-center gap-2 px-4 mt-4 ms-auto"
+          type="submit"
+        >
+
+          <i class="bi bi-plus-circle-fill"></i>
+
+          <span>
+            Add New
+          </span>
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>App</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+    (function() {
+      window.alert = function(message) {
+        let container = document.getElementById('global-alert-container');
+        if (!container) {
+          container = document.createElement('div');
+          container.id = 'global-alert-container';
+          document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = 'custom-alert-toast';
+
+        let type = 'info';
+        let iconClass = 'bi-info-circle-fill';
+        const msgLower = (message || '').toLowerCase();
+        
+        if (msgLower.includes('success') || msgLower.includes('add') || msgLower.includes('save') || msgLower.includes('update') || msgLower.includes('register') || msgLower.includes('verify') || msgLower.includes('verified')) {
+          type = 'success';
+          iconClass = 'bi-check-circle-fill';
+        } else if (msgLower.includes('fail') || msgLower.includes('error') || msgLower.includes('invalid') || msgLower.includes('short') || msgLower.includes('expired') || msgLower.includes('wrong') || msgLower.includes('mismatch') || msgLower.includes('required')) {
+          type = 'error';
+          iconClass = 'bi-exclamation-octagon-fill';
+        } else if (msgLower.includes('warning') || msgLower.includes('select') || msgLower.includes('fill') || msgLower.includes('stop') || msgLower.includes('missing') || msgLower.includes('already')) {
+          type = 'warning';
+          iconClass = 'bi-exclamation-triangle-fill';
+        }
+
+        toast.classList.add('toast-' + type);
+
+        toast.innerHTML = `
+          <div class="custom-alert-icon"><i class="bi ${iconClass}"></i></div>
+          <div class="custom-alert-content">${message}</div>
+          <button class="custom-alert-close" style="border: none; background: transparent; padding: 0 4px; cursor: pointer;"><i class="bi bi-x"></i></button>
+          <div class="custom-alert-progress">
+            <div class="custom-alert-progress-bar" style="transform: scaleX(1)"></div>
+          </div>
+        `;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+          toast.classList.add('show');
+          const progressBar = toast.querySelector('.custom-alert-progress-bar');
+          if (progressBar) {
+            progressBar.getBoundingClientRect();
+            progressBar.style.transform = 'scaleX(0)';
+          }
+        }, 50);
+
+        let dismissTimeout = setTimeout(() => {
+          dismissToast();
+        }, 3500);
+
+        function dismissToast() {
+          toast.classList.remove('show');
+          toast.classList.add('hide');
+          setTimeout(() => {
+            toast.remove();
+            if (container.children.length === 0) {
+              container.remove();
+            }
+          }, 400);
+        }
+
+        toast.querySelector('.custom-alert-close').addEventListener('click', () => {
+          clearTimeout(dismissTimeout);
+          dismissToast();
+        });
+      };
+    })();
+  </script>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

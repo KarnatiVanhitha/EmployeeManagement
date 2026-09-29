@@ -1,0 +1,66 @@
+<div class="container-fluid py-4">
+  <div class="card rounded shadow-sm p-4 mx-auto w-100">
+    <h2 class="mb-4">Homework Lookup</h2>
+
+    <div class="row g-3 align-items-end mb-4">
+      <div class="col-md-4">
+        <label class="form-label">Class</label>
+        <select class="form-select" [class.is-invalid]="classError" [(ngModel)]="selectedClass">
+          <option value="">Select Class</option>
+          <option *ngFor="let cls of classes" [value]="cls">{{ cls }}</option>
+        </select>
+        <div class="field-error" *ngIf="classError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ classError }}
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Section</label>
+        <select class="form-select" [class.is-invalid]="sectionError" [(ngModel)]="selectedSection">
+          <option value="">Select Section</option>
+          <option *ngFor="let section of sections" [value]="section">{{ section }}</option>
+        </select>
+        <div class="field-error" *ngIf="sectionError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ sectionError }}
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <button type="button" class=" w-100" (click)="showHomework()">
+          View
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="isTableVisible">
+      <div *ngIf="homeworkRows.length; else noHomeworkFound">
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <thead class="table-secondary">
+              <tr>
+                <th>Subject</th>
+                <th>Homework</th>
+                <th>Teacher</th>
+                <th>Due Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of homeworkRows">
+                <td>{{ row.subject }}</td>
+                <td>{{ row.description }}</td>
+                <td>{{ row.teacher }}</td>
+                <td>{{ row.dueDate }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <ng-template #noHomeworkFound>
+        <div class="alert alert-warning mb-0">
+          {{ noHomeworkMessage }}
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

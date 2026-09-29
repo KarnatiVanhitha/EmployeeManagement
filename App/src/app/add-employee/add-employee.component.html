@@ -1,0 +1,668 @@
+
+<!-- Toast Notification -->
+<div class="toast-notification" [ngClass]="{'show': toastVisible, 'toast-success': toastType === 'success', 'toast-error': toastType === 'error'}">
+  <span class="toast-icon">
+    <i [class]="toastType === 'success' ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
+  </span>
+  <span class="toast-text">{{ toastMessage }}</span>
+</div>
+
+<div class="container-fluid py-4">
+
+  <!-- Add Employee Form -->
+<div class="container-fluid bg-light min-vh-100 p-0">
+
+  <!-- HEADER -->
+  <div class="text-white py-5 px-5 header">
+
+    <div class="d-flex align-items-center gap-5 flex-wrap">
+
+      <div class="d-flex align-items-center gap-3">
+
+        <div
+          class="border border-2 rounded-4 d-flex justify-content-center align-items-center header-left">
+
+          <span class="fs-1">
+            <i class="bi bi-people-fill"></i>
+          </span>
+
+        </div>
+
+        <div>
+          <h2 class="fw-bold mb-0">Eduaide</h2>
+          <p class="mb-0 text-white">
+            School Management System
+          </p>
+        </div>
+
+      </div>
+
+      <div class="bg-white opacity-50 divider"></div>
+
+      <div>
+       <h2 class="fw-bold">
+  {{ isEditMode ? 'Edit Employee' : (isSelfRegistration ? 'Employee Sign Up' : 'Employee Registration') }}
+</h2>
+
+<p class="mb-0 text-light">
+  {{ isEditMode ? 'Update employee details' : 'Complete your employee profile' }}
+</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="container-fluid px-4 details-card">
+
+    <div class="bg-white rounded-4 shadow-lg overflow-hidden form">
+
+      <div class="p-4 p-lg-5">
+
+   <h2 class="fw-bold">
+  {{ isEditMode ? 'Edit Employee' : (isSelfRegistration ? 'Employee Sign Up' : 'Employee Registration') }}
+</h2>
+
+<p class="mb-0 text-light">
+  {{ isEditMode ? 'Update employee details' : 'Create a new employee profile' }}
+</p>
+
+        <div class="row g-4">
+
+          <!-- IMAGE -->
+          <div class="col-lg-3">
+
+            <label class="form-label fw-semibold">
+              Employee Photo
+            </label>
+
+            <div class="border rounded-4 p-4 text-center bg-light">
+
+            <div
+            class="rounded-circle overflow-hidden mx-auto mb-3"
+            style="width:140px;height:140px;">
+
+            <img
+            [src]="employeeImagePreview || 'https://img.freepik.com/premium-vector/man-avatar-profile-picture-isolated-background-avatar-profile-picture-man_1293239-4864.jpg'"
+            class="w-100 h-100 object-fit-cover"
+            alt="Employee Photo">
+
+            </div>
+
+              <label class="button p-2">
+
+                Upload Photo
+
+                <input
+                  hidden
+                  type="file"
+                  accept="image/*"
+                  (change)="onImageChange($event)">
+
+              </label>
+              <div class="field-error mt-2" *ngIf="photoError">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ photoError }}
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- DETAILS -->
+          <div class="col-lg-9">
+
+            <div class="row g-4">
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Full Name
+                </label>
+
+                <input
+                type="text"
+                class="form-control"
+                [class.is-invalid]="fullNameError"
+                [(ngModel)]="employee.FullName">
+                <div class="field-error" *ngIf="fullNameError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ fullNameError }}
+                </div>
+                </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Email
+                </label>
+
+                <input
+                  type="email"
+                  class="form-control"
+                  [class.is-invalid]="emailError"
+                  [(ngModel)]="employee.Email">
+                <div class="field-error" *ngIf="emailError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ emailError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Mobile Number
+                </label>
+
+                <input
+                  type="tel"
+                  class="form-control"
+                  [class.is-invalid]="mobileError"
+                  [(ngModel)]="employee.MobileNumber">
+                <div class="field-error" *ngIf="mobileError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ mobileError }}
+                </div>
+              </div>
+
+              <!-- Password -->
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">
+                    Password
+                  </label>
+
+                  <input
+                    type="password"
+                    class="form-control"
+                    [class.is-invalid]="passwordError"
+                    placeholder="Enter Password"
+                    [(ngModel)]="employee.Password">
+                  <div class="field-error" *ngIf="passwordError">
+                    <i class="bi bi-exclamation-circle-fill"></i> {{ passwordError }}
+                  </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">
+                    Confirm Password
+                  </label>
+
+                  <input
+                    type="password"
+                    class="form-control"
+                    [class.is-invalid]="confirmPasswordError"
+                    placeholder="Confirm Password"
+                    [(ngModel)]="employee.ConfirmPassword">
+                  <div class="field-error" *ngIf="confirmPasswordError">
+                    <i class="bi bi-exclamation-circle-fill"></i> {{ confirmPasswordError }}
+                  </div>
+                </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Gender
+                </label>
+
+                <select
+                  class="form-select"
+                  [class.is-invalid]="genderError"
+                  [(ngModel)]="employee.Gender">
+
+                  <option value="">Select</option>
+                  <option>Male</option>
+                  <option>Female</option>
+
+                </select>
+                <div class="field-error" *ngIf="genderError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ genderError }}
+                </div>
+
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Date of Birth
+                </label>
+
+                <input
+                  type="date"
+                  class="form-control"
+                  [class.is-invalid]="dobError"
+                  [(ngModel)]="employee.DateOfBirth">
+                <div class="field-error" *ngIf="dobError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ dobError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Joining Date
+                </label>
+
+                <input
+                  type="date"
+                  class="form-control"
+                  [class.is-invalid]="joiningDateError"
+                  [(ngModel)]="employee.JoiningDate">
+                <div class="field-error" *ngIf="joiningDateError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ joiningDateError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Department
+                </label>
+
+                <select
+                  class="form-select"
+                  [class.is-invalid]="departmentError"
+                  [(ngModel)]="employee.DepartmentID"
+                  name="DepartmentID"
+                  (change)="onDepartmentChange()">
+
+                  <option value="">Select Department</option>
+
+                  <option *ngFor="let department of departments" [value]="department.DepartmentID">
+                    {{ department.DepartmentName }}
+                  </option>
+
+                </select>
+                <div class="field-error" *ngIf="departmentError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ departmentError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Role
+                </label>
+
+                <select
+                  class="form-select"
+                  [class.is-invalid]="roleError"
+                  [(ngModel)]="employee.RoleID"
+                  name="RoleID">
+
+                  <option value="">
+                    {{ roles.length === 0 ? 'Select Department First' : 'Select Role' }}
+                  </option>
+
+                  <option *ngFor="let role of roles" [value]="role.RoleID">
+                    {{ role.RoleName }}
+                  </option>
+
+                </select>
+                <div class="field-error" *ngIf="roleError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ roleError }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Employment Type
+                </label>
+
+                <select
+                  class="form-select"
+                  [class.is-invalid]="employmentTypeError"
+                  [(ngModel)]="employee.EmploymentType">
+
+                  <option>Full Time</option>
+                  <option>Part Time</option>
+                  <option>Contract</option>
+
+                </select>
+                <div class="field-error" *ngIf="employmentTypeError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ employmentTypeError }}
+                </div>
+
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Salary
+                </label>
+
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="salaryError"
+                  [(ngModel)]="employee.Salary">
+                <div class="field-error" *ngIf="salaryError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ salaryError }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Experience (years)
+                </label>
+
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="experienceError"
+                  step="0.1"
+                  min="0"
+                  [(ngModel)]="employee.Experience">
+                <div class="field-error" *ngIf="experienceError">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ experienceError }}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ADDRESS -->
+
+        <h4 class="fw-bold mt-5 mb-3">
+          Address Details
+        </h4>
+
+        <div class="row g-4">
+
+          <div class="col-md-6">
+
+            <label class="form-label fw-semibold">
+              Present Address
+            </label>
+
+            <textarea
+              rows="4"
+              class="form-control"
+              [class.is-invalid]="presentAddressError"
+              [(ngModel)]="employee.PresentAddress">
+            </textarea>
+            <div class="field-error" *ngIf="presentAddressError">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ presentAddressError }}
+            </div>
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label fw-semibold">
+              Permanent Address
+            </label>
+
+            <textarea
+              rows="4"
+              class="form-control"
+              [class.is-invalid]="permanentAddressError"
+              [(ngModel)]="employee.PermanentAddress">
+            </textarea>
+            <div class="field-error" *ngIf="permanentAddressError">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ permanentAddressError }}
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- EMERGENCY CONTACT -->
+
+        <h4 class="fw-bold mt-5 mb-3">
+          Emergency Contact
+        </h4>
+
+        <div class="row g-4">
+
+          <div class="col-md-4">
+
+            <label class="form-label fw-semibold">
+              Contact Name
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="emergencyNameError"
+              [(ngModel)]="employee.EmergencyContactName">
+            <div class="field-error" *ngIf="emergencyNameError">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ emergencyNameError }}
+            </div>
+
+          </div>
+
+          <div class="col-md-4">
+
+            <label class="form-label fw-semibold">
+              Relationship
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="emergencyRelationError"
+              [(ngModel)]="employee.EmergencyRelationship">
+            <div class="field-error" *ngIf="emergencyRelationError">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ emergencyRelationError }}
+            </div>
+
+          </div>
+
+          <div class="col-md-4">
+
+            <label class="form-label fw-semibold">
+              Phone Number
+            </label>
+
+            <input
+              type="tel"
+              class="form-control"
+              [class.is-invalid]="emergencyPhoneError"
+              [(ngModel)]="employee.EmergencyPhoneNumber">
+            <div class="field-error" *ngIf="emergencyPhoneError">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ emergencyPhoneError }}
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- BUTTON -->
+
+        <div class="d-flex justify-content-end mt-5">
+
+         <button
+    class="button px-5 py-3"
+    *ngIf="!isEditMode"
+    (click)="registerEmployee()">
+
+    {{ isSelfRegistration ? 'Create Employee Account' : 'Add Employee' }}
+
+</button>
+
+<button
+    class="btn btn-warning px-5 py-3"
+    *ngIf="isEditMode"
+    (click)="updateEmployee()">
+
+    Update Employee
+
+</button>
+<button
+    *ngIf="isEditMode"
+    class="btn btn-secondary ms-2 px-5 py-3"
+    routerLink="/home/employee">
+
+    Cancel
+
+</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+</div>
+<div
+    class="modal fade"
+    id="managerModal"
+    tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+  <div class="modal-content">
+
+    <!-- Header -->
+    <div class="modal-header">
+
+      <h5 class="modal-title">
+        Add Team Manager
+      </h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal">
+      </button>
+
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+
+      <div class="row g-3">
+
+        <!-- Manager ID -->
+        <div class="col-md-6">
+
+          <label class="form-label">
+            Manager ID
+          </label>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="manager.ManagerID"
+            readonly>
+
+        </div>
+
+        <!-- Manager Name -->
+        <div class="col-md-6">
+
+          <label class="form-label">
+            Manager Name
+          </label>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="manager.ManagerName"
+            readonly>
+
+        </div>
+
+        <!-- Email -->
+        <div class="col-md-6">
+
+          <label class="form-label">
+            Email
+          </label>
+
+          <input
+            type="email"
+            class="form-control"
+            [(ngModel)]="manager.Email"
+            readonly>
+
+        </div>
+
+        <!-- Team Name -->
+        <div class="col-md-6">
+
+          <label class="form-label">
+            Team Name
+          </label>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="manager.TeamName">
+
+          <div class="validation-space">
+            <small class="text-danger">
+              {{ teamNameError }}
+            </small>
+          </div>
+
+        </div>
+
+        <!-- Members -->
+        <div class="col-md-6">
+
+          <label class="form-label">
+            Members
+          </label>
+
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="manager.Members"
+            min="0">
+
+          <div class="validation-space">
+            <small class="text-danger">
+              {{ membersError }}
+            </small>
+          </div>
+
+        </div>
+
+        <!-- Projects -->
+        <div class="col-md-6">
+
+          <label class="form-label">
+            Projects
+          </label>
+
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="manager.Projects"
+            min="0">
+
+          <div class="validation-space">
+            <small class="text-danger">
+              {{ projectsError }}
+            </small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        data-bs-dismiss="modal">
+
+        Cancel
+
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="registerManager()">
+
+        Add Manager
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+</div>

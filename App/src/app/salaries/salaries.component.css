@@ -1,0 +1,133 @@
+/* ── Page Wrapper ─────────────────────────────────────── */
+.salary-page {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background: #f4f7f3;
+}
+
+.salary-header h3 { color: #1a1d23; }
+
+/* ── Hike Slab Cards ──────────────────────────────────── */
+.slab-card {
+  background: linear-gradient(135deg, #edf4ef, #e3eee6);
+  border: 1px solid #d3dfd6;
+  transition: transform 0.2s;
+}
+.slab-card:hover { transform: translateY(-3px); }
+.slab-hike { color: #26745f; font-size: 1.6rem; }
+.slab-label { color: #6c757d; }
+.slab-badge {
+  background: linear-gradient(135deg, #26745f, #438c71);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* ── Salary Table ─────────────────────────────────────── */
+.salary-table thead {
+  background: linear-gradient(135deg, #273a34, #36594a);
+  color: #fff;
+}
+.salary-table thead th {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 12px 14px;
+  border: none;
+}
+.salary-table tbody tr {
+  transition: background 0.15s;
+}
+.salary-table tbody tr:hover { background: #edf4ef; }
+.salary-table tbody td { padding: 12px 14px; font-size: 0.9rem; vertical-align: middle; }
+
+/* ── Add Salary Button ────────────────────────────────── */
+.btn-add-salary {
+  background: linear-gradient(135deg, #26745f, #438c71);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.btn-add-salary:hover { opacity: 0.88; transform: scale(1.03); color: #fff; }
+
+/* ── Save Salary Button ───────────────────────────────── */
+.btn-save-salary {
+  background: linear-gradient(135deg, #20c997, #0d8a6e);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.btn-save-salary:hover { opacity: 0.88; color: #fff; }
+
+/* ── Status Badges ────────────────────────────────────── */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.badge-paid    { background: #d1fae5; color: #065f46; }
+.badge-pending { background: #fef3c7; color: #92400e; }
+.badge-failed  { background: #fee2e2; color: #991b1b; }
+
+/* ── Modal Overlay ────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(3px);
+  z-index: 1040;
+}
+
+/* ── Salary Modal Card ────────────────────────────────── */
+.salary-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050;
+  width: min(680px, 96vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  border: none;
+  background: #fff;
+}
+
+/* ── Live Total Preview ───────────────────────────────── */
+.total-preview {
+  background: linear-gradient(135deg, #26745f15, #438c7115);
+  border: 1.5px dashed #438c71;
+}
+.preview-total {
+  font-size: 2rem;
+  color: #26745f;
+}
+.preview-label { font-size: 0.78rem; color: #6c757d; }
+.preview-formula { color: #9ca3af; }
+
+/* ── Employee Salary Slip Cards ──────────────────────── */
+.slip-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+.slip-card:hover { transform: translateY(-3px); }
+.slip-value { font-size: 1.1rem; font-weight: 700; color: #1a1d23; }
+.slip-label { font-size: 0.75rem; }
+
+/* ── Total Bar ────────────────────────────────────────── */
+.total-bar {
+  background: linear-gradient(135deg, #273a34, #36594a);
+  color: #fff;
+}
+.total-label { font-size: 1.05rem; color: #fff; }
+.total-label strong { color: #4ade80; font-size: 1.2rem; }

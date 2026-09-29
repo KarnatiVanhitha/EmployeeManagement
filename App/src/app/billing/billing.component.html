@@ -1,0 +1,444 @@
+<div class="container-fluid  billing" >
+
+  <!-- PAGE HEADER -->
+
+  <div class="d-flex align-items-center justify-content-between mb-4">
+
+    <div>
+      <h3 class="fw-bold mb-1">Billing Management</h3>
+      <p class="text-muted mb-0">
+        Manage student fees and payments
+      </p>
+    </div>
+
+    
+
+  </div>
+
+  <!-- TOP FILTERS -->
+
+  <div class="row g-4 mb-4">
+
+    <!-- CLASS DROPDOWN -->
+
+    <div class="col-lg-4">
+
+      <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+
+        <label class="form-label fw-semibold text-secondary">
+          Select Class
+        </label>
+
+        <select
+          class="form-select form-select-lg shadow-none rounded-3"
+          [(ngModel)]="selectedClass"
+          (change)="onClassChange()"
+        >
+
+          <option value="">Choose Class</option>
+
+          <option>JSS 1</option>
+          <option>JSS 2</option>
+          <option>JSS 3</option>
+          <option>SS 1</option>
+          <option>SS 2</option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <!-- STUDENT DROPDOWN -->
+
+    <div class="col-lg-4">
+
+      <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+
+        <label class="form-label fw-semibold text-secondary">
+          Select Student
+        </label>
+
+        <select
+          class="form-select form-select-lg shadow-none rounded-3"
+          [class.is-invalid]="studentError"
+          [(ngModel)]="selectedStudent"
+          (change)="onStudentSelect()"
+        >
+
+          <option [ngValue]="null">Choose Student</option>
+
+          <option
+            *ngFor="let student of filteredStudents"
+            [ngValue]="student"
+          >
+            {{ student.name }}
+          </option>
+
+        </select>
+        <div class="field-error" *ngIf="studentError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ studentError }}
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- PAYMENT STATUS -->
+
+    <div class="col-lg-4">
+
+      <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+        <div class="d-flex justify-content-between mb-3">
+
+          <div>
+
+            <p class="text-muted mb-1 small">
+              Total Fee
+            </p>
+
+            <h4 class="fw-bold text-dark mb-0">
+              ₹ {{ selectedStudent?.totalFee || 0 }}
+            </h4>
+
+          </div>
+
+          <div class="text-end">
+
+            <p class="text-muted mb-1 small">
+              Paid
+            </p>
+
+            <h5 class="fw-bold text-success mb-0">
+              ₹ {{ selectedStudent?.paidFee || 0 }}
+            </h5>
+
+          </div>
+
+        </div>
+
+        <div>
+
+          <p class="text-muted mb-1 small">
+            Unpaid
+          </p>
+
+          <h5 class="fw-bold text-danger mb-0">
+            ₹ {{ selectedStudent?.unpaidFee || 0 }}
+          </h5>
+
+        </div>
+
+        <!-- PROGRESS -->
+
+        <div class="progress mt-4 rounded-pill" style="height:10px;">
+
+          <div
+            class="progress-bar bg-success"
+            role="progressbar"
+           [style.width.%]="
+  selectedStudent
+    ? (selectedStudent.paidFee / selectedStudent.totalFee) * 100
+    : 0
+"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- PAYMENT SECTION -->
+
+  <div
+    class="card border-0 shadow-lg rounded-4 p-4 overflow-hidden"
+  >
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+
+      <div>
+
+        <h4 class="fw-bold mb-1">
+          Payment Method
+        </h4>
+
+        <p class="text-muted mb-0">
+          Select payment option below
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="row g-4">
+
+      <!-- PAYMENT MODES -->
+
+      <div class="col-lg-4">
+
+        <div class="d-grid gap-3">
+
+          <!-- CASH -->
+
+          <div
+            class="payment-card p-3 rounded-4 border cursor-pointer"
+            [class.active-payment]="paymentMode === 'cash'"
+            (click)="paymentMode='cash'"
+          >
+
+            <div class="d-flex align-items-center gap-3">
+
+              <div
+                class="icon-box bg-success-subtle text-success"
+              >
+                <i class="bi bi-cash-stack"></i>
+              </div>
+
+              <div>
+                <h6 class="fw-bold mb-1">
+                  Cash Payment
+                </h6>
+
+                <small class="text-muted">
+                  Pay directly by cash
+                </small>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- CARD -->
+
+          <div
+            class="payment-card p-3 rounded-4 border cursor-pointer"
+            [class.active-payment]="paymentMode === 'card'"
+            (click)="paymentMode='card'"
+          >
+
+            <div class="d-flex align-items-center gap-3">
+
+              <div
+                class="icon-box bg-primary-subtle text-primary"
+              >
+                <i class="bi bi-credit-card"></i>
+              </div>
+
+              <div>
+                <h6 class="fw-bold mb-1">
+                  Card Payment
+                </h6>
+
+                <small class="text-muted">
+                  Debit / Credit card
+                </small>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- UPI -->
+
+          <div
+            class="payment-card p-3 rounded-4 border cursor-pointer"
+            [class.active-payment]="paymentMode === 'upi'"
+            (click)="paymentMode='upi'"
+          >
+
+            <div class="d-flex align-items-center gap-3">
+
+              <div
+                class="icon-box bg-warning-subtle text-warning"
+              >
+                <i class="bi bi-qr-code-scan"></i>
+              </div>
+
+              <div>
+                <h6 class="fw-bold mb-1">
+                  UPI Payment
+                </h6>
+
+                <small class="text-muted">
+                  Scan QR & pay
+                </small>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PAYMENT CONTENT -->
+
+      <div class="col-lg-8">
+
+        <div
+          class="border rounded-4 p-4 bg-light-subtle position-relative payment-container"
+        >
+
+          <!-- CASH UI -->
+
+          <div
+            *ngIf="paymentMode === 'cash'"
+            class="animate-payment"
+          >
+
+            <h5 class="fw-bold mb-4">
+              Cash Payment
+            </h5>
+
+            <div class="row g-4">
+
+              <div class="col-md-6">
+
+                <label class="form-label fw-semibold">
+                  Amount Received
+                </label>
+
+                <input
+                  type="number"
+                  class="form-control form-control-lg shadow-none rounded-3"
+                  placeholder="Enter amount"
+                >
+
+              </div>
+
+              <div class="col-md-6">
+
+                <label class="form-label fw-semibold">
+                  Receipt Number
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control form-control-lg shadow-none rounded-3"
+                  placeholder="Receipt ID"
+                >
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- CARD UI -->
+
+          <div
+            *ngIf="paymentMode === 'card'"
+            class="animate-payment"
+          >
+
+            <h5 class="fw-bold mb-4">
+              Card Payment
+            </h5>
+
+            <div class="row g-4">
+
+              <div class="col-12">
+
+                <label class="form-label fw-semibold">
+                  Card Number
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control form-control-lg shadow-none rounded-3"
+                  placeholder="XXXX XXXX XXXX XXXX"
+                >
+
+              </div>
+
+              <div class="col-md-6">
+
+                <label class="form-label fw-semibold">
+                  Expiry Date
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control form-control-lg shadow-none rounded-3"
+                  placeholder="MM/YY"
+                >
+
+              </div>
+
+              <div class="col-md-6">
+
+                <label class="form-label fw-semibold">
+                  CVV
+                </label>
+
+                <input
+                  type="password"
+                  class="form-control form-control-lg shadow-none rounded-3"
+                  placeholder="***"
+                >
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- UPI UI -->
+
+          <div
+            *ngIf="paymentMode === 'upi'"
+            class="animate-payment text-center"
+          >
+
+            <h5 class="fw-bold mb-4">
+              Scan QR Code
+            </h5>
+
+            <div
+              class="bg-white rounded-4 shadow-sm p-4 d-inline-block"
+            >
+
+              <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=SchoolFeePayment"
+                width="220"
+                class="img-fluid"
+              >
+
+            </div>
+
+            <p class="text-muted mt-4 mb-0">
+              Scan using any UPI app
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SUBMIT -->
+
+    <div class="text-end mt-4 g-3">
+        <button class="btn  px-5 py-3 rounded-4 shadow" style="margin-right: 10px;">
+      Generate Invoice
+    </button>
+
+      <button
+        class="btn px-5 py-3 rounded-4 shadow"
+        (click)="confirmPayment()"
+      >
+        Confirm Payment
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

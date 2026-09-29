@@ -1,0 +1,218 @@
+<div class="container-fluid vh-100 d-flex flex-column justify-content-center align-items-center bg-light">
+
+  <!-- TITLE -->
+  <h2 class="text-center fw-semibold mb-4 text-secondary title">
+    Welcome, create your school account
+  </h2>
+
+  <!-- CARD -->
+  <div class="card border-0 shadow-lg rounded-3 p-0 w-100"
+       style="max-width: 512px;">
+
+    <!-- PROGRESS -->
+    <div class="progress rounded-0" style="height: 6px;">
+      <div class="progress-bar  bar"
+           [style.width.%]="step * 33">
+      </div>
+    </div>
+
+    <div class="p-4">
+
+      <!-- STEP 1 -->
+      <form *ngIf="step === 1"
+      [formGroup]="accountForm"
+      class="d-flex flex-column align-items-center">
+
+  <p class="text-center text-muted mb-4 small subtitle">
+    It is our great pleasure to have
+    <br>
+    you on board
+  </p>
+
+  <div class="mb-3 w-50">
+    <input
+      type="text"
+      class="form-control"
+      [class.is-invalid]="adminName?.invalid && adminName?.touched"
+      placeholder="Admin Name"
+      formControlName="adminName"
+    >
+    <div class="field-error" *ngIf="adminName?.invalid && adminName?.touched">
+      <i class="bi bi-exclamation-circle-fill"></i> Admin Name is required
+    </div>
+  </div>
+
+  <div class="mb-3 w-50">
+    <input
+      type="text"
+      class="form-control"
+      [class.is-invalid]="schoolName?.invalid && schoolName?.touched"
+      placeholder="School Name"
+      formControlName="schoolName"
+    >
+    <div class="field-error" *ngIf="schoolName?.invalid && schoolName?.touched">
+      <i class="bi bi-exclamation-circle-fill"></i> School Name is required
+    </div>
+  </div>
+
+  <div class="mb-3 w-50">
+    <input
+      type="email"
+      class="form-control"
+      [class.is-invalid]="email?.invalid && email?.touched"
+      placeholder="School Email"
+      formControlName="email"
+    >
+    <div class="field-error" *ngIf="email?.invalid && email?.touched">
+      <i class="bi bi-exclamation-circle-fill"></i> Valid email is required
+    </div>
+  </div>
+
+  <!-- ROLE -->
+  <div class="mb-3 w-50">
+    <select
+      class="form-select"
+      [class.is-invalid]="role?.invalid && role?.touched"
+      formControlName="role"
+    >
+      <option value="">Select Role</option>
+      <option value="teacher">Teacher</option>
+      <option value="student">Student</option>
+      <option value="parent">Parent</option>
+      <option value ="staff">Staff</option>
+    </select>
+    <div class="field-error" *ngIf="role?.invalid && role?.touched">
+      <i class="bi bi-exclamation-circle-fill"></i> Please select a role
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="btn btn-primary w-50 fw-semibold"
+    (click)="next()"
+  >
+    Continue &#10140;
+  </button>
+
+</form>
+
+      <!-- STEP 2 -->
+      <form *ngIf="step === 2" [formGroup]="passwordForm"
+            class="d-flex flex-column align-items-center">
+
+        <p class="text-center text-muted mb-4 small">
+          Secure your account
+        </p>
+
+        <div class="mb-3 w-50">
+          <input type="password"
+                 class="form-control"
+                 [class.is-invalid]="password?.invalid && password?.touched"
+                 placeholder="Password"
+                 formControlName="password">
+          <div class="field-error" *ngIf="password?.invalid && password?.touched">
+            <i class="bi bi-exclamation-circle-fill"></i> Password must be at least 6 characters
+          </div>
+        </div>
+
+        <div class="mb-3 w-50">
+          <input type="password"
+                 class="form-control"
+                 [class.is-invalid]="confirmPassword?.invalid && confirmPassword?.touched"
+                 placeholder="Confirm Password"
+                 formControlName="confirmPassword">
+          <div class="field-error" *ngIf="confirmPassword?.invalid && confirmPassword?.touched">
+            <i class="bi bi-exclamation-circle-fill"></i> Passwords do not match
+          </div>
+        </div>
+
+<div class="d-flex justify-content-center gap-5 w-100">
+
+  <button
+    type="button"
+    class="btn btn-outline-secondary px-4"
+    (click)="back()"
+  >
+    Back &#11013;
+  </button>
+
+  <button
+    type="button"
+    class="btn btn-primary px-4"
+    (click)="next()"
+  >
+    Continue &#10140;
+  </button>
+
+</div>
+      </form>
+
+      <!-- STEP 3 -->
+      <form *ngIf="step === 3" [formGroup]="staffForm"
+            class="d-flex flex-column align-items-center">
+
+        <p class="text-center text-muted mb-4 small">
+          Tell us about your school
+        </p>
+
+        <div class="mb-3 w-50">
+          <select class="form-select staff"
+                  [class.is-invalid]="staffCount?.invalid && staffCount?.touched"
+                  formControlName="staffCount">
+
+            <option value="">Staff size</option>
+            <option>1-10</option>
+            <option>10-50</option>
+            <option>50+</option>
+
+          </select>
+          <div class="field-error" *ngIf="staffCount?.invalid && staffCount?.touched">
+            <i class="bi bi-exclamation-circle-fill"></i> Please select staff size
+          </div>
+        </div>
+
+        <div class="mb-3 w-50">
+          <input type="text"
+                 class="form-control"
+                 [class.is-invalid]="address?.invalid && address?.touched"
+                 placeholder="School address"
+                 formControlName="address">
+          <div class="field-error" *ngIf="address?.invalid && address?.touched">
+            <i class="bi bi-exclamation-circle-fill"></i> Address is required
+          </div>
+        </div>
+
+     <div class="d-flex justify-content-center gap-5 w-100 buttons2">
+
+  <button
+    type="button"
+    class="btn btn-outline-secondary px-4"
+    (click)="back()"
+  >
+    Back &#11013;
+  </button>
+
+  <button
+    type="button"
+    class="btn btn-primary px-4"
+    (click)="next()"
+  >
+    Finish
+  </button>
+
+</div>
+
+      </form>
+
+      <!-- LOGIN LINK -->
+      <p class="text-center mt-3 small text-muted">
+        Already have an Account?
+        <a routerLink=""
+           class="fw-bold text text-decoration-none Login-a">
+          Login
+        </a>
+      </p>
+
+    </div>
+  </div>
+</div>

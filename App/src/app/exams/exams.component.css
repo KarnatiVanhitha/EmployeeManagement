@@ -1,0 +1,11 @@
+.table{
+    color: #438c71;
+}
+button{
+    background-color: #438c71;
+    color:white;
+}
+button:hover{
+  background-color: #438c71;
+    color:white;
+}

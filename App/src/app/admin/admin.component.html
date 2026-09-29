@@ -1,0 +1,213 @@
+<div class="container-fluid bg-light vh-100 p-4">
+
+  <!-- ================= SEARCH ================= -->
+  <div class="d-flex align-items-center gap-4 mb-4 search-wrapper">
+
+    <!-- Search Box -->
+    <div class="input-group search-box">
+
+      <span class="input-group-text bg-white border-0 ps-4">
+        <i class="bi bi-search text-muted"></i>
+      </span>
+
+      <input
+        type="text"
+        class="form-control border-0 shadow-none"
+        placeholder="Search admin by name or email"
+        [(ngModel)]="searchText"
+      >
+
+    </div>
+
+  </div>
+
+  <!-- ================= TABLE ================= -->
+  <div class="table-responsive bg-white rounded-4 p-3 shadow-sm">
+
+    <table class="table align-middle">
+
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>View</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <!-- IMPORTANT: ngFor wrapper -->
+        <ng-container *ngFor="let admin of admins ; let i = index">
+
+          <!-- MAIN ROW -->
+          <tr>
+
+            <td>
+              <div class="d-flex align-items-center gap-3">
+
+                <img
+                  *ngIf="admin.profileImage"
+                  [src]="admin.profileImage"
+                  class="rounded-circle"
+                  width="40"
+                  height="40"
+                >
+
+                <span>{{ admin.FullName }}</span>
+
+              </div>
+            </td>
+
+            <td>{{ admin.Email }}</td>
+            <td>{{ admin.AdminType }}</td>
+
+            <!-- VIEW BUTTON -->
+            <td>
+              <button
+                class="btn btn-sm btn-light"
+                (click)="toggleAdmin(admin.id)"
+              >
+                <i class="bi"
+                   [ngClass]="expandedAdminId === admin.id ? 'bi-chevron-down' : 'bi-chevron-right'">
+                </i>
+              </button>
+            </td>
+
+            <!-- DELETE -->
+            <td>
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="deleteAdmin(admin.id)"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+
+          </tr>
+
+          <!-- EXPAND ROW (FIXED SCOPE) -->
+    <tr *ngIf="expandedAdminId === admin.id">
+
+  <td colspan="6" class="p-0">
+
+    <div class="card border-0 shadow-lg m-3 p-4 rounded-4 bg-light">
+
+      <!-- HEADER -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h5 class="fw-bold mb-0 text-primary">
+          Admin Details
+        </h5>
+
+        <span class="badge bg-dark px-3 py-2">
+          ID: {{ i + 1 }}
+        </span>
+
+      </div>
+
+      <div class="row g-3">
+
+        <!-- LEFT SIDE -->
+        <div class="col-md-8">
+
+          <div class="row g-2">
+
+            <div class="col-md-6">
+              <p class="mb-1"><strong>Name:</strong></p>
+              <p class="text-muted">{{ admin.FullName }}</p>
+            </div>
+
+            <div class="col-md-6">
+              <p class="mb-1"><strong>Email:</strong></p>
+              <p class="text-muted">{{ admin.Email }}
+            </div>
+
+            <div class="col-md-6">
+              <p class="mb-1"><strong>Role:</strong></p>
+              <span class="badge bg-success px-3 py-2">
+                {{ admin.AdminType }}
+              </span>
+            </div>
+
+            <div class="col-md-6">
+              <p class="mb-1"><strong>Phone:</strong></p>
+              <p class="text-muted">{{ admin.Phone }}</p>
+            </div>
+
+            <div class="col-md-12">
+              <p class="mb-1"><strong>Address:</strong></p>
+              <p class="text-muted">{{ admin.Address }}</p>
+            </div>
+
+          </div>
+
+          <!-- 🏫 SCHOOL DETAILS -->
+          <hr class="my-3">
+
+          <h6 class="fw-bold text-secondary mb-2">School Details</h6>
+
+          <div class="row g-2">
+
+            <div class="col-md-6">
+              <p class="mb-1"><strong>School Name:</strong></p>
+              <p class="text-muted">{{ admin.schoolName }}</p>
+            </div>
+
+            <div class="col-md-6">
+              <p class="mb-1"><strong>School Code:</strong></p>
+              <p class="text-muted">{{ admin.schoolCode }}</p>
+            </div>
+
+            <div class="col-md-6">
+              <p class="mb-1"><strong>School Type:</strong></p>
+              <p class="text-muted">{{ admin.schoolType }}</p>
+            </div>
+
+            <div class="col-md-6">
+              <p class="mb-1"><strong>School Address:</strong></p>
+              <p class="text-muted">{{ admin.schoolAddress }}</p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- RIGHT SIDE IMAGE -->
+        <div class="col-md-4 text-center">
+
+          <div class="border rounded-4 p-3 bg-white shadow-sm">
+
+            <img
+              *ngIf="admin.profileImage"
+              [src]="admin.profileImage"
+              class="img-fluid rounded-4 shadow-sm"
+              style="max-height: 200px; object-fit: cover;"
+            >
+
+            <p class="mt-2 text-muted small">
+              Profile Photo
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </td>
+
+</tr>
+
+        </ng-container>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

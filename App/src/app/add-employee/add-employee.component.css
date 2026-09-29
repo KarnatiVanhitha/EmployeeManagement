@@ -1,0 +1,112 @@
+.card {
+  border-radius: 12px;
+}
+
+.card-header {
+  padding: 18px 24px;
+}
+.header{
+  background-color: #26745f  ;
+}
+.card-body {
+  padding: 24px;
+}
+.details-card{
+  margin-top: -40px;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-control,
+.form-select {
+  height: 45px;
+}
+
+.table th {
+  font-weight: 700;
+  padding: 16px;
+}
+
+.table td {
+  padding: 16px;
+  vertical-align: middle;
+}
+
+.button {
+  border-radius: 8px;
+  background-color: #26745f;
+  color: whitesmoke;
+  border: none;
+}
+
+/* ── Inline field error ── */
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+  font-size: 0.82rem;
+  color: #e03e3e;
+  font-weight: 500;
+  animation: fadeInDown 0.2s ease;
+}
+
+.field-error i {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* ── Toast notification ── */
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  min-width: 280px;
+  max-width: 400px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #fff;
+  opacity: 0;
+  transform: translateX(120%);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.toast-notification.toast-success {
+  background: linear-gradient(135deg, #1a9e5e, #27c47c);
+}
+
+.toast-notification.toast-error {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+}
+
+.toast-icon {
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+}
+
+.toast-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,435 @@
+<div class="container-fluid bg-light min-vh-100 p-0">
+
+  <!-- HEADER -->
+  <div class="text-white py-5 px-5 header">
+
+    <div class="d-flex align-items-center gap-5 flex-wrap">
+
+      <!-- SCHOOL -->
+      <div class="d-flex align-items-center gap-3">
+
+        <div
+          class="border border-2 rounded-4 d-flex justify-content-center align-items-center header-left"
+        >
+          <span class="fs-1">
+            <i class="bi bi-mortarboard-fill"></i>
+          </span>
+        </div>
+
+        <div>
+          <h2 class="fw-bold mb-0">Eduaide</h2>
+
+          <p class="text-white mb-0">
+            Nurturing Minds, Building Futures
+          </p>
+        </div>
+
+      </div>
+
+      <!-- DIVIDER -->
+      <div class="bg-white opacity-50 divider"></div>
+
+      <!-- TITLE -->
+      <div>
+
+        <h2 class="fw-bold">
+          Staff Application Form
+        </h2>
+
+        <p class="mb-0 text-light">
+          Fill in the details below to apply for admission.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CARD -->
+  <div class="container-fluid px-4">
+
+    <div class="card-body p-lg-5 p-4 bg-white rounded-4 shadow-lg overflow-hidden form">
+
+      <form #staffForm="ngForm" (ngSubmit)="addStaff()" >
+
+        <div class="row g-4">
+             <h2 class="fw-bold text-dark">
+  Staff Details
+</h2>
+            <div class="row g-4">
+
+  <!-- LEFT SIDE -->
+  <div class="col-lg-8">
+ 
+    <div class="row g-4">
+
+      <!-- STAFF ID -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Staff ID
+        </label>
+
+        <input
+          type="text"
+          class="form-control input-box"
+          [(ngModel)]="staff.staffId"
+          name="staffId"
+          placeholder="Staff ID">
+      </div>
+
+      <!-- FIRST NAME -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          First Name
+        </label>
+
+        <input
+          type="text"
+          class="form-control input-box"
+          [class.is-invalid]="firstNameError"
+          [(ngModel)]="staff.firstName"
+          name="firstName"
+          placeholder="First Name">
+        <div class="field-error" *ngIf="firstNameError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ firstNameError }}
+        </div>
+      </div>
+
+      <!-- LAST NAME -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Last Name
+        </label>
+
+        <input
+          type="text"
+          class="form-control input-box"
+          [class.is-invalid]="lastNameError"
+          [(ngModel)]="staff.lastName"
+          name="lastName"
+          placeholder="Last Name">
+        <div class="field-error" *ngIf="lastNameError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ lastNameError }}
+        </div>
+      </div>
+
+      <!-- GENDER -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Gender
+        </label>
+
+        <select
+          class="form-select input-box"
+          [class.is-invalid]="genderError"
+          [(ngModel)]="staff.gender"
+          name="gender">
+          <option value="">Select Gender</option>
+          <option>Female</option>
+          <option>Male</option>
+        </select>
+        <div class="field-error" *ngIf="genderError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ genderError }}
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Primary Contact Number
+        </label>
+
+        <input
+          type="text"
+          class="form-control input-box"
+          [class.is-invalid]="phoneError"
+          [(ngModel)]="staff.phone"
+          name="phone"
+          placeholder="Phone Number">
+        <div class="field-error" *ngIf="phoneError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ phoneError }}
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="col-md-6">
+        <label class="form-label form-label-custom">
+          Email Address
+        </label>
+
+        <input
+          type="email"
+          class="form-control input-box"
+          [class.is-invalid]="emailError"
+          [(ngModel)]="staff.email"
+          name="email"
+          placeholder="Email">
+        <div class="field-error" *ngIf="emailError">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ emailError }}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE PHOTO -->
+  <div class="col-lg-4">
+
+    <label class="form-label fw-semibold">
+      Staff Photo
+    </label>
+
+    <div class="border rounded-4 p-4 text-center bg-light">
+
+      <div
+        class="rounded-circle shadow-sm overflow-hidden d-flex justify-content-center align-items-center mx-auto mb-3"
+        style="width:170px;height:170px;">
+
+        <i
+          *ngIf="!staff.image"
+          class="bi bi-person-circle text-secondary"
+          style="font-size:170px;">
+        </i>
+
+        <img
+          *ngIf="staff.image"
+          [src]="staff.image"
+          class="w-100 h-100 object-fit-cover">
+      </div>
+
+      <label
+        class="btn text-white upload-btn">
+
+        Upload Staff Image
+
+        <input
+          type="file"
+          hidden
+          accept="image/*"
+          (change)="onImageChange($event,'staff')">
+
+      </label>
+
+    </div>
+
+  </div>
+
+</div>
+        
+
+          <!-- BLOOD GROUP -->
+          <div class="col-md-3">
+
+            <label class="form-label form-label-custom">
+              Blood Group
+            </label>
+
+            <select
+              class="form-select input-box"
+              [(ngModel)]="staff.bloodGroup"
+              name="bloodGroup"
+            >
+            <option value="">Select BloodGroup</option>
+              <option>O +ve</option>
+              <option>A +ve</option>
+              <option>B +ve</option>
+
+            </select>
+
+          </div>
+
+          <!-- FATHER NAME -->
+          <div class="col-md-3">
+
+            <label class="form-label form-label-custom">
+              Father’s Name
+            </label>
+
+            <input
+              type="text"
+              class="form-control input-box"
+              [(ngModel)]="staff.fatherName"
+              name="fatherName"
+              placeholder="Father Name"
+            >
+
+          </div>
+
+          <!-- MOTHER NAME -->
+          <div class="col-md-3">
+
+            <label class="form-label form-label-custom">
+              Mother’s Name
+            </label>
+
+            <input
+              type="text"
+              class="form-control input-box"
+              [(ngModel)]="staff.motherName"
+              name="motherName"
+              placeholder="Mother Name"
+            >
+
+          </div>
+
+          <!-- DATE OF BIRTH -->
+          <div class="col-md-3">
+
+            <label class="form-label form-label-custom">
+              Date of Birth
+            </label>
+
+            <input
+              type="date"
+              class="form-control input-box"
+              [(ngModel)]="staff.dob"
+              name="dob"
+            >
+
+          </div>
+
+          <!-- MARITAL STATUS -->
+          <div class="col-md-4">
+
+            <label class="form-label form-label-custom">
+              Marital Status
+            </label>
+
+            <select
+              class="form-select input-box"
+              [(ngModel)]="staff.maritalStatus"
+              name="maritalStatus"
+            >
+            <option value="">Select Status</option>
+
+              <option>Single</option>
+              <option>Married</option>
+
+            </select>
+
+          </div>
+
+          <!-- QUALIFICATION -->
+          <div class="col-md-4">
+
+            <label class="form-label form-label-custom">
+              Qualification
+            </label>
+
+            <input
+              type="text"
+              class="form-control input-box"
+              [(ngModel)]="staff.qualification"
+              name="qualification"
+              placeholder="Qualification"
+            >
+
+          </div>
+          <!-- SALARY -->
+<div class="col-md-4">
+
+  <label class="form-label form-label-custom">
+    Salary
+  </label>
+
+  <input
+    type="number"
+    class="form-control input-box"
+    [(ngModel)]="staff.salary"
+    name="salary"
+    placeholder="Enter Salary"
+  >
+
+</div>
+          <!-- EXPERIENCE -->
+          <div class="col-md-6">
+
+            <label class="form-label form-label-custom">
+              Work Experience
+            </label>
+
+            <input
+              type="text"
+              class="form-control input-box"
+              [(ngModel)]="staff.experience"
+              name="experience"
+              placeholder="Experience"
+            >
+
+          </div>
+          <!-- ADDRESS -->
+          <div class="col-md-6">
+
+            <label class="form-label form-label-custom">
+              Address
+            </label>
+
+            <textarea
+              rows="3"
+              class="form-control input-box"
+              [(ngModel)]="staff.address"
+              name="address"
+              placeholder="Enter Address"
+            ></textarea>
+
+          </div>
+
+          <!-- PERMANENT ADDRESS -->
+          <div class="col-md-6">
+
+            <label class="form-label form-label-custom">
+              Permanent Address
+            </label>
+
+            <textarea
+              rows="3"
+              class="form-control input-box"
+              [(ngModel)]="staff.permanentAddress"
+              name="permanentAddress"
+              placeholder="Permanent Address"
+            ></textarea>
+
+          </div>
+          
+          <!-- PAN -->
+          <div class="col-md-6">
+
+            <label class="form-label form-label-custom">
+              PAN Number / ID Number
+            </label>
+
+            <input
+              type="text"
+              class="form-control input-box"
+              [(ngModel)]="staff.pan"
+              name="pan"
+              placeholder="PAN Number"
+            >
+
+          </div>
+
+        </div>
+
+        <!-- BUTTON -->
+        <button
+          class="btn submit-btn d-flex align-items-center justify-content-center gap-2 px-4 mt-4"
+          type="submit"
+        >
+
+          <i class="bi bi-plus-circle-fill"></i>
+
+          <span>
+            Add New
+          </span>
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

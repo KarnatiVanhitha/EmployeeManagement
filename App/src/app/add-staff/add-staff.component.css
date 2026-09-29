@@ -1,0 +1,81 @@
+.header
+{
+    background-color: var(--primary-light) !important;
+}
+.header-left{
+   width:90px;
+   height:90px; 
+}
+.divider{
+    width:2px;
+    height:90px;
+}
+.input-box::placeholder,
+.input-box select {
+  font-family: 'Kumbh Sans', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 100% !important;
+  letter-spacing: 0% !important;
+  color: #535353 !important;
+
+}
+.upload-btn{
+    background-color: var(--primary-color);
+}
+h2{
+    font-weight: 500;
+    font-size: larger;
+}
+select{
+  color: #8A8A8A;
+}
+option{
+  color:#8A8A8A
+}
+.input-box {
+  height: 42px !important;
+  border-radius: 4px !important;
+  border: 0.5px solid #d1d5db !important;
+  /* padding: 16px !important; */
+  gap: 11px !important;
+  font-family: 'Kumbh Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  color: #8A8A8A !important;
+}
+ .table th {
+  font-family: 'Kumbh Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+.form{
+    margin-top:-40px;
+}
+.table td {
+  font-family: 'Kumbh Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+.submit-btn{
+  background: var(--primary-color) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 14px;
+  height: 50px;
+  min-width: 180px;
+  margin-left:auto ;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 18px rgba(24,35,107,0.15);
+}
+.submit-btn:active{
+  transform: scale(0.98);
+}
+
+.submit-btn i{
+  font-size: 18px;
+}

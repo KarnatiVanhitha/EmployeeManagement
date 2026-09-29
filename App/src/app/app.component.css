@@ -1,0 +1,16 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Kumbh Sans', sans-serif !important;
+  color: #242124 !important;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  height: auto;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+}

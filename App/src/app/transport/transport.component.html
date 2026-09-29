@@ -1,0 +1,62 @@
+<div class="transport-container p-3">
+  <h2 class="mb-4">Student Transport Details</h2>
+
+  <div class="row mb-3">
+    <div class="col-md-4 mb-3 mb-md-0">
+      <label class="form-label">Class</label>
+      <select class="form-select" [class.is-invalid]="classError" [(ngModel)]="selectedClass">
+        <option value="">Select Class</option>
+        <option *ngFor="let item of classes" [value]="item">{{ item }}</option>
+      </select>
+      <div class="field-error" *ngIf="classError">
+        <i class="bi bi-exclamation-circle-fill"></i> {{ classError }}
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3 mb-md-0">
+      <label class="form-label">Section</label>
+      <select class="form-select" [class.is-invalid]="sectionError" [(ngModel)]="selectedSection">
+        <option value="">Select Section</option>
+        <option *ngFor="let item of sections" [value]="item">{{ item }}</option>
+      </select>
+      <div class="field-error" *ngIf="sectionError">
+        <i class="bi bi-exclamation-circle-fill"></i> {{ sectionError }}
+      </div>
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end">
+      <button class="btn w-100" (click)="showTransport()">View</button>
+    </div>
+  </div>
+
+  <div *ngIf="message" class="alert alert-warning">{{ message }}</div>
+
+  <div *ngIf="filteredStudents.length">
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="table-light">
+          <tr>
+            <th>Name</th>
+            <th>Roll No.</th>
+            <th>Class</th>
+            <th>Section</th>
+            <th>Bus Route</th>
+            <th>Pickup Time</th>
+            <th>Drop Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of filteredStudents">
+            <td>{{ student.name }}</td>
+            <td>{{ student.roll }}</td>
+            <td>{{ student.grade }}</td>
+            <td>{{ student.section }}</td>
+            <td>{{ student.route }}</td>
+            <td>{{ student.pickup }}</td>
+            <td>{{ student.drop }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

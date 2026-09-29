@@ -1,0 +1,60 @@
+<div class="layout">
+
+  <!-- MOBILE/TABLET TOPBAR -->
+  <div class="mobile-topbar d-lg-none">
+
+    <button
+      class="menu-btn"
+      (click)="isSidebarOpen = !isSidebarOpen"
+    >
+      <i class="bi bi-list"></i>
+    </button>
+
+
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div
+    class="sidebar-wrapper"
+    [class.show-sidebar]="isSidebarOpen"
+  >
+
+    <app-sidebar></app-sidebar>
+
+  </div>
+
+  <!-- OVERLAY -->
+  <div
+    class="overlay"
+    *ngIf="isSidebarOpen"
+    (click)="isSidebarOpen = false"
+  ></div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+
+  </div>
+
+  <div class="ask-me-widget">
+    <section class="ask-me-panel" *ngIf="isAskMeOpen" id="ask-me-panel" role="status">
+      <p class="ask-me-panel-title">Ask me</p>
+      <p class="ask-me-panel-message">Your assistant is coming soon.</p>
+    </section>
+    <button
+      class="ask-me-button"
+      type="button"
+      aria-controls="ask-me-panel"
+      [attr.aria-expanded]="isAskMeOpen"
+      (click)="isAskMeOpen = !isAskMeOpen">
+      <i class="bi bi-chat-dots-fill" aria-hidden="true"></i>
+      <span>Ask me</span>
+    </button>
+  </div>
+
+</div>

@@ -1,0 +1,611 @@
+<div class="container-fluid meeting-container">
+
+  <!-- Header -->
+  <div class="card border-0 shadow-sm mb-3">
+
+    <div class="card-body d-flex justify-content-between align-items-center">
+
+      <div class="d-flex align-items-center">
+
+        <i class="bi bi-calendar-event fs-2 me-3 text-primary"></i>
+
+        <div>
+
+          <h2 class="mb-0 fw-bold">
+            Meetings
+          </h2>
+
+          <small class="text-muted">
+            Microsoft Teams Calendar
+          </small>
+
+        </div>
+
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+
+        <div class="input-group">
+
+          <span class="input-group-text">
+            <i class="bi bi-search"></i>
+          </span>
+
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search Meeting..."
+            [(ngModel)]="searchText">
+
+        </div>
+
+        <button
+          class="btn btn-outline-primary"
+          (click)="previousMonth()">
+
+          <i class="bi bi-chevron-left"></i>
+
+        </button>
+
+        <button
+          class="btn btn-primary"
+          (click)="goToToday()">
+
+          Today
+
+        </button>
+
+        <button
+          class="btn btn-outline-primary"
+          (click)="nextMonth()">
+
+          <i class="bi bi-chevron-right"></i>
+
+        </button>
+
+        <button
+          class="btn btn-success"
+          *ngIf="canAdd()"
+          (click)="openMeetingModal()">
+
+          <i class="bi bi-plus-circle"></i>
+
+          New Meeting
+
+        </button>
+
+        <button
+          class="btn btn-warning"
+          *ngIf="canAdd()"
+          (click)="showHolidayModal=true">
+
+          <i class="bi bi-plus-circle"></i>
+
+          Holiday
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <!-- Left Sidebar -->
+
+    <div class="col-lg-3">
+
+      <div class="card shadow-sm">
+
+        <div class="card-header">
+
+          <h5 class="mb-0">
+
+            {{monthNames[currentMonth]}}
+
+            {{currentYear}}
+
+          </h5>
+
+        </div>
+
+        <div class="card-body">
+
+          <table class="table table-borderless mini-calendar">
+
+            <thead>
+
+              <tr>
+
+                <th>S</th>
+                <th>M</th>
+                <th>T</th>
+                <th>W</th>
+                <th>T</th>
+                <th>F</th>
+                <th>S</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let week of calendar">
+
+                <td *ngFor="let day of week">
+
+                  {{day.day}}
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      <!-- Meeting Types -->
+
+      <div class="card mt-3 shadow-sm">
+
+        <div class="card-header">
+
+          Meeting Types
+
+        </div>
+
+        <div class="card-body">
+
+          <div class="form-check">
+
+            <input
+              class="form-check-input"
+              type="checkbox"
+              checked>
+
+            <label>
+
+              Office Meeting
+
+            </label>
+
+          </div>
+
+          <div class="form-check">
+
+            <input
+              class="form-check-input"
+              type="checkbox"
+              checked>
+
+            <label>
+
+              Client Meeting
+
+            </label>
+
+          </div>
+
+          <div class="form-check">
+
+            <input
+              class="form-check-input"
+              type="checkbox"
+              checked>
+
+            <label>
+
+              Interview
+
+            </label>
+
+          </div>
+
+          <div class="form-check">
+
+            <input
+              class="form-check-input"
+              type="checkbox"
+              checked>
+
+            <label>
+
+              Follow Up
+
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Calendar -->
+
+    <div class="col-lg-9">
+
+      <div class="card shadow-sm calendar-card">
+
+        <div class="card-header">
+
+          <h3>
+
+            {{monthNames[currentMonth]}}
+
+            {{currentYear}}
+
+          </h3>
+
+        </div>
+
+        <div class="card-body p-0">
+
+          <table class="table table-bordered calendar-table">
+
+            <thead>
+
+              <tr>
+
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let week of calendar">
+
+                <td
+                  *ngFor="let day of week"
+                  class="calendar-cell">
+
+                  <div class="date">
+
+                    {{day.day}}
+
+                  </div>
+
+                  <!-- Holidays -->
+
+                  <div
+                    *ngFor="let holiday of getHoliday(day.date)"
+                    class="holiday">
+
+                    🎉 {{holiday.title}}
+
+                  </div>
+
+                  <!-- Meetings -->
+
+                 <div  *ngFor="let meeting of getMeetings(day.date)"
+                        class="meeting"
+                        [ngClass]="getMeetingStatusClass(meeting)">
+
+                    <strong>
+
+                      {{meeting.title}}
+
+                    </strong>
+
+                    <br>
+
+                    {{meeting.time}}
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+<!-- ================= Add Meeting Modal ================= -->
+
+<div
+  class="modal fade show"
+  *ngIf="showMeetingModal"
+  style="display:block;background:rgba(0,0,0,.5);">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+
+    <div class="modal-content AddModal">
+
+      <div class="modal-header">
+
+        <h4 class="modal-title">
+          <i class="bi bi-calendar-event me-2"></i>
+          Schedule Meeting
+        </h4>
+
+        <button
+          class="btn-close"
+          (click)="showMeetingModal=false">
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Meeting Title
+            </label>
+
+            <input
+              class="form-control"
+              [class.is-invalid]="meetingTitleError"
+              [(ngModel)]="meeting.title">
+            <div class="field-error" *ngIf="meetingTitleError">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ meetingTitleError }}
+            </div>
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Meeting Type
+            </label>
+
+            <select
+              class="form-select"
+              [(ngModel)]="meeting.type">
+
+              <option value="">
+                Select
+              </option>
+
+              <option>
+                Office Meeting
+              </option>
+
+              <option>
+                Client Meeting
+              </option>
+
+              <option>
+                Interview
+              </option>
+
+              <option>
+                Follow Up
+              </option>
+
+            </select>
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Meeting Date
+            </label>
+
+            <input
+              type="date"
+              class="form-control"
+              [class.is-invalid]="meetingDateError"
+              [(ngModel)]="meeting.date">
+            <div class="field-error" *ngIf="meetingDateError">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ meetingDateError }}
+            </div>
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Meeting Time
+            </label>
+
+            <input
+              type="time"
+              class="form-control"
+              [class.is-invalid]="meetingTimeError"
+              [(ngModel)]="meeting.time">
+            <div class="field-error" *ngIf="meetingTimeError">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ meetingTimeError }}
+            </div>
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Organizer
+            </label>
+
+            <input
+              class="form-control"
+              [(ngModel)]="meeting.organizer">
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+              Location
+            </label>
+
+            <input
+              class="form-control"
+              [(ngModel)]="meeting.location">
+
+          </div>
+
+          <div class="col-12">
+
+            <label class="form-label">
+              Description
+            </label>
+
+            <textarea
+              rows="4"
+              class="form-control"
+              [(ngModel)]="meeting.description">
+            </textarea>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="btn btn-secondary"
+          (click)="closeMeetingModal()">
+
+          Cancel
+
+        </button>
+
+        <button
+          class="btn btn-success"
+          (click)="saveMeeting()">
+
+          {{ isEditingMeeting ? 'Update Meeting' : 'Save Meeting' }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- ================= Add Holiday Modal ================= -->
+
+<div
+  class="modal fade show"
+  *ngIf="showHolidayModal"
+  style="display:block;background:rgba(0,0,0,.5);">
+
+  <div class="modal-dialog modal-md modal-dialog-centered">
+
+    <div class="modal-content AddModal">
+
+      <div class="modal-header">
+
+        <h4>
+
+          <i class="bi bi-stars me-2"></i>
+
+          Add Holiday
+
+        </h4>
+
+        <button
+          class="btn-close"
+          (click)="showHolidayModal=false">
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="mb-3">
+
+          <label class="form-label">
+            Holiday Name
+          </label>
+
+          <input
+            class="form-control"
+            [class.is-invalid]="holidayTitleError"
+            [(ngModel)]="holiday.title">
+          <div class="field-error" *ngIf="holidayTitleError">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ holidayTitleError }}
+          </div>
+
+        </div>
+
+        <div class="mb-3">
+
+          <label class="form-label">
+            Holiday Date
+          </label>
+
+          <input
+            type="date"
+            class="form-control"
+            [class.is-invalid]="holidayDateError"
+            [(ngModel)]="holiday.date">
+          <div class="field-error" *ngIf="holidayDateError">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ holidayDateError }}
+          </div>
+
+        </div>
+
+        <div>
+
+          <label class="form-label">
+            Description
+          </label>
+
+          <textarea
+            rows="4"
+            class="form-control"
+            [(ngModel)]="holiday.description">
+          </textarea>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="btn btn-secondary"
+          (click)="showHolidayModal=false">
+
+          Cancel
+
+        </button>
+
+        <button
+          class="btn btn-warning"
+          (click)="addHoliday()">
+
+          Save Holiday
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</div>
