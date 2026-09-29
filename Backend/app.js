@@ -137,33 +137,31 @@ app.get("/jira/rest/api/3/project/search", async (req, res) => {
 });
 
 async function startServer() {
-
     try {
-
-        await connectDB();
+        const isConnected = await connectDB();
 
         // Run table initializations only after DB is connected
-        await initProjectsTable();
-        await initTaskTable();
-        await initRoleTable();
-        await initCalendarTables();
-        await initTimesheetTable();
-        await initUseCaseTable();
-        await initSprintTable();
+        if (isConnected) {
+            await initProjectsTable();
+            await initTaskTable();
+            await initRoleTable();
+            await initCalendarTables();
+            await initTimesheetTable();
+            await initUseCaseTable();
+            await initSprintTable();
+        } else {
+            console.warn("⚠️ Skipping table initializations because database is not connected.");
+            console.warn("💡 Please ensure DB_SERVER, DB_DATABASE, DB_USER, and DB_PASSWORD are set in Backend/.env");
+        }
 
         const port = process.env.PORT || 3000;
         app.listen(port, "0.0.0.0", () => {
             console.log(`Server running on port ${port}`);
         });
 
+    } catch (err) {
+        console.error("Server startup error:", err);
     }
-
-    catch (err) {
-
-        console.log(err);
-
-    }
-
 }
 
 startServer();

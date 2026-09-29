@@ -2,7 +2,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Vercel API deployment
 
-Set the Vercel project root directory to `App` so Vercel deploys `api/departments.js` alongside the Angular app. Add these environment variables in the Vercel project settings for every deployment environment:
+Set the Vercel project root directory to `App` so Vercel deploys `api/departments.js` and `api/roles.js` alongside the Angular app. Add these environment variables in the Vercel project settings for every deployment environment:
 
 - `DB_SERVER`: Azure SQL server hostname
 - `DB_DATABASE`: database name

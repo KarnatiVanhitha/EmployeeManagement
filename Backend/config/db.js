@@ -9,16 +9,26 @@ const config = {
     options: {
         encrypt: true,
         trustServerCertificate: process.env.DB_TRUST_SERVER_CERTIFICATE === "true"
-    }
+    },
+    connectionTimeout: 15000,
+    requestTimeout: 15000
 };
 
 async function connectDB() {
+    const { DB_SERVER, DB_DATABASE, DB_USER, DB_PASSWORD } = process.env;
+    if (!DB_SERVER || !DB_DATABASE || !DB_USER || !DB_PASSWORD) {
+        console.error("❌ Database configuration error: Missing DB_SERVER, DB_DATABASE, DB_USER, or DB_PASSWORD in Backend/.env");
+        return false;
+    }
+
     try {
         await sql.connect(config);
-        console.log("Database Connected");
+        console.log("✅ Database Connected");
+        return true;
     } catch (err) {
-        console.log(err);
+        console.error("❌ Database connection failed:", err.message);
+        return false;
     }
 }
 
-module.exports = { sql, connectDB };
+module.exports = { sql, config, connectDB };

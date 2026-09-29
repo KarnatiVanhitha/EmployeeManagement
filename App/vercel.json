@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/roles/department/:id",
+      "destination": "/api/roles?departmentId=:id"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
