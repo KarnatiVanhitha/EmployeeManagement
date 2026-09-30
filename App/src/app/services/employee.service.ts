@@ -14,7 +14,7 @@ export class EmployeeService {
   private apiUrl = '/api/employees';
 
   private superAdminApiUrl =
-    '/api/SuperAdmins';
+    '/api/admins';
 
 
   // =========================================================
