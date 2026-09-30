@@ -2,16 +2,16 @@ const assert = require("node:assert/strict");
 const test = require("node:test");
 
 const handlers = [
-    require("../api-handlers/admins"),
-    require("../api-handlers/admins/[id]"),
-    require("../api-handlers/employees/[id]"),
-    require("../api-handlers/managers"),
-    require("../api-handlers/leaves"),
-    require("../api-handlers/salaries"),
-    require("../api-handlers/projects"),
-    require("../api-handlers/tasks/employee/[id]"),
-    require("../api-handlers/calendar/meetings"),
-    require("../api-handlers/calendar/holidays")
+    require("../api/admins"),
+    require("../api/admins/[id]"),
+    require("../api/employees/[id]"),
+    require("../api/managers"),
+    require("../api/leaves"),
+    require("../api/salaries"),
+    require("../api/projects"),
+    require("../api/tasks/employee/[id]"),
+    require("../api/calendar/meetings"),
+    require("../api/calendar/holidays")
 ];
 
 function createResponse() {
