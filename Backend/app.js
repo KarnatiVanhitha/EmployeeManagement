@@ -57,6 +57,47 @@ app.use("/api", (req, res, next) => {
     next();
 });
 
+let databaseInitializationPromise;
+
+async function initializeDatabase() {
+    if (!databaseInitializationPromise) {
+        databaseInitializationPromise = (async () => {
+            const isConnected = await connectDB();
+            if (!isConnected) {
+                return false;
+            }
+
+            await initProjectsTable();
+            await initTaskTable();
+            await initRoleTable();
+            await initCalendarTables();
+            await initTimesheetTable();
+            await initUseCaseTable();
+            await initSprintTable();
+            return true;
+        })().catch((error) => {
+            databaseInitializationPromise = undefined;
+            throw error;
+        });
+    }
+
+    return databaseInitializationPromise;
+}
+
+app.use("/api", async (req, res, next) => {
+    try {
+        if (!await initializeDatabase()) {
+            databaseInitializationPromise = undefined;
+            return res.status(503).json({ message: "Database is unavailable" });
+        }
+
+        next();
+    } catch (error) {
+        console.error("Database initialization failed:", error);
+        return res.status(503).json({ message: "Database is unavailable" });
+    }
+});
+
 app.use("/api/managers", teamManagerRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/roles", roleRoutes);
@@ -137,31 +178,14 @@ app.get("/jira/rest/api/3/project/search", async (req, res) => {
 });
 
 async function startServer() {
-    try {
-        const isConnected = await connectDB();
-
-        // Run table initializations only after DB is connected
-        if (isConnected) {
-            await initProjectsTable();
-            await initTaskTable();
-            await initRoleTable();
-            await initCalendarTables();
-            await initTimesheetTable();
-            await initUseCaseTable();
-            await initSprintTable();
-        } else {
-            console.warn("⚠️ Skipping table initializations because database is not connected.");
-            console.warn("💡 Please ensure DB_SERVER, DB_DATABASE, DB_USER, and DB_PASSWORD are set in Backend/.env");
-        }
-
-        const port = process.env.PORT || 3000;
-        app.listen(port, "0.0.0.0", () => {
-            console.log(`Server running on port ${port}`);
-        });
-
-    } catch (err) {
-        console.error("Server startup error:", err);
-    }
+    const port = process.env.PORT || 3000;
+    app.listen(port, "0.0.0.0", () => {
+        console.log(`Server running on port ${port}`);
+    });
 }
 
-startServer();
+if (require.main === module) {
+    startServer();
+}
+
+module.exports = app;
