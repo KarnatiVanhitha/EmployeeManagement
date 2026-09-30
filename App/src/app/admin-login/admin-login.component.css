@@ -4,8 +4,8 @@
 }
 
 .Login-btn {
-  background: var(--primary-glow-alpha) !important;
-  border: none !important;
+  background: var(--primary-color) !important;
+  border: 1px solid var(--primary-color) !important;
   color: #fff !important;
 }
 
@@ -13,6 +13,7 @@
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 10px 22px var(--focus-shadow);
   background: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
 }
 
 .title {
