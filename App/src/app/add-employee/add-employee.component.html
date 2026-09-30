@@ -7,13 +7,13 @@
   <span class="toast-text">{{ toastMessage }}</span>
 </div>
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-4" [ngClass]="{'employee-signup-shell': isSelfRegistration}">
 
   <!-- Add Employee Form -->
-<div class="container-fluid bg-light min-vh-100 p-0">
+<div class="container-fluid bg-light min-vh-100 p-0" [ngClass]="{'employee-signup-page': isSelfRegistration}">
 
   <!-- HEADER -->
-  <div class="text-white py-5 px-5 header">
+  <div *ngIf="!isSelfRegistration" class="text-white py-5 px-5 header">
 
     <div class="d-flex align-items-center gap-5 flex-wrap">
 
@@ -53,19 +53,69 @@
 
   </div>
 
-  <!-- FORM CARD -->
-  <div class="container-fluid px-4 details-card">
+  <h1 *ngIf="isSelfRegistration" class="signup-title text-center fw-semibold">
+    Welcome, create your employee account
+  </h1>
 
-    <div class="bg-white rounded-4 shadow-lg overflow-hidden form">
+  <!-- FORM CARD -->
+  <div class="container-fluid px-4 details-card" [ngClass]="{'signup-card-container': isSelfRegistration, 'signup-card-wide': isSelfRegistration && signupStep === 2}">
+
+    <div class="bg-white rounded-4 shadow-lg overflow-hidden form" [ngClass]="{'signup-card': isSelfRegistration}">
+
+      <div *ngIf="isSelfRegistration" class="progress rounded-0 signup-progress" role="progressbar" aria-label="Signup progress" [attr.aria-valuenow]="signupStep * 50" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar signup-progress-bar" [style.width.%]="signupStep * 50"></div>
+      </div>
 
       <div class="p-4 p-lg-5">
 
   
 
-<p class="mb-0 text-light">
+<p class="mb-0 text-light" *ngIf="!isSelfRegistration">
   {{ isEditMode ? 'Update employee details' : 'Create a new employee profile' }}
 </p>
 
+        <div *ngIf="isSelfRegistration && signupStep === 1" class="signup-first-step">
+          <div class="signup-intro mb-4">
+            <p class="text-center text-muted mb-2">It is our great pleasure to have<br>you on board</p>
+            <span class="text-muted small">Step 1 of 2 · Account details</span>
+          </div>
+
+          <div class="signup-fields">
+            <div class="signup-field">
+              <label class="form-label fw-semibold">Full Name</label>
+              <input type="text" class="form-control" [class.is-invalid]="fullNameError" [(ngModel)]="employee.FullName" autocomplete="name">
+              <div class="field-error" *ngIf="fullNameError"><i class="bi bi-exclamation-circle-fill"></i> {{ fullNameError }}</div>
+            </div>
+
+            <div class="signup-field">
+              <label class="form-label fw-semibold">Email</label>
+              <input type="email" class="form-control" [class.is-invalid]="emailError" [(ngModel)]="employee.Email" autocomplete="email">
+              <div class="field-error" *ngIf="emailError"><i class="bi bi-exclamation-circle-fill"></i> {{ emailError }}</div>
+            </div>
+
+            <div class="signup-field">
+              <label class="form-label fw-semibold">Password</label>
+              <input type="password" class="form-control" [class.is-invalid]="passwordError" [(ngModel)]="employee.Password" autocomplete="new-password">
+              <div class="field-error" *ngIf="passwordError"><i class="bi bi-exclamation-circle-fill"></i> {{ passwordError }}</div>
+            </div>
+
+            <div class="signup-field">
+              <label class="form-label fw-semibold">Confirm Password</label>
+              <input type="password" class="form-control" [class.is-invalid]="confirmPasswordError" [(ngModel)]="employee.ConfirmPassword" autocomplete="new-password">
+              <div class="field-error" *ngIf="confirmPasswordError"><i class="bi bi-exclamation-circle-fill"></i> {{ confirmPasswordError }}</div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-5">
+            <button type="button" class="button px-5 py-3" (click)="nextSignupStep()">Next <i class="bi bi-arrow-right ms-2"></i></button>
+          </div>
+        </div>
+
+        <div *ngIf="!isSelfRegistration || signupStep === 2">
+        <div *ngIf="isSelfRegistration" class="signup-step-heading mb-4">
+          <h3 class="h5 fw-bold mb-1">Complete your profile</h3>
+          <p class="text-muted mb-0">Step 2 of 2 · Employee details</p>
+        </div>
         <div class="row g-4">
 
           <!-- IMAGE -->
@@ -112,7 +162,7 @@
 
             <div class="row g-4">
 
-              <div class="col-md-6">
+              <div class="col-md-6" *ngIf="!isSelfRegistration">
                 <label class="form-label fw-semibold">
                   Full Name
                 </label>
@@ -126,7 +176,7 @@
                   <i class="bi bi-exclamation-circle-fill"></i> {{ fullNameError }}
                 </div>
                 </div>
-              <div class="col-md-6">
+              <div class="col-md-6" *ngIf="!isSelfRegistration">
                 <label class="form-label fw-semibold">
                   Email
                 </label>
@@ -157,7 +207,7 @@
               </div>
 
               <!-- Password -->
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="!isSelfRegistration">
                   <label class="form-label fw-semibold">
                     Password
                   </label>
@@ -174,7 +224,7 @@
                 </div>
 
                 <!-- Confirm Password -->
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="!isSelfRegistration">
                   <label class="form-label fw-semibold">
                     Confirm Password
                   </label>
@@ -455,13 +505,25 @@
 
         </div>
 
+        </div>
+
         <!-- BUTTON -->
 
-        <div class="d-flex justify-content-end mt-5">
+        <div class="d-flex justify-content-end gap-3 mt-5" *ngIf="!isSelfRegistration || signupStep === 2">
+
+         <button
+      type="button"
+      class="btn btn-outline-secondary px-4 py-3"
+      *ngIf="isSelfRegistration"
+      (click)="previousSignupStep()">
+
+      <i class="bi bi-arrow-left me-2"></i> Back
+
+    </button>
 
          <button
     class="button px-5 py-3"
-    *ngIf="!isEditMode"
+      *ngIf="!isEditMode && (!isSelfRegistration || signupStep === 2)"
     (click)="registerEmployee()">
 
     {{ isSelfRegistration ? 'Create Employee Account' : 'Add Employee' }}

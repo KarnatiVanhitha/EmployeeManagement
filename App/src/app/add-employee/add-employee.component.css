@@ -15,6 +15,132 @@
   margin-top: -40px;
 }
 
+.signup-progress {
+  height: 6px;
+  background: #e7efec;
+}
+
+.signup-progress-bar {
+  background-color: #26745f;
+  transition: width 0.35s ease;
+}
+
+.signup-first-step {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12px 0 8px;
+}
+
+.signup-step-heading {
+  border-bottom: 1px solid #e7efec;
+  padding-bottom: 16px;
+}
+
+.employee-signup-shell {
+  padding: 0 !important;
+}
+
+.employee-signup-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px !important;
+}
+
+.signup-title {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto 24px;
+  color: var(--accent-slate);
+  font-family: "Kumbh Sans", sans-serif;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.signup-card-container {
+  width: 100%;
+  max-width: 512px;
+  padding: 0 !important;
+  margin: 0 auto;
+}
+
+.signup-card-wide {
+  max-width: 1120px;
+}
+
+.signup-card {
+  width: 100%;
+  border-radius: 10px !important;
+}
+
+.signup-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Inter", sans-serif;
+}
+
+.signup-fields {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.signup-field {
+  width: 100%;
+  max-width: 240px;
+}
+
+.signup-first-step .form-control {
+  height: 42px;
+  border-radius: 6px;
+  border-color: #cbd5e1;
+}
+
+.employee-signup-page .signup-first-step > .d-flex {
+  justify-content: center !important;
+  margin-top: 24px !important;
+}
+
+.employee-signup-page .signup-first-step .button {
+  width: 100%;
+  max-width: 240px;
+  height: 42px;
+  padding: 8px 16px !important;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+@media screen and (max-width: 768px) {
+  .employee-signup-page {
+    padding: 20px 14px !important;
+  }
+
+  .signup-title {
+    margin-bottom: 20px;
+    font-size: 28px;
+  }
+
+  .signup-card-container {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .signup-title {
+    font-size: 23px;
+    line-height: 1.35;
+  }
+
+  .signup-card .p-4 {
+    padding: 20px !important;
+  }
+}
+
 .form-label {
   font-weight: 600;
 }
@@ -109,4 +235,4 @@
 @keyframes fadeInDown {
   from { opacity: 0; transform: translateY(-6px); }
   to   { opacity: 1; transform: translateY(0); }
-}
+}

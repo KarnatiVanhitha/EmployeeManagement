@@ -31,6 +31,7 @@ export class AddEmployeeComponent {
   departments:any[]=[];
   isEditMode = false;
   isSelfRegistration = false;
+  signupStep = 1;
 
   
   manager: {
@@ -128,6 +129,51 @@ export class AddEmployeeComponent {
     this.loadDepartment();
     this.loadRoles();
     this.loaddetails();
+  }
+
+  nextSignupStep(): void {
+    this.clearErrors();
+    let hasError = false;
+
+    if (!this.employee.FullName?.trim()) {
+      this.fullNameError = 'Full Name is required';
+      hasError = true;
+    }
+
+    if (!this.employee.Email?.trim()) {
+      this.emailError = 'Email is required';
+      hasError = true;
+    } else {
+      const emailRegex = /^[^\s@]+@desidea\.com$/i;
+      if (!emailRegex.test(this.employee.Email)) {
+        this.emailError = 'Employee email must use the @desidea.com domain';
+        hasError = true;
+      }
+    }
+
+    if (!this.employee.Password) {
+      this.passwordError = 'Password is required';
+      hasError = true;
+    } else if (this.employee.Password.length < 8) {
+      this.passwordError = 'Password must contain at least 8 characters';
+      hasError = true;
+    }
+
+    if (!this.employee.ConfirmPassword) {
+      this.confirmPasswordError = 'Confirm Password is required';
+      hasError = true;
+    } else if (this.employee.Password !== this.employee.ConfirmPassword) {
+      this.confirmPasswordError = 'Passwords do not match';
+      hasError = true;
+    }
+
+    if (!hasError) {
+      this.signupStep = 2;
+    }
+  }
+
+  previousSignupStep(): void {
+    this.signupStep = 1;
   }
   //=======================================================================lOADROLES=========================================================//
 loadRoles() {
@@ -651,7 +697,7 @@ onImageChange(event: any): void {
       const roleName = (selectedRole?.RoleName || selectedRole?.roleName || '').toLowerCase().trim();
       const isTeamLead = roleName.includes('team lead') || roleName.includes('lead') || roleName === 'teamlead';
 
-      if (!this.isSelfRegistration && res.isManager === 1 && !isTeamLead) {
+      if (res.isManager === 1 && !isTeamLead) {
 
         console.log("Manager Role Detected");
 
@@ -798,7 +844,7 @@ onImageChange(event: any): void {
 
         this.successMessage = '';
 
-        this.router.navigate(['/home/managers']);
+        this.router.navigate([this.isSelfRegistration ? '/' : '/home/managers']);
 
       }, 2000);
 
