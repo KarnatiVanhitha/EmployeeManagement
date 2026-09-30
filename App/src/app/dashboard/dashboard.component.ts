@@ -5,6 +5,8 @@ import { LeaveService } from '../services/leave.service';
 import { SalaryService } from '../services/salary.service';
 import { ManagerService } from '../services/managers.service';
 import { CalendarService } from '../services/calendar.service';
+import { ProjectsService } from '../services/projects.service';
+import { TaskService } from '../services/task.service';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ToastService } from '../services/toast.service';
@@ -1085,6 +1087,8 @@ constructor(
   private salaryService: SalaryService,
   private managerService: ManagerService,
   private calendarService: CalendarService,
+  private projectsService: ProjectsService,
+  private taskService: TaskService,
   private toastService: ToastService
 ) {}
 
@@ -1934,12 +1938,6 @@ loadDashboardData(): void {
 
       this.loadUserProjects();
 
-      // ---------------------------------------------------
-      // TASKS
-      // ---------------------------------------------------
-
-      this.loadUserTasks();
-
       console.log(
         'Dashboard loaded for:',
         this.currentEmployee
@@ -1958,85 +1956,88 @@ loadDashboardData(): void {
         'Unable to load dashboard data.'
       );
 
+  const employeeId = Number(this.currentUserEmployeeId);
+  if (!Number.isInteger(employeeId) || employeeId < 1) {
+    this.userProjects = [];
+    this.myProjects = [];
+    this.userTasks = [];
+    this.myTasks = [];
+    this.calculateTaskProgress();
+    this.calculateDashboardProgress();
+    return;
+  }
+
+  forkJoin({
+    projects: this.projectsService.getProjects(),
+    tasks: this.taskService.getTasksByEmployeeId(employeeId)
+  }).subscribe({
+    next: ({ projects, tasks }: any) => {
+      const projectList = Array.isArray(projects) ? projects : [];
+      const taskList = Array.isArray(tasks) ? tasks : [];
+      const projectsById = new Map<number, any>(
+        projectList.map((project: any) => [
+          Number(project.projectId ?? project.ProjectID),
+          project
+        ])
+      );
+
+      this.userTasks = taskList.map((task: any) => {
+        const projectId = Number(task.projectId ?? task.ProjectID);
+        const project = projectsById.get(projectId);
+        return {
+          id: task.taskId ?? task.TaskID,
+          title: task.taskName ?? task.TaskName ?? '',
+          project: project?.projectName ?? project?.ProjectName ?? '',
+          status: task.status ?? task.Status ?? 'Pending',
+          progress: Number(task.progress ?? task.Progress ?? 0)
+        };
+      });
+      this.myTasks = this.userTasks;
+
+      const assignedProjectIds = new Set(
+        taskList.map((task: any) => Number(task.projectId ?? task.ProjectID))
+      );
+      const tasksByProject = new Map<number, any[]>();
+      taskList.forEach((task: any) => {
+        const projectId = Number(task.projectId ?? task.ProjectID);
+        const projectTasks = tasksByProject.get(projectId) || [];
+        projectTasks.push(task);
+        tasksByProject.set(projectId, projectTasks);
+      });
+
+      this.userProjects = projectList
+        .filter((project: any) => assignedProjectIds.has(Number(project.projectId ?? project.ProjectID)))
+        .map((project: any) => {
+          const projectId = Number(project.projectId ?? project.ProjectID);
+          const projectTasks = tasksByProject.get(projectId) || [];
+          const progress = projectTasks.length
+            ? Math.round(projectTasks.reduce((total: number, task: any) => total + Number(task.progress ?? task.Progress ?? 0), 0) / projectTasks.length)
+            : 0;
+
+          return {
+            id: projectId,
+            name: project.projectName ?? project.ProjectName ?? '',
+            description: project.description ?? project.Description ?? '',
+            status: project.status ?? project.Status ?? 'Pending',
+            progress,
+            dueDate: project.endDate ?? project.EndDate ?? '',
+            assignedTo: this.currentUserName
+          };
+        });
+      this.myProjects = this.userProjects;
+      this.calculateTaskProgress();
+      this.calculateDashboardProgress();
+    },
+    error: (error) => {
+      console.error('Unable to load employee projects and tasks:', error);
+      this.userProjects = [];
+      this.myProjects = [];
+      this.userTasks = [];
+      this.myTasks = [];
+      this.calculateTaskProgress();
+      this.calculateDashboardProgress();
     }
-
   });
-  this.loadMyAppliedLeaves(
-  this.leaveRequests
-);
-
-this.calculateLeaveBalances();
-}
-
-
-// =========================================================
-// APPLY CURRENT EMPLOYEE
-// =========================================================
-
-applyCurrentEmployee(
-  employeeRecord: any
-): void {
-
-  if (!employeeRecord) {
-    return;
-  }
-
-  const record =
-    employeeRecord.data ??
-    employeeRecord.employee ??
-    employeeRecord.user ??
-    employeeRecord;
-
-  if (!record) {
-    return;
-  }
-
-  this.currentEmployee =
-    record;
-
-  this.currentUserEmployeeId =
-    record.EmployeeID ??
-    record.employeeId ??
-    record.EmployeeId ??
-    record.id ??
-    this.currentUserEmployeeId;
-
-  this.currentUserName =
-    record.FullName ??
-    record.fullName ??
-    record.Name ??
-    record.name ??
-    this.currentUserName;
-
-  this.role =
-    record.RoleName ??
-    record.roleName ??
-    record.Role ??
-    record.role ??
-    record.Designation ??
-    record.designation ??
-    this.role;
-
-  this.currentUser = {
-
-    ...record,
-
-    name:
-      this.currentUserName,
-
-    role:
-      this.role,
-
-    image:
-      record.image ??
-      record.profileImage ??
-      record.Image ??
-      'assets/user1.jpg'
-
-  };
-
-  console.log(
-    'Authoritative employee record:',
     record
   );
 
@@ -4701,93 +4702,6 @@ loadUserProjects(): void {
 // =========================================================
 // TASKS
 // =========================================================
-
-loadUserTasks(): void {
-
-  this.userTasks = [
-
-    {
-
-      id: 1,
-
-      title:
-        'Complete dashboard UI',
-
-      project:
-        'HRMS Dashboard',
-
-      status:
-        'Completed',
-
-      progress:
-        100
-
-    },
-
-    {
-
-      id: 2,
-
-      title:
-        'Fix employee API',
-
-      project:
-        'Employee Management',
-
-      status:
-        'In Progress',
-
-      progress:
-        70
-
-    },
-
-    {
-
-      id: 3,
-
-      title:
-        'Leave approval testing',
-
-      project:
-        'Leave Management',
-
-      status:
-        'In Progress',
-
-      progress:
-        20
-
-    },
-
-    {
-
-      id: 4,
-
-      title:
-        'Salary module testing',
-
-      project:
-        'Finance',
-
-      status:
-        'Completed',
-
-      progress:
-        100
-
-    }
-
-  ];
-
-  this.myTasks =
-    this.userTasks;
-
-  this.calculateTaskProgress();
-
-  this.calculateDashboardProgress();
-
-}
 
 
 // =========================================================
