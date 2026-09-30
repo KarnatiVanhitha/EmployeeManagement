@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
-const departmentsHandler = require("../api/departments");
+const departmentsHandler = require("../api-handlers/departments");
 
 function createResponse() {
     return {

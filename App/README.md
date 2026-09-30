@@ -2,7 +2,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Vercel API deployment
 
-Set the Vercel project root directory to `App` so Vercel deploys `api/departments.js` and `api/roles.js` alongside the Angular app. Add these environment variables in the Vercel project settings for every deployment environment:
+Set the Vercel project root directory to `App`. The API catch-all dispatches requests to the handlers in `api-handlers`. Add these environment variables to this same Vercel project for every deployment environment:
 
 - `DB_SERVER`: Azure SQL server hostname
 - `DB_DATABASE`: database name
@@ -11,7 +11,7 @@ Set the Vercel project root directory to `App` so Vercel deploys `api/department
 - `DB_PORT`: `1433` (optional)
 - `DB_TRUST_SERVER_CERTIFICATE`: `false` (optional)
 
-Redeploy after adding or changing environment variables. Keep database credentials out of Angular code and source control.
+The database variables configured on a separate Backend deployment are not automatically available to this App project. Redeploy after adding or changing environment variables. Employee and admin login return `503: Database is not configured` if any required variable is missing. Keep database credentials out of Angular code and source control.
 # App
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
