@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
-const rolesHandler = require("../api/[...path]");
+const rolesHandler = require("../api/roles");
 
 function createResponse() {
     return {
@@ -21,14 +21,33 @@ function createResponse() {
     };
 }
 
-test("role requests report missing backend configuration", async () => {
-    const previousBackendUrl = process.env.BACKEND_URL;
-    delete process.env.BACKEND_URL;
+test("returns a configuration error when database environment variables are missing", async () => {
+    const names = ["DB_SERVER", "DB_DATABASE", "DB_USER", "DB_PASSWORD"];
+    const previousValues = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+    names.forEach((name) => delete process.env[name]);
+
     const response = createResponse();
-    await rolesHandler({ method: "GET", url: "/api/roles/department/9", headers: {} }, response);
-    if (previousBackendUrl === undefined) delete process.env.BACKEND_URL;
-    else process.env.BACKEND_URL = previousBackendUrl;
+    await rolesHandler({ method: "GET", query: {} }, response);
+
+    names.forEach((name) => {
+        if (previousValues[name] === undefined) {
+            delete process.env[name];
+        } else {
+            process.env[name] = previousValues[name];
+        }
+    });
 
     assert.equal(response.statusCode, 503);
-    assert.deepEqual(response.body, { message: "BACKEND_URL is not configured" });
+    assert.deepEqual(response.body, {
+        success: false,
+        message: "Database is not configured"
+    });
+});
+
+test("rejects methods other than GET", async () => {
+    const response = createResponse();
+    await rolesHandler({ method: "POST", query: {} }, response);
+
+    assert.equal(response.statusCode, 405);
+    assert.equal(response.headers.Allow, "GET");
 });

@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
-const departmentsHandler = require("../api/departments");
+const employeesHandler = require("../api/employees");
 
 function createResponse() {
     return {
@@ -26,28 +26,30 @@ test("returns a configuration error when database environment variables are miss
     const previousValues = Object.fromEntries(names.map((name) => [name, process.env[name]]));
     names.forEach((name) => delete process.env[name]);
 
-    const response = createResponse();
-    await departmentsHandler({ method: "GET" }, response);
+    try {
+        const response = createResponse();
+        await employeesHandler({ method: "POST", body: {} }, response);
 
-    names.forEach((name) => {
-        if (previousValues[name] === undefined) {
-            delete process.env[name];
-        } else {
-            process.env[name] = previousValues[name];
-        }
-    });
-
-    assert.equal(response.statusCode, 503);
-    assert.deepEqual(response.body, {
-        success: false,
-        message: "Database is not configured"
-    });
+        assert.equal(response.statusCode, 503);
+        assert.deepEqual(response.body, {
+            success: false,
+            message: "Database is not configured"
+        });
+    } finally {
+        names.forEach((name) => {
+            if (previousValues[name] === undefined) {
+                delete process.env[name];
+            } else {
+                process.env[name] = previousValues[name];
+            }
+        });
+    }
 });
 
-test("rejects methods other than GET", async () => {
+test("rejects methods other than GET and POST", async () => {
     const response = createResponse();
-    await departmentsHandler({ method: "POST" }, response);
+    await employeesHandler({ method: "PATCH" }, response);
 
     assert.equal(response.statusCode, 405);
-    assert.equal(response.headers.Allow, "GET");
+    assert.equal(response.headers.Allow, "GET, POST");
 });
