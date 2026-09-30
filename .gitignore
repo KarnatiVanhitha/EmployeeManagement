@@ -1,0 +1,31 @@
+# Dependencies
+**/node_modules/
+**/bower_components/
+
+# Build output and caches
+**/dist/
+**/out-tsc/
+**/.angular/cache/
+**/coverage/
+**/tmp/
+**/out/
+
+# Environment files
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE and editor files
+.idea/
+.history/
+*.sublime-workspace
+
+# Operating system files
+.DS_Store
+Thumbs.db
