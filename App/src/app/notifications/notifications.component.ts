@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { forkJoin } from 'rxjs';
-import { LeaveService } from '../services/leave.service';
-import { ProjectsService } from '../services/projects.service';
-import { ReviewService } from '../services/review.service';
-import { EmployeeService } from '../services/employee.service';
+import { NotificationsService } from '../services/notifications.service';
 
 @Component({
   selector: 'app-notifications',
@@ -19,10 +15,7 @@ export class NotificationsComponent implements OnInit {
   employees: any[] = [];
 
   constructor(
-    private leaveService: LeaveService,
-    private projectService: ProjectsService,
-    private reviewService: ReviewService,
-    private employeeService: EmployeeService
+    private notificationsService: NotificationsService
   ) {}
 
   ngOnInit(): void {
@@ -33,16 +26,7 @@ export class NotificationsComponent implements OnInit {
       localStorage.getItem('loggedInUser') || '{}'
     );
 
-    // Load employees first to resolve names, then load notifications
-    this.employeeService.getEmployees().subscribe({
-      next: (emps) => {
-        this.employees = emps;
-        this.loadNotifications();
-      },
-      error: () => {
-        this.loadNotifications();
-      }
-    });
+    this.loadNotifications();
   }
 
   getReviewerName(reviewerId: number): string {
@@ -64,12 +48,9 @@ export class NotificationsComponent implements OnInit {
       this.currentUser?.EmployeeID || this.currentUser?.employeeID || this.currentUser?.id || 0
     );
 
-    forkJoin({
-      leaves: this.leaveService.getLeaves(),
-      projects: this.projectService.getProjects(),
-      reviews: this.reviewService.getReviews()
-    }).subscribe({
+    this.notificationsService.getNotificationsData().subscribe({
       next: (result: any) => {
+        this.employees = result.employees || [];
         const notificationsList: any[] = [];
 
         // -------------------------
