@@ -3,6 +3,10 @@
   "outputDirectory": "dist/app",
   "rewrites": [
     {
+      "source": "/api/leaves/:id/status",
+      "destination": "/api/leaves?action=status&id=:id"
+    },
+    {
       "source": "/api/roles/department/:id",
       "destination": "/api/roles?departmentId=:id"
     },

@@ -3,15 +3,15 @@ const { getDatabaseConfig, getConnectionPool } = require("../serverless/database
 
 module.exports = async function leavesHandler(req, res) {
     if (req.method === "OPTIONS") {
-        res.setHeader("Allow", "GET, POST, OPTIONS");
+        res.setHeader("Allow", "GET, POST, PUT, OPTIONS");
         res.setHeader("Access-Control-Allow-Origin", req.headers?.origin || "*");
-        res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", req.headers?.["access-control-request-headers"] || "Content-Type");
         return res.status(204).end();
     }
 
-    if (req.method !== "GET" && req.method !== "POST") {
-        res.setHeader("Allow", "GET, POST, OPTIONS");
+    if (req.method !== "GET" && req.method !== "POST" && req.method !== "PUT") {
+        res.setHeader("Allow", "GET, POST, PUT, OPTIONS");
         return res.status(405).json({ success: false, message: "Method not allowed" });
     }
 
@@ -22,6 +22,26 @@ module.exports = async function leavesHandler(req, res) {
 
     try {
         const pool = await getConnectionPool(config);
+        if (req.method === "PUT" && req.query?.action === "status") {
+            const leaveId = Number(req.query?.id);
+            const status = String(req.body?.status || "").trim();
+            if (!Number.isInteger(leaveId) || leaveId < 1 || !["Approved", "Rejected", "Declined"].includes(status)) {
+                return res.status(400).json({ message: "A valid leave ID and status are required" });
+            }
+
+            await pool.request()
+                .input("LeaveID", sql.Int, leaveId)
+                .input("Status", sql.NVarChar(20), status)
+                .query(`
+                    UPDATE Leaves
+                    SET Status = @Status,
+                        ActionDate = GETDATE()
+                    WHERE LeaveID = @LeaveID
+                `);
+
+            return res.status(200).json({ message: "Leave status updated successfully" });
+        }
+
         if (req.method === "POST") {
             const leave = req.body || {};
             const result = await pool.request()

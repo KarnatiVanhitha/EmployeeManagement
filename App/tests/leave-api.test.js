@@ -54,7 +54,7 @@ test("rejects methods other than GET and POST", async () => {
     await leavesHandler({ method: "PATCH" }, response);
 
     assert.equal(response.statusCode, 405);
-    assert.equal(response.headers.Allow, "GET, POST, OPTIONS");
+    assert.equal(response.headers.Allow, "GET, POST, PUT, OPTIONS");
 });
 
 test("accepts CORS preflight requests", async () => {
@@ -68,8 +68,37 @@ test("accepts CORS preflight requests", async () => {
     }, response);
 
     assert.equal(response.statusCode, 204);
-    assert.equal(response.headers.Allow, "GET, POST, OPTIONS");
+    assert.equal(response.headers.Allow, "GET, POST, PUT, OPTIONS");
     assert.equal(response.headers["Access-Control-Allow-Origin"], "https://app.example.com");
-    assert.equal(response.headers["Access-Control-Allow-Methods"], "GET, POST, OPTIONS");
+    assert.equal(response.headers["Access-Control-Allow-Methods"], "GET, POST, PUT, OPTIONS");
     assert.equal(response.headers["Access-Control-Allow-Headers"], "content-type");
+});
+
+test("accepts leave status updates and reaches database configuration", async () => {
+    const names = ["DB_SERVER", "DB_DATABASE", "DB_USER", "DB_PASSWORD"];
+    const previousValues = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+    names.forEach((name) => delete process.env[name]);
+
+    try {
+        const response = createResponse();
+        await leavesHandler({
+            method: "PUT",
+            query: { action: "status", id: "7" },
+            body: { status: "Approved" }
+        }, response);
+
+        assert.equal(response.statusCode, 503);
+        assert.deepEqual(response.body, {
+            success: false,
+            message: "Database is not configured"
+        });
+    } finally {
+        names.forEach((name) => {
+            if (previousValues[name] === undefined) {
+                delete process.env[name];
+            } else {
+                process.env[name] = previousValues[name];
+            }
+        });
+    }
 });
