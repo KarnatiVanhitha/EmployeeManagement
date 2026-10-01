@@ -495,49 +495,7 @@ roleEmployees: any[] = [];
     'Assignment submission deadline this Friday for 10th Grade'
   ];
 
-  // =========================================================
-  // RECENT ACTIVITIES
-  // =========================================================
-
-  recentActivities = [
-    {
-      name: 'John Carter',
-      action: 'Added New Project HRMS Dashboard',
-      time: '06:20 PM',
-      image: 'https://i.pravatar.cc/100?img=1'
-    },
-    {
-      name: 'Sophia White',
-      action: 'Commented on Uploaded Document',
-      time: '04:00 PM',
-      image: 'https://i.pravatar.cc/100?img=5'
-    },
-    {
-      name: 'Michael Johnson',
-      action: 'Approved Task Projects',
-      time: '02:30 PM',
-      image: 'https://i.pravatar.cc/100?img=12'
-    },
-    {
-      name: 'Emily Clark',
-      action: 'Requesting Access to Module Tickets',
-      time: '12:10 PM',
-      image: 'https://i.pravatar.cc/100?img=9'
-    },
-    {
-      name: 'David Anderson',
-      action: 'Downloaded App Reports',
-      time: '10:40 AM',
-      image: 'https://i.pravatar.cc/100?img=15'
-    },
-    {
-      name: 'Olivia Haris',
-      action: 'Completed ticket module in HRMS',
-      time: '09:50 AM',
-      image: 'https://i.pravatar.cc/100?img=20'
-    }
-  ];
-
+  
   // =========================================================
   // UPCOMING LEAVES & DEPARTMENT TEAM MEMBERS
   // =========================================================
@@ -545,93 +503,9 @@ roleEmployees: any[] = [];
   upcomingLeaves: any[] = [];
   departmentTeamMembers: any[] = [];
 
-  // =========================================================
-  // TODAY ACTIVITIES
-  // =========================================================
 
-  todayActivities = [
-    {
-      message: "Daniel Martinz's Birthday",
-      image: 'https://i.pravatar.cc/100?img=32',
-      icon: 'bi bi-gift',
-      iconBg: '#ede7f6',
-      iconColor: '#5e35b1'
-    },
-    {
-      message: "Amelia Curr's Birthday",
-      image: 'https://i.pravatar.cc/100?img=11',
-      icon: 'bi bi-gift',
-      iconBg: '#ede7f6',
-      iconColor: '#5e35b1'
-    },
-    {
-      message: "Emma Lewis's Birthday",
-      image: 'https://i.pravatar.cc/100?img=47',
-      icon: 'bi bi-gift',
-      iconBg: '#ede7f6',
-      iconColor: '#5e35b1'
-    },
-    {
-      message: 'Madison Andrew is off sick today',
-      image: 'https://i.pravatar.cc/100?img=15',
-      icon: 'bi bi-calendar-x',
-      iconBg: '#fff3e0',
-      iconColor: '#fb8c00'
-    },
-    {
-      message: 'Victoria Celestie is off sick today',
-      image: 'https://i.pravatar.cc/100?img=25',
-      icon: 'bi bi-calendar-x',
-      iconBg: '#fff3e0',
-      iconColor: '#fb8c00'
-    },
-    {
-      message: 'Daniel Patrick is off sick today',
-      image: 'https://i.pravatar.cc/100?img=14',
-      icon: 'bi bi-calendar-x',
-      iconBg: '#fff3e0',
-      iconColor: '#fb8c00'
-    },
-    {
-      message: 'Jessica Renee is off sick today',
-      image: 'https://i.pravatar.cc/100?img=44',
-      icon: 'bi bi-calendar-x',
-      iconBg: '#fff3e0',
-      iconColor: '#fb8c00'
-    }
-  ];
 
-  // =========================================================
-  // TODO
-  // =========================================================
-
-  todoList = [
-    {
-      title: 'New Employee Intro',
-      priority: 'High',
-      schedule: '04:00 PM on 18 Apr 2025',
-      completed: true,
-      bgColor: '#fbe2dc',
-      textColor: '#ff3d00'
-    },
-    {
-      title: 'New Employee Intro',
-      priority: 'Medium',
-      schedule: '04:00 PM on 18 Apr 2025',
-      completed: false,
-      bgColor: '#dce8ff',
-      textColor: '#2f6fed'
-    },
-    {
-      title: 'New Employee Intro',
-      priority: 'Low',
-      schedule: '04:00 PM on 18 Apr 2025',
-      completed: false,
-      bgColor: '#dff3e5',
-      textColor: '#1b9e3e'
-    }
-  ];
-
+  
   // =========================================================
   // TODAY EVENTS
   // =========================================================
