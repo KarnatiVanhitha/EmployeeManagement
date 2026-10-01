@@ -14,3 +14,42 @@ html, body {
 body {
   min-height: 100vh;
 }
+
+.app-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: grid;
+  place-items: center;
+  background: rgba(245, 248, 245, 0.72);
+  backdrop-filter: blur(2px);
+}
+
+.app-loading-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border: 1px solid rgba(39, 58, 49, 0.12);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(39, 58, 49, 0.12);
+  color: #273a34;
+  font-weight: 600;
+}
+
+.app-loading-spinner {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  border: 3px solid #dcefe6;
+  border-top-color: #26745f;
+  border-radius: 50%;
+  animation: app-loading-spin 0.75s linear infinite;
+}
+
+@keyframes app-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
