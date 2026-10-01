@@ -69,6 +69,7 @@ module.exports = async function managersHandler(req, res) {
             WHERE e.IsActive = 1
                 AND (COALESCE(r.IsManager, 0) = 1 OR LOWER(r.RoleName) LIKE '%manager%')
                 AND LOWER(r.RoleName) NOT LIKE '%lead%'
+                AND (r.DepartmentID IS NULL OR r.DepartmentID = e.DepartmentID)
             ORDER BY d.DepartmentName, e.FullName
         `);
         return res.status(200).json(result.recordset);
