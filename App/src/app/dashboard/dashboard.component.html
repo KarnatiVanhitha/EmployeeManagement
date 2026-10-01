@@ -4324,7 +4324,7 @@
 
         <div class="card-body p-0">
           <div class="activity-item" *ngFor="let activity of recentActivities">
-            <img [src]="activity.image || 'assets/user1.jpg'" class="activity-avatar" alt="Avatar" />
+            <img [src]="getRecentActivityImage(activity)" class="activity-avatar" alt="Employee avatar" />
 
             <div class="activity-text flex-grow-1">
               <strong>

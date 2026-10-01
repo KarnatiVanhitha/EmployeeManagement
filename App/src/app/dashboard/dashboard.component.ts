@@ -115,38 +115,32 @@ roleEmployees: any[] = [];
 
   // =========================================================
   // TASK INFORMATION
-  // =========================================================
-
+      time: '06:20 PM'
   userTasks: any[] = [];
 
   taskCompletionPercentage = 0;
 
-  // =========================================================
-  // EMPLOYEES / TEAM
+      time: '04:00 PM'
   // =========================================================
 
   employeesByRole: any[] = [];
 
-  teamLeads: any[] = [];
-
+      time: '02:30 PM'
   totalEmployees = 0;
 
   // =========================================================
   // ADMIN
-  // =========================================================
-
+      time: '12:10 PM'
   admins: any[] = [];
 
   schoolAdminCount = 0;
 
-  officeAdminCount = 0;
-
+      time: '10:40 AM'
   officeDashboardLoading = false;
 
   officeDashboardError = '';
 
-  officeDashboardDepartments: any[] = [];
-
+      time: '09:50 AM'
   officeDashboardManagers: any[] = [];
 
   officeDashboardPendingLeaves: any[] = [];
@@ -297,34 +291,37 @@ roleEmployees: any[] = [];
 
   // =========================================================
   // APPLICATIONS
-  // =========================================================
+
 
   applications = [
     {
       name: 'Total',
-      count: 0,
       percent: 100,
       color: '#9795f1'
     },
     {
       name: 'Selected',
       count: 0,
-      percent: 0,
+    teamLeads: any[] = [];
+
       color: '#87f3a0'
     },
     {
       name: 'Shortlisted',
-      count: 0,
+    // =========================================================
+
       percent: 0,
       color: '#f1c40f'
     },
     {
-      name: 'Rejected',
+    officeAdminCount = 0;
+
       count: 0,
       percent: 0,
       color: '#f37b63'
     }
-  ];
+    officeDashboardDepartments: any[] = [];
+
 
   // =========================================================
   // SALARY CHART
@@ -1143,6 +1140,8 @@ private applyLoginUser(
       this.role,
 
     image:
+      employee.EmployeePhoto ??
+      employee.employeePhoto ??
       employee.image ??
       employee.profileImage ??
       employee.Image ??
@@ -4869,6 +4868,21 @@ getEmployeeName(
 
   );
 
+}
+
+getRecentActivityImage(activity: any): string {
+  const activityEmployeeId = activity?.EmployeeID ?? activity?.employeeId ?? activity?.employeeID;
+  const activityName = String(activity?.name ?? activity?.FullName ?? activity?.fullName ?? '').trim().toLowerCase();
+  const employee = this.employee.find((item: any) => {
+    const employeeId = item.EmployeeID ?? item.employeeId ?? item.EmployeeId ?? item.id;
+    const employeeName = String(item.FullName ?? item.fullName ?? item.Name ?? item.name ?? '').trim().toLowerCase();
+
+    return activityEmployeeId
+      ? String(employeeId) === String(activityEmployeeId)
+      : !!activityName && employeeName === activityName;
+  });
+
+  return employee?.EmployeePhoto || employee?.employeePhoto || employee?.image || 'assets/user1.jpg';
 }
 
 
