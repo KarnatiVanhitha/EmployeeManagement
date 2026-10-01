@@ -52,8 +52,9 @@ module.exports = async function managersHandler(req, res) {
                 e.Email AS email,
                 e.EmployeePhoto,
                 e.EmployeePhoto AS employeePhoto,
+                e.DepartmentID,
+                e.DepartmentID AS departmentId,
                 d.DepartmentID,
-                d.DepartmentID AS departmentId,
                 COALESCE(d.DepartmentName, '') AS TeamName,
                 COALESCE(d.DepartmentName, '') AS teamName,
                 COALESCE(d.DepartmentName, '') AS DepartmentName,
@@ -66,7 +67,9 @@ module.exports = async function managersHandler(req, res) {
             INNER JOIN Roles r ON e.RoleID = r.RoleID
             LEFT JOIN Departments d ON e.DepartmentID = d.DepartmentID
             WHERE e.IsActive = 1
-                AND LOWER(LTRIM(RTRIM(r.RoleName))) = 'manager'
+                AND (COALESCE(r.IsManager, 0) = 1 OR LOWER(r.RoleName) LIKE '%manager%')
+                AND LOWER(r.RoleName) NOT LIKE '%lead%'
+            ORDER BY d.DepartmentName, e.FullName
         `);
         return res.status(200).json(result.recordset);
     } catch (error) {
