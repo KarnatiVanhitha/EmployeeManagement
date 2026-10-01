@@ -2,8 +2,8 @@ const sql = require("mssql");
 const { getDatabaseConfig, getConnectionPool } = require("../serverless/database");
 
 module.exports = async function leavesHandler(req, res) {
-    if (req.method !== "GET") {
-        res.setHeader("Allow", "GET");
+    if (req.method !== "GET" && req.method !== "POST") {
+        res.setHeader("Allow", "GET, POST");
         return res.status(405).json({ success: false, message: "Method not allowed" });
     }
 
@@ -14,6 +14,55 @@ module.exports = async function leavesHandler(req, res) {
 
     try {
         const pool = await getConnectionPool(config);
+        if (req.method === "POST") {
+            const leave = req.body || {};
+            const result = await pool.request()
+                .input("EmployeeID", sql.Int, leave.EmployeeID)
+                .input("ApplicantName", sql.NVarChar(100), leave.ApplicantName)
+                .input("ApplicantRole", sql.NVarChar(50), leave.ApplicantRole)
+                .input("LeaveType", sql.NVarChar(50), leave.LeaveType)
+                .input("StartDate", sql.Date, leave.StartDate)
+                .input("EndDate", sql.Date, leave.EndDate)
+                .input("ContactNumber", sql.NVarChar(20), leave.ContactNumber)
+                .input("Reason", sql.NVarChar(sql.MAX), leave.Reason)
+                .input("Status", sql.NVarChar(20), leave.Status || "Pending")
+                .input("AppliedDate", sql.DateTime, leave.AppliedDate || new Date())
+                .query(`
+                    INSERT INTO Leaves
+                    (
+                        EmployeeID,
+                        ApplicantName,
+                        ApplicantRole,
+                        LeaveType,
+                        StartDate,
+                        EndDate,
+                        ContactNumber,
+                        Reason,
+                        Status,
+                        AppliedDate
+                    )
+                    OUTPUT INSERTED.*
+                    VALUES
+                    (
+                        @EmployeeID,
+                        @ApplicantName,
+                        @ApplicantRole,
+                        @LeaveType,
+                        @StartDate,
+                        @EndDate,
+                        @ContactNumber,
+                        @Reason,
+                        @Status,
+                        @AppliedDate
+                    )
+                `);
+
+            return res.status(201).json({
+                message: "Leave Applied Successfully",
+                leave: result.recordset[0]
+            });
+        }
+
         const view = req.query?.view;
         const request = pool.request();
         let whereClause = "";
