@@ -2805,8 +2805,8 @@ computeUpcomingLeaves(
 
           return (
             start >= today &&
-            status !==
-            'declined'
+            status ===
+            'approved'
           );
 
         }
@@ -5042,7 +5042,7 @@ computeDepartmentOverview(
         const start = new Date(startValue);
         const status = (leave.Status ?? leave.status ?? '').toLowerCase();
         const empId = String(leave.EmployeeID ?? leave.employeeId ?? '');
-        return start >= today && status !== 'declined' && empIds.has(empId);
+        return start >= today && status === 'approved' && empIds.has(empId);
       })
       .map((leave: any) => ({
         name: leave.ApplicantName ?? leave.applicantName ?? 'Unknown',
