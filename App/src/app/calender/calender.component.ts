@@ -119,7 +119,11 @@ export class CalenderComponent implements OnInit {
     this.generateCalendar();
   }
 
-  canAdd(): boolean {
+  canAddMeeting(): boolean {
+    return true;
+  }
+
+  canManageCalendar(): boolean {
     const roleStr = (this.role || '').trim().toLowerCase();
     return ['office', 'project manager', 'team lead', 'hr', 'manager', 'school', 'admin', 'superadmin'].includes(roleStr);
   }
@@ -177,11 +181,6 @@ export class CalenderComponent implements OnInit {
   }
 
   addMeeting(): void {
-    if (!this.canAdd()) {
-      this.toastService.showError('You do not have permission to create meetings.');
-      return;
-    }
-
     this.clearMeetingErrors();
     let hasError = false;
 

@@ -101,6 +101,10 @@ export class ReviewsComponent implements OnInit {
   }
 
   canAddReview(): boolean {
+    return true;
+  }
+
+  canManageReviews(): boolean {
     const role = (localStorage.getItem('role') || '').trim().toLowerCase();
     return ['office', 'project manager', 'team lead', 'hr', 'manager'].includes(role);
   }

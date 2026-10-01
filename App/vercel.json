@@ -3,6 +3,18 @@
   "outputDirectory": "dist/app",
   "rewrites": [
     {
+      "source": "/api/roles/department/:id",
+      "destination": "/api/roles?departmentId=:id"
+    },
+    {
+      "source": "/api/reviews",
+      "destination": "/api/notifications?proxy=reviews&path="
+    },
+    {
+      "source": "/api/reviews/:path*",
+      "destination": "/api/notifications?proxy=reviews&path=:path*"
+    },
+    {
       "source": "/api/jira/:path*",
       "destination": "/api/projects?proxy=jira&path=:path*"
     },

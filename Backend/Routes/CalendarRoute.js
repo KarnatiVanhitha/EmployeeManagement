@@ -13,12 +13,6 @@ router.get("/meetings", async (req, res) => {
 });
 
 router.post("/meetings", async (req, res) => {
-    const role = String(req.get("X-User-Role") || "").trim().toLowerCase();
-    const allowedRoles = ["office", "project manager", "team lead", "hr", "manager", "school", "admin", "superadmin"];
-    if (!allowedRoles.includes(role)) {
-        return res.status(403).json({ message: "You do not have permission to create meetings" });
-    }
-
     try {
         const meeting = await CalendarModel.addMeeting(req.body);
         res.json({ message: "Meeting Added Successfully", ...meeting });

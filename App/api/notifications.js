@@ -1,6 +1,11 @@
 const { getDatabaseConfig, getConnectionPool } = require("../serverless/database");
+const reviewsHandler = require("../api-handlers/_lib/reviews");
 
 module.exports = async function notificationsHandler(req, res) {
+    if (req.query?.proxy === "reviews") {
+        return reviewsHandler(req, res);
+    }
+
     if (req.method !== "GET") {
         res.setHeader("Allow", "GET");
         return res.status(405).json({ success: false, message: "Method not allowed" });

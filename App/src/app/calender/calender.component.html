@@ -65,7 +65,7 @@
 
         <button
           class="btn btn-success"
-          *ngIf="canAdd()"
+          *ngIf="canAddMeeting()"
           (click)="openMeetingModal()">
 
           <i class="bi bi-plus-circle"></i>
@@ -76,7 +76,7 @@
 
         <button
           class="btn btn-warning"
-          *ngIf="canAdd()"
+          *ngIf="canManageCalendar()"
           (click)="showHolidayModal=true">
 
           <i class="bi bi-plus-circle"></i>

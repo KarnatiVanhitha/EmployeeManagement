@@ -7,14 +7,6 @@ module.exports = async function meetingsHandler(req, res) {
         return res.status(405).json({ success: false, message: "Method not allowed" });
     }
 
-    if (req.method === "POST") {
-        const role = String(req.headers?.["x-user-role"] || "").trim().toLowerCase();
-        const allowedRoles = ["office", "project manager", "team lead", "hr", "manager", "school", "admin", "superadmin"];
-        if (!allowedRoles.includes(role)) {
-            return res.status(403).json({ message: "You do not have permission to create meetings" });
-        }
-    }
-
     const config = getDatabaseConfig();
     if (!config) {
         return res.status(503).json({ success: false, message: "Database is not configured" });

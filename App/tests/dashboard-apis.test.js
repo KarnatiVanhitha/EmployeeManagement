@@ -67,21 +67,7 @@ test("dashboard data handlers report missing database configuration", async () =
     }
 });
 
-test("meeting creation rejects roles outside the allowed list", async () => {
-    const response = createResponse();
-    await meetingsHandler({
-        method: "POST",
-        headers: { "x-user-role": "employee" },
-        body: {}
-    }, response);
-
-    assert.equal(response.statusCode, 403);
-    assert.deepEqual(response.body, {
-        message: "You do not have permission to create meetings"
-    });
-});
-
-test("meeting creation allows an approved role to reach database validation", async () => {
+test("meeting creation allows employees to reach database validation", async () => {
     const names = ["DB_SERVER", "DB_DATABASE", "DB_USER", "DB_PASSWORD"];
     const previousValues = Object.fromEntries(names.map((name) => [name, process.env[name]]));
     names.forEach((name) => delete process.env[name]);
@@ -90,7 +76,7 @@ test("meeting creation allows an approved role to reach database validation", as
         const response = createResponse();
         await meetingsHandler({
             method: "POST",
-            headers: { "x-user-role": "manager" },
+            headers: { "x-user-role": "employee" },
             body: {}
         }, response);
 
