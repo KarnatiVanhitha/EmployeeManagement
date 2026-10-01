@@ -92,6 +92,7 @@ module.exports = async function employeesHandler(req, res) {
         }
 
         const insertResult = await pool.request()
+            .input("EmployeePhoto", sql.NVarChar(sql.MAX), employeeData.EmployeePhoto || null)
             .input("FullName", sql.NVarChar(100), employeeData.FullName)
             .input("Email", sql.NVarChar(100), employeeData.Email)
             .input("MobileNumber", sql.NVarChar(20), employeeData.MobileNumber)
@@ -112,7 +113,7 @@ module.exports = async function employeesHandler(req, res) {
             .query(`
                 INSERT INTO Employees
                 (
-                    FullName, Email, MobileNumber, Password, Gender, DateOfBirth,
+                    EmployeePhoto, FullName, Email, MobileNumber, Password, Gender, DateOfBirth,
                     JoiningDate, DepartmentID, RoleID, EmploymentType, Salary,
                     Experience, PresentAddress, PermanentAddress, EmergencyContactName,
                     EmergencyRelationship, EmergencyPhoneNumber
@@ -120,7 +121,7 @@ module.exports = async function employeesHandler(req, res) {
                 OUTPUT INSERTED.EmployeeID, INSERTED.FullName, INSERTED.Email
                 VALUES
                 (
-                    @FullName, @Email, @MobileNumber, @Password, @Gender, @DateOfBirth,
+                    @EmployeePhoto, @FullName, @Email, @MobileNumber, @Password, @Gender, @DateOfBirth,
                     @JoiningDate, @DepartmentID, @RoleID, @EmploymentType, @Salary,
                     @Experience, @PresentAddress, @PermanentAddress, @EmergencyContactName,
                     @EmergencyRelationship, @EmergencyPhoneNumber

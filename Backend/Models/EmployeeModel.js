@@ -18,6 +18,7 @@ async function addEmployee(employee) {
 
     const result = await new sql.Request()
 
+         .input("EmployeePhoto", sql.NVarChar(sql.MAX), employee.EmployeePhoto || null)
        .input("FullName", sql.NVarChar(100), employee.FullName)
         .input("Email", sql.NVarChar(100), employee.Email)
         .input("MobileNumber", sql.NVarChar(20), employee.MobileNumber)
@@ -40,6 +41,7 @@ async function addEmployee(employee) {
 
         INSERT INTO Employees
         (
+            EmployeePhoto,
             FullName,
             Email,
             MobileNumber,
@@ -65,6 +67,7 @@ async function addEmployee(employee) {
 
         VALUES
         (
+            @EmployeePhoto,
             @FullName,
             @Email,
             @MobileNumber,
