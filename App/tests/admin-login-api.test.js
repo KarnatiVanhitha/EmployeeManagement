@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
-const adminLoginHandler = require("../api/admins/login");
+const adminLoginHandler = require("../api-handlers/_lib/admin-login");
 
 function createResponse() {
     return {

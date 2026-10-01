@@ -3,8 +3,8 @@ const test = require("node:test");
 
 const handlers = [
     require("../api/admins"),
-    require("../api/admins/[id]"),
-    require("../api/employees/[id]"),
+    require("../api-handlers/_lib/admin-by-id"),
+    require("../api-handlers/_lib/employee-by-id"),
     require("../api/managers"),
     require("../api/leaves"),
     require("../api/salaries"),

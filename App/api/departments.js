@@ -55,6 +55,25 @@ module.exports = async function departmentsHandler(req, res) {
 
     try {
         const pool = await getConnectionPool(config);
+        if (req.query?.aggregate === "roles") {
+            const [departmentResult, roleResult] = await Promise.all([
+                pool.request().query(`
+                    SELECT DepartmentID, DepartmentName
+                    FROM Departments
+                `),
+                pool.request().query(`
+                    SELECT RoleID, RoleName, DepartmentID
+                    FROM Roles
+                    ORDER BY RoleName ASC
+                `)
+            ]);
+
+            return res.status(200).json({
+                departments: departmentResult.recordset,
+                roles: roleResult.recordset
+            });
+        }
+
         const result = await pool.request().query(`
             SELECT DepartmentID, DepartmentName
             FROM Departments

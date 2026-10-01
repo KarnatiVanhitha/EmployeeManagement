@@ -1,4 +1,5 @@
-const { sql, getDatabaseConfig, getConnectionPool } = require("../../serverless/database");
+const sql = require("mssql");
+const { getDatabaseConfig, getConnectionPool } = require("../../serverless/database");
 
 module.exports = async function employeeByIdHandler(req, res) {
     if (req.method !== "GET") {

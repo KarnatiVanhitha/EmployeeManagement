@@ -106,6 +106,7 @@ app.use("/api/departments", departmentRoutes);
 app.get("/api/department-roles", require("./Controllers/DepartmentController").getDepartmentRoles);
 app.use("/api/admins", adminRoute);
 app.use("/api/salaries", salaryRoutes);
+app.get("/api/salary-data", require("./Controllers/SalaryController").getSalaryData);
 app.use("/api/leaves", leaveRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/reviews", reviewRoutes);

@@ -3,6 +3,30 @@
   "outputDirectory": "dist/app",
   "rewrites": [
     {
+      "source": "/api/department-roles",
+      "destination": "/api/departments?aggregate=roles"
+    },
+    {
+      "source": "/api/salary-data",
+      "destination": "/api/salaries?aggregate=data"
+    },
+    {
+      "source": "/api/admins/login",
+      "destination": "/api/admins?route=login"
+    },
+    {
+      "source": "/api/admins/:id",
+      "destination": "/api/admins?route=id&id=:id"
+    },
+    {
+      "source": "/api/employees/login",
+      "destination": "/api/employees?route=login"
+    },
+    {
+      "source": "/api/employees/:id",
+      "destination": "/api/employees?route=id&id=:id"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }

@@ -1,4 +1,6 @@
 const sql = require("mssql");
+const employeeLoginHandler = require("../api-handlers/_lib/employee-login");
+const employeeByIdHandler = require("../api-handlers/_lib/employee-by-id");
 
 let poolPromise;
 
@@ -44,6 +46,13 @@ function isDesideaEmail(email) {
 }
 
 module.exports = async function employeesHandler(req, res) {
+    if (req.query?.route === "login") {
+        return employeeLoginHandler(req, res);
+    }
+    if (req.query?.route === "id") {
+        return employeeByIdHandler(req, res);
+    }
+
     if (req.method !== "GET" && req.method !== "POST") {
         res.setHeader("Allow", "GET, POST");
         return res.status(405).json({ success: false, message: "Method not allowed" });

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { EmployeeService } from '../services/employee.service';
 import { SalaryService } from '../services/salary.service';
 import { ToastService } from '../services/toast.service';
 
@@ -45,7 +44,6 @@ export class SalariesComponent implements OnInit {
   ];
 
   constructor(
-    private employeeService: EmployeeService,
     private salaryService: SalaryService,
     private toastService: ToastService
   ) { }
@@ -61,27 +59,33 @@ export class SalariesComponent implements OnInit {
 
   ngOnInit(): void {
     this.role = this.normalizeRole(localStorage.getItem('role'));
-    this.loadEmployees();
-    this.loadRoles();
-    this.loadSalaries();
+    this.loadSalaryData();
   }
 
-  // ─── Load Employees ──────────────────────────────────────
-  loadEmployees(): void {
-    this.employeeService.getEmployees().subscribe({
-      next: (res: any) => {
-        this.employees = res;
-        this.filteredEmployees = res;
+  loadSalaryData(): void {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const employeeId = Number(
+      loggedInUser.EmployeeID ?? loggedInUser.employeeID ?? loggedInUser.id ?? 0
+    );
+    const email = (loggedInUser.Email || loggedInUser.email || '').toLowerCase();
+    const request = this.isAdminRole()
+      ? this.salaryService.getSalaryData()
+      : this.salaryService.getSalaryData(employeeId || undefined, employeeId ? undefined : email);
+
+    request.subscribe({
+      next: (result: any) => {
+        this.employees = result.employees || [];
+        this.filteredEmployees = this.employees;
+        this.roles = result.roles || [];
+        this.salaries = result.salaries || [];
       },
-      error: (err) => console.log(err)
-    });
-  }
-
-  // ─── Load Roles ──────────────────────────────────────────
-  loadRoles(): void {
-    this.employeeService.getRoles().subscribe({
-      next: (res: any) => { this.roles = res; },
-      error: (err) => console.log(err)
+      error: (err) => {
+        console.error(err);
+        this.employees = [];
+        this.filteredEmployees = [];
+        this.roles = [];
+        this.salaries = [];
+      }
     });
   }
 
