@@ -46,6 +46,8 @@ export class ManagersComponent {
     image: 'assets/profile.png'
   };
 
+  readonly defaultManagerImage = 'assets/default-avatar.svg';
+
   ngOnInit(): void {
     this.loadManagers();
     this.loadEmployees();
@@ -98,6 +100,17 @@ loadManagers(): void {
   });
 
 }
+
+managerImage(manager: any): string {
+  return manager?.EmployeePhoto || manager?.employeePhoto || manager?.image || this.defaultManagerImage;
+}
+
+useDefaultManagerImage(event: Event): void {
+  const image = event.target as HTMLImageElement;
+  image.onerror = null;
+  image.src = this.defaultManagerImage;
+}
+
 // ------------------------------------------------------------SaveManager &UpdateManager------------------------------------------------------------
 saveManager(): void {
 

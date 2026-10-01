@@ -162,6 +162,11 @@
                 <div class="card-body">
 
                     <div class="d-flex align-items-center mb-3">
+                      <img
+                        class="manager-card-avatar me-3"
+                        [src]="managerImage(manager)"
+                        (error)="useDefaultManagerImage($event)"
+                        [alt]="manager.ManagerName || 'Manager'">
                         <div>
 
                             <h5 class="mb-1">
@@ -170,6 +175,7 @@
 
                             <small class="text-muted">
                                 {{manager.Email}}
+                                
                             </small>
 
                             <small class="text-muted d-block" *ngIf="manager.DepartmentName">
@@ -286,6 +292,18 @@
 
       
       <div class="modal-body">
+
+        <div class="manager-detail-profile">
+          <img
+            class="manager-detail-avatar"
+            [src]="managerImage(selectedManager)"
+            (error)="useDefaultManagerImage($event)"
+            [alt]="selectedManager.ManagerName || 'Manager'">
+          <div>
+            <h5 class="mb-1">{{ selectedManager.ManagerName }}</h5>
+            <span class="text-muted">{{ selectedManager.DepartmentName || selectedManager.TeamName }}</span>
+          </div>
+        </div>
 
         <div class="row mb-3">
           <div class="col-5 fw-bold">Manager Name</div>
