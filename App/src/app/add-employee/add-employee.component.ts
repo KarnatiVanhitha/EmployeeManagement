@@ -470,59 +470,69 @@ onImageChange(event: any): void {
 
       next: (data: any) => {
 
+        const employeeData = data?.employee ?? data?.data ?? data;
+        if (!employeeData || typeof employeeData !== 'object') {
+          this.showToast('Employee details could not be loaded.', 'error');
+          return;
+        }
+
+        const mobileValue = employeeData.MobileNumber ?? employeeData.mobileNumber ?? employeeData.Phone ?? employeeData.phone ?? '';
+        const mobileContainsEmail = typeof mobileValue === 'string' && mobileValue.includes('@');
+
         this.employee = {
 
-          EmployeeID: data.EmployeeID,
-          EmployeePhoto: data.EmployeePhoto,
+          EmployeeID: employeeData.EmployeeID ?? employeeData.employeeID ?? employeeData.id,
+          EmployeePhoto: employeeData.EmployeePhoto ?? employeeData.employeePhoto ?? employeeData.image ?? '',
 
-          FullName: data.FullName,
-          Email: data.Email,
-          MobileNumber: data.MobileNumber,
+          FullName: employeeData.FullName ?? employeeData.fullName ?? employeeData.EmployeeName ?? employeeData.employeeName ?? employeeData.Name ?? '',
+          Email: employeeData.Email ?? employeeData.email ?? employeeData.EmailAddress ?? employeeData.emailAddress ?? (mobileContainsEmail ? mobileValue : ''),
+          MobileNumber: mobileContainsEmail ? '' : mobileValue,
 
-          Password: data.Password,
-          ConfirmPassword: data.Password,
+          Password: employeeData.Password ?? employeeData.password ?? '',
+          ConfirmPassword: employeeData.Password ?? employeeData.password ?? '',
 
-          Gender: data.Gender,
+          Gender: employeeData.Gender ?? employeeData.gender ?? '',
 
-          DateOfBirth: data.DateOfBirth
-            ? data.DateOfBirth.substring(0, 10)
+          DateOfBirth: employeeData.DateOfBirth ?? employeeData.dateOfBirth
+            ? String(employeeData.DateOfBirth ?? employeeData.dateOfBirth).substring(0, 10)
             : '',
 
-          DepartmentID: data.DepartmentID,
+          DepartmentID: employeeData.DepartmentID ?? employeeData.departmentID ?? employeeData.departmentId ?? '',
 
-          Designation: data.Designation,
+          Designation: employeeData.Designation ?? employeeData.designation ?? '',
 
-          JoiningDate: data.JoiningDate
-            ? data.JoiningDate.substring(0, 10)
+          JoiningDate: employeeData.JoiningDate ?? employeeData.joiningDate
+            ? String(employeeData.JoiningDate ?? employeeData.joiningDate).substring(0, 10)
             : '',
 
-          EmploymentType: data.EmploymentType,
+          EmploymentType: employeeData.EmploymentType ?? employeeData.employmentType ?? '',
 
-          Salary: data.Salary,
+          Salary: employeeData.Salary ?? employeeData.salary ?? '0',
 
-          Experience: data.Experience ?? '',
+          Experience: employeeData.Experience ?? employeeData.experience ?? '',
 
-          PresentAddress: data.PresentAddress,
+          PresentAddress: employeeData.PresentAddress ?? employeeData.presentAddress ?? '',
 
-          PermanentAddress: data.PermanentAddress,
+          PermanentAddress: employeeData.PermanentAddress ?? employeeData.permanentAddress ?? '',
 
-          EmergencyContactName: data.EmergencyContactName,
+          EmergencyContactName: employeeData.EmergencyContactName ?? employeeData.emergencyContactName ?? '',
 
-          EmergencyRelationship: data.EmergencyRelationship,
+          EmergencyRelationship: employeeData.EmergencyRelationship ?? employeeData.emergencyRelationship ?? '',
 
-          EmergencyPhoneNumber: data.EmergencyPhoneNumber,
+          EmergencyPhoneNumber: employeeData.EmergencyPhoneNumber ?? employeeData.emergencyPhoneNumber ?? '',
 
-          RoleID: data.RoleID
+          RoleID: employeeData.RoleID ?? employeeData.roleID ?? employeeData.roleId ?? ''
 
         };
         this.onDepartmentChange();
 
-        this.employeeImagePreview = data.EmployeePhoto;
+        this.employeeImagePreview = this.employee.EmployeePhoto;
 
       },
 
       error: (err) => {
         console.log(err);
+        this.showToast(err.error?.message || 'Employee details could not be loaded.', 'error');
       }
 
     });

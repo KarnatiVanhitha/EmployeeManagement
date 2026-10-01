@@ -171,6 +171,7 @@
                 type="text"
                 class="form-control"
                 [class.is-invalid]="fullNameError"
+                autocomplete="name"
                 [(ngModel)]="employee.FullName">
                 <div class="field-error" *ngIf="fullNameError">
                   <i class="bi bi-exclamation-circle-fill"></i> {{ fullNameError }}
@@ -185,6 +186,7 @@
                   type="email"
                   class="form-control"
                   [class.is-invalid]="emailError"
+                  autocomplete="email"
                   [(ngModel)]="employee.Email">
                 <div class="field-error" *ngIf="emailError">
                   <i class="bi bi-exclamation-circle-fill"></i> {{ emailError }}
@@ -200,6 +202,7 @@
                   type="tel"
                   class="form-control"
                   [class.is-invalid]="mobileError"
+                  autocomplete="tel"
                   [(ngModel)]="employee.MobileNumber">
                 <div class="field-error" *ngIf="mobileError">
                   <i class="bi bi-exclamation-circle-fill"></i> {{ mobileError }}
@@ -216,6 +219,7 @@
                     type="password"
                     class="form-control"
                     [class.is-invalid]="passwordError"
+                    autocomplete="new-password"
                     placeholder="Enter Password"
                     [(ngModel)]="employee.Password">
                   <div class="field-error" *ngIf="passwordError">
@@ -233,6 +237,7 @@
                     type="password"
                     class="form-control"
                     [class.is-invalid]="confirmPasswordError"
+                    autocomplete="new-password"
                     placeholder="Confirm Password"
                     [(ngModel)]="employee.ConfirmPassword">
                   <div class="field-error" *ngIf="confirmPasswordError">
