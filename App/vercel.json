@@ -11,6 +11,10 @@
       "destination": "/api/roles?departmentId=:id"
     },
     {
+      "source": "/api/managers/:id",
+      "destination": "/api/managers?route=employee&id=:id"
+    },
+    {
       "source": "/api/reviews",
       "destination": "/api/notifications?proxy=reviews&path="
     },

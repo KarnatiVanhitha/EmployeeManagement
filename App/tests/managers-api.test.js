@@ -63,3 +63,36 @@ test("manager registration requires manager details", async () => {
         message: "Manager ID, name, email, and team are required"
     });
 });
+
+test("manager profile updates reach database configuration", async () => {
+    const names = ["DB_SERVER", "DB_DATABASE", "DB_USER", "DB_PASSWORD"];
+    const previousValues = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+    names.forEach((name) => delete process.env[name]);
+
+    try {
+        const response = createResponse();
+        await managersHandler({
+            method: "PUT",
+            query: { id: "42", route: "employee" },
+            body: {
+                ManagerName: "Updated Manager",
+                Email: "manager@example.com",
+                TeamName: "Engineering"
+            }
+        }, response);
+
+        assert.equal(response.statusCode, 503);
+        assert.deepEqual(response.body, {
+            success: false,
+            message: "Database is not configured"
+        });
+    } finally {
+        names.forEach((name) => {
+            if (previousValues[name] === undefined) {
+                delete process.env[name];
+            } else {
+                process.env[name] = previousValues[name];
+            }
+        });
+    }
+});

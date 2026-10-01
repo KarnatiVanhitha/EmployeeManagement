@@ -151,34 +151,11 @@ saveManager(): void {
   }
 
   // Members
-  if (
-    this.manager.Members === null ||
-    this.manager.Members === '' ||
-    this.manager.Members <= 0
-  ) {
-
-    this.membersError = "Members must be greater than 0.";
-
-  }
-
-  // Projects
-  if (
-    this.manager.Projects === null ||
-    this.manager.Projects === '' ||
-    this.manager.Projects <= 0
-  ) {
-
-    this.projectsError = "Projects must be greater than 0.";
-
-  }
-
   // Stop if any validation failed
   if (
     this.managerNameError ||
     this.emailError ||
-    this.teamNameError ||
-    this.membersError ||
-    this.projectsError
+    this.teamNameError
   ) {
 
     return;
@@ -264,21 +241,20 @@ saveManager(): void {
   this.manager = {
 
     ManagerID: manager.ManagerID,
-    ManagerName: manager.ManagerName,
-    Email: manager.Email,
-    TeamName: manager.TeamName,
-    Members: manager.Members,
-    Projects: manager.Projects
+    ManagerName: manager.ManagerName || manager.FullName || manager.managerName || '',
+    Email: manager.Email || manager.email || '',
+    TeamName: manager.DepartmentName || manager.TeamName || manager.teamName || '',
+    Members: manager.Members || 0,
+    Projects: manager.Projects || 0
 
   };
 
   this.isEditMode = true;
 
-  const modal = new bootstrap.Modal(
-    document.getElementById('managerModal')
-  );
-
-  modal.show();
+  const modalElement = document.getElementById('managerModal');
+  if (modalElement) {
+    new bootstrap.Modal(modalElement).show();
+  }
 
 }
 // ------------------------------------------------------------DeleteManager------------------------------------------------------------

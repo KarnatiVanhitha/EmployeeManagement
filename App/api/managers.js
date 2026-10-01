@@ -2,16 +2,20 @@ const sql = require("mssql");
 const { getDatabaseConfig, getConnectionPool } = require("../serverless/database");
 
 module.exports = async function managersHandler(req, res) {
-    if (req.method !== "GET" && req.method !== "POST") {
-        res.setHeader("Allow", "GET, POST");
+    if (req.method !== "GET" && req.method !== "POST" && req.method !== "PUT") {
+        res.setHeader("Allow", "GET, POST, PUT");
         return res.status(405).json({ success: false, message: "Method not allowed" });
     }
 
     const manager = req.body || {};
-    const managerId = Number(manager.ManagerID);
+    const managerId = Number(req.query?.id || manager.ManagerID);
     if (req.method === "POST" &&
         (!Number.isInteger(managerId) || managerId < 1 || !manager.ManagerName || !manager.Email || !manager.TeamName)) {
         return res.status(400).json({ message: "Manager ID, name, email, and team are required" });
+    }
+    if (req.method === "PUT" &&
+        (!Number.isInteger(managerId) || managerId < 1 || !manager.ManagerName || !manager.Email || !manager.TeamName)) {
+        return res.status(400).json({ message: "Manager ID, name, email, and department are required" });
     }
 
     const config = getDatabaseConfig();
@@ -38,6 +42,30 @@ module.exports = async function managersHandler(req, res) {
                 `);
 
             return res.status(201).json({ message: "Manager added successfully." });
+        }
+
+        if (req.method === "PUT") {
+            const result = await pool.request()
+                .input("ManagerID", sql.Int, managerId)
+                .input("ManagerName", sql.NVarChar(100), manager.ManagerName)
+                .input("Email", sql.NVarChar(100), manager.Email)
+                .input("TeamName", sql.NVarChar(100), manager.TeamName)
+                .query(`
+                    UPDATE Employees
+                    SET FullName = @ManagerName,
+                        Email = @Email,
+                        DepartmentID = COALESCE(
+                            (SELECT TOP 1 DepartmentID FROM Departments WHERE DepartmentName = @TeamName),
+                            DepartmentID
+                        )
+                    WHERE EmployeeID = @ManagerID
+                `);
+
+            if (!result.rowsAffected[0]) {
+                return res.status(404).json({ message: "Manager employee not found" });
+            }
+
+            return res.status(200).json({ message: "Manager profile updated successfully." });
         }
 
         const result = await pool.request().query(`

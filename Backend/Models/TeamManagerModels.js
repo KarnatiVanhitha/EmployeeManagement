@@ -131,28 +131,21 @@ async function addManager(manager) {
 }
 // Update Manager
 const updateManager = async (id, manager) => {
-    await sql.connect(config);
-
-    const request = new sql.Request();
-
-    request.input("ManagerID", sql.Int, id);
-    request.input("ManagerName", sql.NVarChar, manager.ManagerName);
-    request.input("Email", sql.NVarChar, manager.Email);
-    request.input("TeamName", sql.NVarChar, manager.TeamName);
-    request.input("Members", sql.Int, manager.Members);
-    request.input("Projects", sql.Int, manager.Projects);
-
-    return await request.query(`
-        UPDATE TeamManagers
-        SET
-            ManagerName = @ManagerName,
-            Email = @Email,
-            TeamName = @TeamName,
-            Members = @Members,
-            Projects = @Projects,
-            UpdatedAt = GETDATE()
-        WHERE ManagerID = @ManagerID
-    `);
+    return await new sql.Request()
+        .input("ManagerID", sql.Int, id)
+        .input("ManagerName", sql.NVarChar(100), manager.ManagerName)
+        .input("Email", sql.NVarChar(100), manager.Email)
+        .input("TeamName", sql.NVarChar(100), manager.TeamName)
+        .query(`
+            UPDATE Employees
+            SET FullName = @ManagerName,
+                Email = @Email,
+                DepartmentID = COALESCE(
+                    (SELECT TOP 1 DepartmentID FROM Departments WHERE DepartmentName = @TeamName),
+                    DepartmentID
+                )
+            WHERE EmployeeID = @ManagerID
+        `);
 };
 
 // Delete Manager (Soft Delete)
