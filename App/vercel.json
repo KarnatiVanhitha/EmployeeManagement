@@ -55,6 +55,10 @@
       "destination": "/api/employees?route=login"
     },
     {
+      "source": "/api/employees/managers",
+      "destination": "/api/managers"
+    },
+    {
       "source": "/api/employees/:id",
       "destination": "/api/employees?route=id&id=:id"
     },

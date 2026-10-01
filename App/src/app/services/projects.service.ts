@@ -98,7 +98,7 @@ export class ProjectsService {
 
   getManagers(): Observable<any[]> {
     return this.http.get<any[]>(
-      `${this.apiUrl}/managers`
+      '/api/employees/managers'
     );
   }
 

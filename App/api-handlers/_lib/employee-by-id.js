@@ -24,7 +24,7 @@ module.exports = async function employeeByIdHandler(req, res) {
             .query(`
                 SELECT
                     e.EmployeeID, e.EmployeePhoto, e.FullName, e.Email, e.MobileNumber,
-                    e.Gender, e.DateOfBirth, e.DepartmentID, e.Designation, e.JoiningDate,
+                    e.Gender, e.DateOfBirth, e.DepartmentID, e.JoiningDate,
                     e.EmploymentType, e.Salary, e.Experience, e.PresentAddress,
                     e.PermanentAddress, e.EmergencyContactName, e.EmergencyRelationship,
                     e.EmergencyPhoneNumber, e.RoleID, e.IsActive,
