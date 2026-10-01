@@ -3,6 +3,14 @@
   "outputDirectory": "dist/app",
   "rewrites": [
     {
+      "source": "/api/leaves/employee-leaves/all",
+      "destination": "/api/leaves?view=employee-leaves"
+    },
+    {
+      "source": "/api/leaves/employee/:id",
+      "destination": "/api/leaves?view=employee&id=:id"
+    },
+    {
       "source": "/api/department-roles",
       "destination": "/api/departments?aggregate=roles"
     },

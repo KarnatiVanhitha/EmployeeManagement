@@ -1,3 +1,4 @@
+const sql = require("mssql");
 const { getDatabaseConfig, getConnectionPool } = require("../serverless/database");
 
 module.exports = async function leavesHandler(req, res) {
@@ -13,7 +14,22 @@ module.exports = async function leavesHandler(req, res) {
 
     try {
         const pool = await getConnectionPool(config);
-        const result = await pool.request().query(`
+        const view = req.query?.view;
+        const request = pool.request();
+        let whereClause = "";
+
+        if (view === "employee") {
+            const employeeId = Number(req.query?.id);
+            if (!Number.isInteger(employeeId) || employeeId < 1) {
+                return res.status(400).json({ message: "A valid employee ID is required" });
+            }
+            request.input("EmployeeID", sql.Int, employeeId);
+            whereClause = "WHERE l.EmployeeID = @EmployeeID";
+        } else if (view === "employee-leaves") {
+            whereClause = "WHERE LOWER(l.ApplicantRole) NOT IN ('superadmin', 'school', 'office', 'admin', 'hr')";
+        }
+
+        const result = await request.query(`
             SELECT
                 l.LeaveID AS leaveId,
                 l.LeaveID AS LeaveID,
@@ -49,6 +65,7 @@ module.exports = async function leavesHandler(req, res) {
             LEFT JOIN Employees e ON l.EmployeeID = e.EmployeeID
             LEFT JOIN Roles r ON e.RoleID = r.RoleID
             LEFT JOIN Departments d ON e.DepartmentID = d.DepartmentID
+            ${whereClause}
             ORDER BY l.LeaveID DESC
         `);
         return res.status(200).json(result.recordset);

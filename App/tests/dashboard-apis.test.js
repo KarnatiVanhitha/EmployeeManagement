@@ -1,5 +1,6 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
+const meetingsHandler = require("../api/calendar/meetings");
 
 const handlers = [
     require("../api/admins"),
@@ -10,7 +11,6 @@ const handlers = [
     require("../api/salaries"),
     require("../api/projects"),
     require("../api/tasks/employee/[id]"),
-    require("../api/calendar/meetings"),
     require("../api/calendar/holidays")
 ];
 
@@ -56,6 +56,49 @@ test("dashboard data handlers report missing database configuration", async () =
             assert.equal(response.statusCode, 503);
             assert.equal(response.body.message, "Database is not configured");
         }
+    } finally {
+        names.forEach((name) => {
+            if (previousValues[name] === undefined) {
+                delete process.env[name];
+            } else {
+                process.env[name] = previousValues[name];
+            }
+        });
+    }
+});
+
+test("meeting creation rejects roles outside the allowed list", async () => {
+    const response = createResponse();
+    await meetingsHandler({
+        method: "POST",
+        headers: { "x-user-role": "employee" },
+        body: {}
+    }, response);
+
+    assert.equal(response.statusCode, 403);
+    assert.deepEqual(response.body, {
+        message: "You do not have permission to create meetings"
+    });
+});
+
+test("meeting creation allows an approved role to reach database validation", async () => {
+    const names = ["DB_SERVER", "DB_DATABASE", "DB_USER", "DB_PASSWORD"];
+    const previousValues = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+    names.forEach((name) => delete process.env[name]);
+
+    try {
+        const response = createResponse();
+        await meetingsHandler({
+            method: "POST",
+            headers: { "x-user-role": "manager" },
+            body: {}
+        }, response);
+
+        assert.equal(response.statusCode, 503);
+        assert.deepEqual(response.body, {
+            success: false,
+            message: "Database is not configured"
+        });
     } finally {
         names.forEach((name) => {
             if (previousValues[name] === undefined) {

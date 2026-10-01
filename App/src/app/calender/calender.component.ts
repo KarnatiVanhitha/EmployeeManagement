@@ -177,6 +177,11 @@ export class CalenderComponent implements OnInit {
   }
 
   addMeeting(): void {
+    if (!this.canAdd()) {
+      this.toastService.showError('You do not have permission to create meetings.');
+      return;
+    }
+
     this.clearMeetingErrors();
     let hasError = false;
 

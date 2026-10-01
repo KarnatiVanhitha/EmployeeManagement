@@ -16,7 +16,9 @@ export class CalendarService {
   }
 
   addMeeting(meeting: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/meetings`, meeting);
+    return this.http.post<any>(`${this.apiUrl}/meetings`, meeting, {
+      headers: { 'X-User-Role': localStorage.getItem('role') || '' }
+    });
   }
 
   updateMeeting(id: number, meeting: any): Observable<any> {

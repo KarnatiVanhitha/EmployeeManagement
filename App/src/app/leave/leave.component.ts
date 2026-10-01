@@ -26,7 +26,7 @@ export class LeaveComponent implements OnInit {
 
   isAdminRole(): boolean {
     const role = this.normalizeRole(this.role);
-    return ['superadmin', 'school', 'office', 'admin'].includes(role);
+    return ['superadmin', 'school', 'office', 'admin', 'hr'].includes(role);
   }
 
   leaveForm = {
