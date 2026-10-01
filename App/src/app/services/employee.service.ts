@@ -142,6 +142,12 @@ export class EmployeeService {
 
   }
 
+  getDepartmentRoles(): Observable<{ departments: any[]; roles: any[] }> {
+    return this.http.get<{ departments: any[]; roles: any[] }>(
+      '/api/department-roles'
+    );
+  }
+
 
   // =========================================================
   // NORMAL EMPLOYEE LOGIN

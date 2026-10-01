@@ -126,8 +126,7 @@ export class AddEmployeeComponent {
   ngOnInit(): void {
     this.isSelfRegistration = this.router.url === '/employee-signup';
     this.loadEmployees();
-    this.loadDepartment();
-    this.loadRoles();
+    this.loadDepartmentAndRoles();
     this.loaddetails();
   }
 
@@ -175,31 +174,17 @@ export class AddEmployeeComponent {
   previousSignupStep(): void {
     this.signupStep = 1;
   }
-  //=======================================================================lOADROLES=========================================================//
-loadRoles() {
-  this.employeeService.getRoles().subscribe({
-    next: (data) => {
-      this.roles = data;
-
-    },
-    error: (err) => {
-      console.error(err);
-    }
-  });
- 
-}
-//===================================================================LOADDEPARTMENTS========================================================//
-loadDepartment(){
-  this.employeeService.getDepartment().subscribe({
-    next:(data)=>{
-      this.departments=data;
-    
-    },
-    error:(err)=>{
-      console.error(err);
-    }
-  })
-  
+  //=======================================================================LOADDEPARTMENTANDROLES=========================================================//
+  loadDepartmentAndRoles(): void {
+    this.employeeService.getDepartmentRoles().subscribe({
+      next: (data) => {
+        this.departments = data.departments;
+        this.roles = data.roles;
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
 }
 
 onDepartmentChange(): void {

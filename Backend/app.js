@@ -102,6 +102,7 @@ app.use("/api/managers", teamManagerRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/departments", departmentRoutes);
+app.get("/api/department-roles", require("./Controllers/DepartmentController").getDepartmentRoles);
 app.use("/api/admins", adminRoute);
 app.use("/api/salaries", salaryRoutes);
 app.use("/api/leaves", leaveRoutes);
