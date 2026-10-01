@@ -3,6 +3,10 @@
   "outputDirectory": "dist/app",
   "rewrites": [
     {
+      "source": "/api/jira/:path*",
+      "destination": "/api/projects?proxy=jira&path=:path*"
+    },
+    {
       "source": "/api/leaves/employee-leaves/all",
       "destination": "/api/leaves?view=employee-leaves"
     },

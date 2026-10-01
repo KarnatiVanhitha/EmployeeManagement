@@ -1,6 +1,11 @@
 const { getDatabaseConfig, getConnectionPool } = require("../serverless/database");
+const jiraProxyHandler = require("../api-handlers/_lib/jira-proxy");
 
 module.exports = async function projectsHandler(req, res) {
+    if (req.query?.proxy === "jira") {
+        return jiraProxyHandler(req, res);
+    }
+
     if (req.method !== "GET") {
         res.setHeader("Allow", "GET");
         return res.status(405).json({ success: false, message: "Method not allowed" });
