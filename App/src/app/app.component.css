@@ -21,8 +21,7 @@ body {
   z-index: 20000;
   display: grid;
   place-items: center;
-  background: rgba(245, 248, 245, 0.72);
-  backdrop-filter: blur(2px);
+  pointer-events: none;
 }
 
 .app-loading-status {

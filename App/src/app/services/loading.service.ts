@@ -10,6 +10,7 @@ export class LoadingService {
 
   private activeRequests = 0;
   private showTimer: ReturnType<typeof setTimeout> | null = null;
+  private hideTimer: ReturnType<typeof setTimeout> | null = null;
 
   beginRequest(): void {
     this.activeRequests += 1;
@@ -17,6 +18,10 @@ export class LoadingService {
       this.showTimer = setTimeout(() => {
         if (this.activeRequests > 0) {
           this.loadingSubject.next(true);
+          this.hideTimer = setTimeout(() => {
+            this.loadingSubject.next(false);
+            this.hideTimer = null;
+          }, 6000);
         }
       }, 250);
     }
@@ -28,6 +33,10 @@ export class LoadingService {
       if (this.showTimer) {
         clearTimeout(this.showTimer);
         this.showTimer = null;
+      }
+      if (this.hideTimer) {
+        clearTimeout(this.hideTimer);
+        this.hideTimer = null;
       }
       this.loadingSubject.next(false);
     }
