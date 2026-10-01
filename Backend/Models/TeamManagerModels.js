@@ -7,9 +7,9 @@ async function getManagers() {
 
     SELECT
 
-        tm.ManagerID,
-        tm.ManagerID AS managerId,
-        tm.ManagerID AS EmployeeID,
+        e.EmployeeID AS ManagerID,
+        e.EmployeeID AS managerId,
+        e.EmployeeID AS EmployeeID,
 
         e.FullName AS ManagerName,
         e.FullName AS managerName,
@@ -23,31 +23,29 @@ async function getManagers() {
 
         d.DepartmentID,
         d.DepartmentID AS departmentId,
-        COALESCE(d.DepartmentName, tm.TeamName, '') AS TeamName,
-        COALESCE(d.DepartmentName, tm.TeamName, '') AS teamName,
-        COALESCE(d.DepartmentName, tm.TeamName, '') AS DepartmentName,
+        COALESCE(d.DepartmentName, '') AS TeamName,
+        COALESCE(d.DepartmentName, '') AS teamName,
+        COALESCE(d.DepartmentName, '') AS DepartmentName,
 
         r.RoleName,
         r.RoleName AS roleName,
 
-        tm.Members,
+        0 AS Members,
 
-        tm.Projects,
+        0 AS Projects,
 
-        tm.IsActive
+        1 AS IsActive
 
-    FROM TeamManagers tm
+    FROM Employees e
 
-    INNER JOIN Employees e
-        ON tm.ManagerID = e.EmployeeID
+    INNER JOIN Roles r
+        ON e.RoleID = r.RoleID
 
     LEFT JOIN Departments d
         ON e.DepartmentID = d.DepartmentID
 
-    LEFT JOIN Roles r
-        ON e.RoleID = r.RoleID
-
-    WHERE tm.IsActive = 1
+    WHERE e.IsActive = 1
+            AND LOWER(LTRIM(RTRIM(r.RoleName))) = 'manager'
 
     `;
 

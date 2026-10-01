@@ -524,7 +524,6 @@ roleDashboardConfig: any = {
       'employees',
       'roles',
       'leaves',
-      'salary',
       'managers',
       'projects',
       'tasks',
@@ -545,7 +544,6 @@ roleDashboardConfig: any = {
       'employees',
       'roles',
       'leaves',
-      'salary',
       'managers',
       'projects',
       'tasks',
@@ -563,7 +561,6 @@ roleDashboardConfig: any = {
       'employees',
       'roles',
       'leaves',
-      'salary',
       'managers',
       'projects',
       'tasks'
@@ -578,7 +575,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'leaves',
       'projects',
       'tasks',
@@ -594,7 +590,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'leaves',
       'team',
       'projects',
@@ -610,7 +605,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'leaves',
       'myLeaves',
       'projects',
@@ -626,7 +620,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'leaves',
       'myLeaves',
       'projects',
@@ -642,7 +635,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'leaves',
       'myLeaves',
       'projects',
@@ -658,7 +650,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'leaves',
       'myLeaves',
       'projects',
@@ -673,7 +664,6 @@ roleDashboardConfig: any = {
   Accountant: {
     sections: [
       'overview',
-      'salary',
       'employees',
       'leaves',
       'tasks'
@@ -703,7 +693,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'leaves',
       'myLeaves',
       'tasks'
@@ -720,7 +709,6 @@ roleDashboardConfig: any = {
       'employees',
       'roles',
       'manager',
-      'salary',
       'projects',
       'tasks',
       'leaves'
@@ -734,7 +722,6 @@ roleDashboardConfig: any = {
   'Finance Manager': {
     sections: [
       'overview',
-      'salary',
       'employees',
       'leaves',
       'tasks'
@@ -751,7 +738,6 @@ roleDashboardConfig: any = {
       'employees',
       'roles',
       'leaves',
-      'salary',
       'tasks'
     ]
   },
@@ -765,7 +751,6 @@ roleDashboardConfig: any = {
       'overview',
       'employees',
       'team',
-      'salary',
       'leaves',
       'projects',
       'tasks'
@@ -781,7 +766,6 @@ roleDashboardConfig: any = {
       'overview',
       'employees',
       'team',
-      'salary',
       'leaves',
       'projects',
       'tasks'
@@ -797,7 +781,6 @@ roleDashboardConfig: any = {
       'overview',
       'employees',
       'team',
-      'salary',
       'leaves',
       'projects',
       'tasks'
@@ -813,7 +796,6 @@ roleDashboardConfig: any = {
       'overview',
       'employees',
       'team',
-      'salary',
       'leaves',
       'projects',
       'tasks'
@@ -829,7 +811,6 @@ roleDashboardConfig: any = {
       'overview',
       'employees',
       'team',
-      'salary',
       'leaves',
       'projects',
       'tasks'
@@ -859,7 +840,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'projects',
       'tasks',
       'team',
@@ -875,7 +855,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'projects',
       'tasks',
       'team',
@@ -891,7 +870,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'projects',
       'tasks',
       'leaves'
@@ -906,7 +884,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'projects',
       'tasks',
       'team',
@@ -922,7 +899,6 @@ roleDashboardConfig: any = {
     sections: [
       'overview',
       'manager',
-      'salary',
       'employees',
       'team',
       'projects',
