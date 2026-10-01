@@ -412,16 +412,14 @@ filteredManagers(): any[] {
       const empId = String(leave.EmployeeID ?? leave.employeeId ?? '');
 
       const isDeptLeave = deptEmpIds.size > 0 ? deptEmpIds.has(empId) : true;
-      return start >= today && status !== 'declined' && isDeptLeave;
+      return start >= today && status === 'approved' && isDeptLeave;
     }).slice(0, 5);
   }
 
   // ------------------------------------------------------------ViewManager------------------------------------------------------------
   viewManager(manager: any): void {
     const teamLeads = this.getTeamLeadsForManager(manager);
-    const upcomingLeaves = this.getUpcomingLeavesForManager(manager).filter((leave: any) =>
-      String(leave.Status ?? leave.status ?? '').trim().toLowerCase() === 'approved'
-    );
+    const upcomingLeaves = this.getUpcomingLeavesForManager(manager);
 
     this.selectedManager = {
       ...manager,
