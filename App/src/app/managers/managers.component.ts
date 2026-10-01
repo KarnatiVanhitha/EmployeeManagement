@@ -419,7 +419,9 @@ filteredManagers(): any[] {
   // ------------------------------------------------------------ViewManager------------------------------------------------------------
   viewManager(manager: any): void {
     const teamLeads = this.getTeamLeadsForManager(manager);
-    const upcomingLeaves = this.getUpcomingLeavesForManager(manager);
+    const upcomingLeaves = this.getUpcomingLeavesForManager(manager).filter((leave: any) =>
+      String(leave.Status ?? leave.status ?? '').trim().toLowerCase() === 'approved'
+    );
 
     this.selectedManager = {
       ...manager,
