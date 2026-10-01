@@ -134,7 +134,7 @@ module.exports = async function employeesHandler(req, res) {
         const role = roleResult.recordset[0];
         const roleName = String(role?.RoleName || "").toLowerCase().trim();
         const isTeamLead = roleName.includes("team lead") || roleName.includes("lead") || roleName === "teamlead";
-        const isManager = role?.IsManager && !isTeamLead &&
+        const isManager = !isTeamLead &&
             (roleName.includes("manager") || roleName === "admin" || roleName === "product owner") ? 1 : 0;
 
         try {

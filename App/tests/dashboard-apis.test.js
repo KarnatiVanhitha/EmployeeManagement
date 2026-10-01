@@ -6,7 +6,6 @@ const handlers = [
     require("../api/admins"),
     require("../api-handlers/_lib/admin-by-id"),
     require("../api-handlers/_lib/employee-by-id"),
-    require("../api/managers"),
     require("../api/salaries"),
     require("../api/projects"),
     require("../api/tasks/employee/[id]"),

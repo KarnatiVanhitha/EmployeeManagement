@@ -40,7 +40,7 @@ async function addEmployee(req, res) {
             const roleName = String(role.RoleName || '').toLowerCase().trim();
             const isTeamLead = roleName.includes('team lead') || roleName.includes('lead') || roleName === 'teamlead';
 
-            if (role.IsManager && !isTeamLead && (roleName.includes('manager') || roleName === 'admin' || roleName === 'product owner')) {
+            if (!isTeamLead && (roleName.includes('manager') || roleName === 'admin' || roleName === 'product owner')) {
                 isManager = 1;
             }
         }
