@@ -115,32 +115,34 @@ roleEmployees: any[] = [];
 
   // =========================================================
   // TASK INFORMATION
-      time: '06:20 PM'
+
   userTasks: any[] = [];
 
   taskCompletionPercentage = 0;
 
-      time: '04:00 PM'
   // =========================================================
 
   employeesByRole: any[] = [];
 
-      time: '02:30 PM'
+    teamLeads: any[] = [];
+
   totalEmployees = 0;
 
   // =========================================================
   // ADMIN
-      time: '12:10 PM'
+
   admins: any[] = [];
 
   schoolAdminCount = 0;
 
-      time: '10:40 AM'
+    officeAdminCount = 0;
+
   officeDashboardLoading = false;
 
   officeDashboardError = '';
 
-      time: '09:50 AM'
+    officeDashboardDepartments: any[] = [];
+
   officeDashboardManagers: any[] = [];
 
   officeDashboardPendingLeaves: any[] = [];
@@ -291,36 +293,34 @@ roleEmployees: any[] = [];
 
   // =========================================================
   // APPLICATIONS
-
+  // =========================================================
 
   applications = [
     {
       name: 'Total',
+      count: 0,
       percent: 100,
       color: '#9795f1'
     },
     {
       name: 'Selected',
       count: 0,
-    teamLeads: any[] = [];
-
+      percent: 0,
       color: '#87f3a0'
     },
     {
       name: 'Shortlisted',
-    // =========================================================
-
+      count: 0,
       percent: 0,
       color: '#f1c40f'
     },
     {
-    officeAdminCount = 0;
-
+      name: 'Rejected',
       count: 0,
       percent: 0,
       color: '#f37b63'
     }
-    officeDashboardDepartments: any[] = [];
+  ];
 
 
   // =========================================================
@@ -490,6 +490,25 @@ roleEmployees: any[] = [];
     'Parent-Teacher Meeting on 15th July',
     'Examination timetable has been published for 11th Grade',
     'Assignment submission deadline this Friday for 10th Grade'
+  ];
+
+  recentActivities = [
+    { name: 'John Carter', action: 'Added New Project HRMS Dashboard', time: '06:20 PM' },
+    { name: 'Sophia White', action: 'Commented on Uploaded Document', time: '04:00 PM' },
+    { name: 'Michael Johnson', action: 'Approved Task Projects', time: '02:30 PM' },
+    { name: 'Emily Clark', action: 'Requesting Access to Module Tickets', time: '12:10 PM' },
+    { name: 'David Anderson', action: 'Downloaded App Reports', time: '10:40 AM' },
+    { name: 'Olivia Haris', action: 'Completed ticket module in HRMS', time: '09:50 AM' }
+  ];
+
+  todayActivities = [
+    { message: "Daniel Martinz's Birthday", image: 'assets/user1.jpg', icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
+    { message: "Amelia Curr's Birthday", image: 'assets/user2.jpg', icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
+    { message: "Emma Lewis's Birthday", image: 'assets/user3.jpg', icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
+    { message: 'Madison Andrew is off sick today', image: 'assets/user1.jpg', icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
+    { message: 'Victoria Celestie is off sick today', image: 'assets/user2.jpg', icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
+    { message: 'Daniel Patrick is off sick today', image: 'assets/user3.jpg', icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
+    { message: 'Jessica Renee is off sick today', image: 'assets/user1.jpg', icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' }
   ];
 
   

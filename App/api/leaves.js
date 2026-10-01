@@ -2,8 +2,16 @@ const sql = require("mssql");
 const { getDatabaseConfig, getConnectionPool } = require("../serverless/database");
 
 module.exports = async function leavesHandler(req, res) {
+    if (req.method === "OPTIONS") {
+        res.setHeader("Allow", "GET, POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Origin", req.headers?.origin || "*");
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", req.headers?.["access-control-request-headers"] || "Content-Type");
+        return res.status(204).end();
+    }
+
     if (req.method !== "GET" && req.method !== "POST") {
-        res.setHeader("Allow", "GET, POST");
+        res.setHeader("Allow", "GET, POST, OPTIONS");
         return res.status(405).json({ success: false, message: "Method not allowed" });
     }
 

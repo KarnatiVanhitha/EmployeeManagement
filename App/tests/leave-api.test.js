@@ -17,6 +17,9 @@ function createResponse() {
         json(body) {
             this.body = body;
             return this;
+        },
+        end() {
+            return this;
         }
     };
 }
@@ -51,5 +54,22 @@ test("rejects methods other than GET and POST", async () => {
     await leavesHandler({ method: "PATCH" }, response);
 
     assert.equal(response.statusCode, 405);
-    assert.equal(response.headers.Allow, "GET, POST");
+    assert.equal(response.headers.Allow, "GET, POST, OPTIONS");
+});
+
+test("accepts CORS preflight requests", async () => {
+    const response = createResponse();
+    await leavesHandler({
+        method: "OPTIONS",
+        headers: {
+            origin: "https://app.example.com",
+            "access-control-request-headers": "content-type"
+        }
+    }, response);
+
+    assert.equal(response.statusCode, 204);
+    assert.equal(response.headers.Allow, "GET, POST, OPTIONS");
+    assert.equal(response.headers["Access-Control-Allow-Origin"], "https://app.example.com");
+    assert.equal(response.headers["Access-Control-Allow-Methods"], "GET, POST, OPTIONS");
+    assert.equal(response.headers["Access-Control-Allow-Headers"], "content-type");
 });
