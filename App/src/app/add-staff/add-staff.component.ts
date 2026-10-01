@@ -31,7 +31,6 @@ staff:any = {
   permanentAddress: '',
   pan: '',
   status: '',
-  salary: '',
   image:'',
 };
 
@@ -128,36 +127,6 @@ addStaff() {
     JSON.stringify(staffList)
   );
 
-  // -----------------------------
-  // Save Salary
-  // -----------------------------
-
-  const salaries = JSON.parse(
-    localStorage.getItem('salaries') || '[]'
-  );
-
-  salaries.push({
-
-    id: newStaff.id,
-
-    employeeName:
-      newStaff.firstName + ' ' + newStaff.lastName,
-
-    email: newStaff.email,
-
-    role: 'Staff',
-
-    department: newStaff.subject,
-
-    salary: newStaff.salary
-
-  });
-
-  localStorage.setItem(
-    'salaries',
-    JSON.stringify(salaries)
-  );
-
   this.toastService.showSuccess('Staff Added Successfully');
 
   // Reset Form
@@ -184,7 +153,6 @@ addStaff() {
     permanentAddress: '',
     pan: '',
     status: '',
-    salary: '',
     image: '',
   };
 

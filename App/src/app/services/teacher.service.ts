@@ -33,24 +33,5 @@ export class TeacherService {
   data.push(newTeacher);
 
   localStorage.setItem('teachers', JSON.stringify(data));
-   // Store salary separately
-  const salaries = JSON.parse(
-    localStorage.getItem('salaries') || '[]'
-  );
-
-  salaries.push({
-    id: newTeacher.id,
-    employeeName: newTeacher.fullName || newTeacher.firstName,
-    email: newTeacher.email,
-    role: newTeacher.role,
-    salary: newTeacher.salary,
-    department: newTeacher.department,
-    subject: newTeacher.subject
-  });
-
-  localStorage.setItem(
-    'salaries',
-    JSON.stringify(salaries)
-  );
 }
 }

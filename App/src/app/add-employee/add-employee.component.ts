@@ -60,7 +60,6 @@ export class AddEmployeeComponent {
     roleError = '';
     joiningDateError = '';
     employmentTypeError = '';
-    salaryError = '';
     experienceError = '';
     presentAddressError = '';
     permanentAddressError = '';
@@ -88,7 +87,6 @@ export class AddEmployeeComponent {
     this.roleError = '';
     this.joiningDateError = '';
     this.employmentTypeError = '';
-    this.salaryError = '';
     this.experienceError = '';
     this.presentAddressError = '';
     this.permanentAddressError = '';
@@ -113,7 +111,7 @@ export class AddEmployeeComponent {
   Designation: '',
   JoiningDate: '',
   EmploymentType: '',
-  Salary: '',
+  Salary: '0',
   Experience: '',
   PresentAddress: '',
   PermanentAddress: '',
@@ -297,17 +295,6 @@ this.clearErrors();
   // Employment Type
   if (!this.employee.EmploymentType) {
     this.employmentTypeError = 'Please select Employment Type';
-    return;
-  }
-
-  // Salary
-  if (!this.employee.Salary) {
-    this.salaryError = 'Please enter Salary';
-    return;
-  }
-
-  if (Number(this.employee.Salary) <= 0) {
-    this.salaryError = 'Salary must be greater than zero';
     return;
   }
 
@@ -624,11 +611,6 @@ onImageChange(event: any): void {
     hasError = true;
   }
 
-  if (!this.employee.Salary || Number(this.employee.Salary) <= 0) {
-    this.salaryError = 'Please enter a valid Salary';
-    hasError = true;
-  }
-
   if (this.employee.Experience === '' || this.employee.Experience === null || this.employee.Experience === undefined) {
     this.experienceError = 'Experience is required';
     hasError = true;
@@ -815,7 +797,7 @@ onImageChange(event: any): void {
       Designation: '',
       JoiningDate: '',
       EmploymentType: '',
-      Salary: '',
+      Salary: '0',
       Experience: '',
       PresentAddress: '',
       PermanentAddress: '',

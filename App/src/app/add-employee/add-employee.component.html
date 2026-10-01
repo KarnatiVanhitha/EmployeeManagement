@@ -387,21 +387,6 @@
 
               <div class="col-md-6">
                 <label class="form-label fw-semibold">
-                  Salary
-                </label>
-
-                <input
-                  type="number"
-                  class="form-control"
-                  [class.is-invalid]="salaryError"
-                  [(ngModel)]="employee.Salary">
-                <div class="field-error" *ngIf="salaryError">
-                  <i class="bi bi-exclamation-circle-fill"></i> {{ salaryError }}
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">
                   Experience (years)
                 </label>
 

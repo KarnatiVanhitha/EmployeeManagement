@@ -26,7 +26,6 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { HostelDayscholarComponent } from './hostel-dayscholar/hostel-dayscholar.component';
 import { TransportComponent } from './transport/transport.component';
 import { SettingsandprofileComponent } from './settingsandprofile/settingsandprofile.component';
-import { SalariesComponent } from './salaries/salaries.component';
 import { AdminComponent } from './admin/admin.component';
 import { AddAdminComponent } from './add-admin/add-admin.component';
 import { AddEmployeeComponent } from './add-employee/add-employee.component';
@@ -70,7 +69,6 @@ import { LoadingInterceptor } from './services/loading.interceptor';
      HostelDayscholarComponent,
      TransportComponent,
      SettingsandprofileComponent,
-     SalariesComponent,
      AdminComponent,
      AddAdminComponent,
      AddEmployeeComponent,

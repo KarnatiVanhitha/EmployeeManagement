@@ -37,7 +37,6 @@ export class AddTeacherComponent {
   permanentAddress: '',
   pan: '',
   status: '',
-   salary: '',   
   image: ''
 
 };
@@ -215,7 +214,6 @@ console.log('Validation Errors:', this.errors);
       phone: '',
       subject: '',
       image: '',
-      salary: ''
     };
 
     // this.selectedFile = null;

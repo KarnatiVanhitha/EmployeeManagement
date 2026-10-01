@@ -2169,30 +2169,6 @@
     </div>
 
 
-    <!-- SALARY -->
-    <div class="col-xl-3 col-md-6">
-      <div class="dashboard-card stat-card">
-
-        <div class="stat-icon">
-          <i class="bi bi-currency-rupee"></i>
-        </div>
-
-        <div>
-          <span>Salary</span>
-
-          <h3>
-            ₹{{ salaryInfo.amount || 0 | number }}
-          </h3>
-
-          <small>
-            {{ salaryInfo.currency || 'INR' }}
-          </small>
-        </div>
-
-      </div>
-    </div>
-
-
     <!-- ROLE -->
     <div class="col-xl-3 col-md-6">
       <div class="dashboard-card stat-card">
@@ -2220,7 +2196,7 @@
 
 
   <!-- ========================================================= -->
-  <!-- COMMON EMPLOYEE / MANAGER / SALARY INFORMATION -->
+  <!-- COMMON EMPLOYEE / MANAGER INFORMATION -->
   <!-- ========================================================= -->
 
   <div class="row g-4 mb-4">
@@ -2389,64 +2365,6 @@
 
     </div>
 
-
-    <!-- ======================================================= -->
-    <!-- SALARY -->
-    <!-- ======================================================= -->
-
-    <div class="col-xl-4 col-lg-12">
-
-      <div class="dashboard-card salary-details-card">
-
-        <div class="card-header-custom">
-
-          <h5>
-            <i class="bi bi-wallet2"></i>
-            Salary Information
-          </h5>
-
-        </div>
-
-
-        <div class="salary-main">
-
-          <span>
-            Current Salary
-          </span>
-
-          <h1>
-            ₹{{ (salaryInfo.amount || 0) | number }}
-          </h1>
-
-          <p>
-            Currency:
-            <strong>
-              {{ salaryInfo.currency || 'INR' }}
-            </strong>
-          </p>
-
-        </div>
-
-
-        <div class="salary-footer">
-
-          <span>
-            Last Updated
-          </span>
-
-          <strong>
-            {{
-            salaryInfo.lastUpdated
-            ? (salaryInfo.lastUpdated | date:'dd MMM yyyy')
-            : 'Not available'
-            }}
-          </strong>
-
-        </div>
-
-      </div>
-
-    </div>
 
   </div>
 
@@ -3982,46 +3900,6 @@
 
     </div>
 
-
-    <!-- SALARY OVERVIEW -->
-
-    <div class="dashboard-card mb-4">
-
-      <div class="card-header-custom">
-
-        <h5>
-
-          <i class="bi bi-bar-chart"></i>
-
-          Salary Overview
-
-        </h5>
-
-      </div>
-
-
-      <div class="salary-chart">
-
-        <div class="salary-bar" *ngFor="let item of salaryData">
-
-          <div class="bars">
-
-            <div class="received-bar" [style.height.px]="item.received"></div>
-
-            <div class="pending-bar" [style.height.px]="item.pending"></div>
-
-          </div>
-
-
-          <small>
-            {{ item.month }}
-          </small>
-
-        </div>
-
-      </div>
-
-    </div>
 
   </ng-container>
 

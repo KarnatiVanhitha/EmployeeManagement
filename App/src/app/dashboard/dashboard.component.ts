@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../services/admins.service';
 import { EmployeeService } from '../services/employee.service';
 import { LeaveService } from '../services/leave.service';
-import { SalaryService } from '../services/salary.service';
 import { ManagerService } from '../services/managers.service';
 import { CalendarService } from '../services/calendar.service';
 import { ProjectsService } from '../services/projects.service';
@@ -67,16 +66,6 @@ roleEmployees: any[] = [];
     name: 'Not Assigned',
     role: 'Not Assigned',
     isAbsent: false
-  };
-
-  // =========================================================
-  // SALARY INFORMATION
-  // =========================================================
-
-  salaryInfo: any = {
-    amount: 0,
-    currency: 'INR',
-    lastUpdated: null
   };
 
   // =========================================================
@@ -241,12 +230,6 @@ roleEmployees: any[] = [];
       bgColor: '#fd7e14',
       borderColor: '#fd7e14'
     },
-    {
-      title: 'Salary',
-      value: '0',
-      bgColor: '#20c997',
-      borderColor: '#20c997'
-    }
   ];
 
   statsCards = [
@@ -322,22 +305,6 @@ roleEmployees: any[] = [];
     }
   ];
 
-
-  // =========================================================
-  // SALARY CHART
-  // =========================================================
-
-  salaryData = [
-    { month: 'Jan', received: 140, pending: 80 },
-    { month: 'Feb', received: 150, pending: 90 },
-    { month: 'Mar', received: 160, pending: 90 },
-    { month: 'Apr', received: 150, pending: 90 },
-    { month: 'May', received: 120, pending: 70 },
-    { month: 'Jun', received: 180, pending: 130 },
-    { month: 'Jul', received: 155, pending: 110 },
-    { month: 'Aug', received: 200, pending: 140 },
-    { month: 'Sep', received: 160, pending: 110 }
-  ];
 
   // =========================================================
   // FEE CHART
@@ -974,7 +941,6 @@ constructor(
   private adminService: AdminService,
   private employeeService: EmployeeService,
   private leaveService: LeaveService,
-  private salaryService: SalaryService,
   private managerService: ManagerService,
   private calendarService: CalendarService,
   private projectsService: ProjectsService,
@@ -1677,9 +1643,6 @@ loadDashboardData(): void {
     leaves:
       this.leaveService.getLeaves(),
 
-    salaries:
-      this.salaryService.getSalaries(),
-
     managers:
       this.managerService.getManagers()
 
@@ -1689,7 +1652,6 @@ loadDashboardData(): void {
       employees,
       currentEmployeeRecord,
       leaves,
-      salaries,
       managers
     }: any) => {
 
@@ -1744,17 +1706,6 @@ loadDashboardData(): void {
       );
 
       // ---------------------------------------------------
-      // SALARY
-      // ---------------------------------------------------
-
-      this.findCurrentSalary(
-        Array.isArray(salaries)
-          ? salaries
-          : [],
-        this.currentUserEmployeeId
-      );
-
-      // ---------------------------------------------------
       // MY LEAVES
       // ---------------------------------------------------
 
@@ -1788,20 +1739,7 @@ loadDashboardData(): void {
 
       this.computeStatsFromEmployees(
         this.employee,
-        this.leaveRequests,
-        Array.isArray(salaries)
-          ? salaries
-          : []
-      );
-
-      // ---------------------------------------------------
-      // SALARY CHART
-      // ---------------------------------------------------
-
-      this.computeSalaryChartData(
-        Array.isArray(salaries)
-          ? salaries
-          : []
+        this.leaveRequests
       );
 
       // ---------------------------------------------------
@@ -2134,112 +2072,6 @@ findCurrentManager(
 
 }
 
-
-// =========================================================
-// FIND CURRENT SALARY
-// =========================================================
-
-findCurrentSalary(
-  salaries: any[],
-  employeeId: any
-): void {
-
-  if (!Array.isArray(salaries)) {
-
-    this.salaryInfo = {
-
-      amount: 0,
-
-      currency: 'INR',
-
-      lastUpdated: null
-
-    };
-
-    return;
-  }
-
-  const employeeSalaries =
-    salaries.filter(
-      (salary: any) => {
-
-        const salaryEmployeeId =
-          salary.EmployeeID ??
-          salary.employeeId ??
-          salary.EmployeeId;
-
-        return (
-          String(salaryEmployeeId) ===
-          String(employeeId)
-        );
-
-      }
-    );
-
-  if (!employeeSalaries.length) {
-
-    this.salaryInfo = {
-
-      amount: 0,
-
-      currency: 'INR',
-
-      lastUpdated: null
-
-    };
-
-    return;
-  }
-
-  const sorted =
-    [...employeeSalaries].sort(
-      (a: any, b: any) => {
-
-        const dateA =
-          a.SalaryMonth
-            ? new Date(
-                a.SalaryMonth
-              ).getTime()
-            : 0;
-
-        const dateB =
-          b.SalaryMonth
-            ? new Date(
-                b.SalaryMonth
-              ).getTime()
-            : 0;
-
-        return dateB - dateA;
-
-      }
-    );
-
-  const latestSalary =
-    sorted[0];
-
-  this.salaryInfo = {
-
-    amount:
-      latestSalary.totalSalary ??
-      latestSalary.TotalSalary ??
-      latestSalary.salary ??
-      latestSalary.Salary ??
-      0,
-
-    currency:
-      latestSalary.currency ??
-      latestSalary.Currency ??
-      'INR',
-
-    lastUpdated:
-      latestSalary.SalaryMonth ??
-      latestSalary.salaryMonth ??
-      latestSalary.LastUpdated ??
-      null
-
-  };
-
-}
 
 // =========================================================
 // LOAD MY APPLIED LEAVES
@@ -2600,13 +2432,12 @@ computeDepartmentTeamMembers(): void {
 }
 
 // =========================================================
-// EMPLOYEE / LEAVE / SALARY STATISTICS
+// EMPLOYEE / LEAVE STATISTICS
 // =========================================================
 
 computeStatsFromEmployees(
   employees: any[],
-  leaves: any[],
-  salaries: any[]
+  leaves: any[]
 ): void {
 
   const totalEmployees =
@@ -2628,32 +2459,6 @@ computeStatsFromEmployees(
 
       }
     ).length;
-
-  const totalSalary =
-    salaries.reduce(
-      (
-        sum: number,
-        salary: any
-      ) => {
-
-        return (
-          sum +
-          Number(
-            salary.totalSalary ??
-            salary.TotalSalary ??
-            salary.salary ??
-            0
-          )
-        );
-
-      },
-      0
-    );
-
-  const totalSalaryLakh =
-    (
-      totalSalary / 100000
-    ).toFixed(1);
 
   this.topCards = [
 
@@ -2681,19 +2486,6 @@ computeStatsFromEmployees(
 
       borderColor:
         '#fd7e14'
-    },
-
-    {
-      title: 'Salary (L)',
-
-      value:
-        totalSalaryLakh,
-
-      bgColor:
-        '#20c997',
-
-      borderColor:
-        '#20c997'
     }
 
   ];
@@ -2988,149 +2780,6 @@ computeStatsFromEmployees(
     }
 
   ];
-
-}
-
-
-// =========================================================
-// SALARY CHART
-// =========================================================
-
-computeSalaryChartData(
-  salaries: any[]
-): void {
-
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec'
-  ];
-
-  const monthMap:
-    Record<
-      string,
-      {
-        received: number;
-        pending: number;
-      }
-    > = {};
-
-  salaries.forEach(
-    (salary: any) => {
-
-      const salaryMonth =
-        salary.SalaryMonth ??
-        salary.salaryMonth;
-
-      if (!salaryMonth) {
-        return;
-      }
-
-      const date =
-        new Date(
-          salaryMonth
-        );
-
-      if (
-        isNaN(
-          date.getTime()
-        )
-      ) {
-
-        return;
-
-      }
-
-      const key =
-        monthNames[
-          date.getMonth()
-        ];
-
-      if (!monthMap[key]) {
-
-        monthMap[key] = {
-
-          received: 0,
-
-          pending: 0
-
-        };
-
-      }
-
-      const total =
-        Number(
-          salary.totalSalary ??
-          salary.TotalSalary ??
-          salary.salary ??
-          salary.Salary ??
-          0
-        );
-
-      const paymentStatus =
-        (
-          salary.PaymentStatus ??
-          salary.paymentStatus ??
-          ''
-        ).toLowerCase();
-
-      if (
-        paymentStatus ===
-        'paid'
-      ) {
-
-        monthMap[key].received +=
-          total;
-
-      } else {
-
-        monthMap[key].pending +=
-          total;
-
-      }
-
-    }
-  );
-
-  if (
-    Object.keys(
-      monthMap
-    ).length
-  ) {
-
-    this.salaryData =
-      Object.entries(
-        monthMap
-      ).map(
-        ([month, values]) => ({
-
-          month,
-
-          received:
-            Math.round(
-              values.received /
-              1000
-            ),
-
-          pending:
-            Math.round(
-              values.pending /
-              1000
-            )
-
-        })
-      );
-
-  }
 
 }
 
@@ -5075,7 +4724,7 @@ getRoleDescription(): string {
 
     case 'Software Developer':
 
-      return 'Track your projects, development tasks, salary and leaves.';
+      return 'Track your projects, development tasks and leaves.';
 
     case 'UI/UX Designer':
 
@@ -5091,7 +4740,7 @@ getRoleDescription(): string {
 
     case 'Accountant':
 
-      return 'Manage salary, employee and accounting-related information.';
+      return 'Manage employee and accounting-related information.';
 
     case 'Receptionist':
 
@@ -5099,7 +4748,7 @@ getRoleDescription(): string {
 
     case 'Support Executive':
 
-      return 'Track support tasks, manager, salary and leave information.';
+      return 'Track support tasks, manager and leave information.';
 
     case 'IT Manager':
 
