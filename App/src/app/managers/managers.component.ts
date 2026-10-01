@@ -36,6 +36,8 @@ export class ManagersComponent {
   membersError = '';
   projectsError = '';
 
+  readonly defaultManagerImage = 'https://www.kindpng.com/picc/m/146-1468390_transparent-shadow-person-png-missing-profile-picture-icon.png';
+
   manager: any = {
     id: null,
     ManagerName: '',
@@ -43,10 +45,8 @@ export class ManagersComponent {
     TeamName: '',
     Members: 0,
     Projects: 0,
-    image: 'assets/profile.png'
+    image: this.defaultManagerImage
   };
-
-  readonly defaultManagerImage = 'assets/default-avatar.svg';
 
   ngOnInit(): void {
     this.loadManagers();
@@ -366,7 +366,7 @@ filteredManagers(): any[] {
 
       Projects: 0,
 
-      image: 'assets/profile.png'
+      image: this.defaultManagerImage
 
     };
 

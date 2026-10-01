@@ -16,6 +16,7 @@ import { ToastService } from '../services/toast.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  readonly defaultEmployeeImage = 'https://www.kindpng.com/picc/m/146-1468390_transparent-shadow-person-png-missing-profile-picture-icon.png';
 
   // =========================================================
   // USER INFORMATION
@@ -65,6 +66,7 @@ roleEmployees: any[] = [];
   managerInfo: any = {
     name: 'Not Assigned',
     role: 'Not Assigned',
+    image: this.defaultEmployeeImage,
     isAbsent: false
   };
 
@@ -469,13 +471,13 @@ roleEmployees: any[] = [];
   ];
 
   todayActivities = [
-    { message: "Daniel Martinz's Birthday", image: 'assets/user1.jpg', icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
-    { message: "Amelia Curr's Birthday", image: 'assets/user2.jpg', icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
-    { message: "Emma Lewis's Birthday", image: 'assets/user3.jpg', icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
-    { message: 'Madison Andrew is off sick today', image: 'assets/user1.jpg', icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
-    { message: 'Victoria Celestie is off sick today', image: 'assets/user2.jpg', icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
-    { message: 'Daniel Patrick is off sick today', image: 'assets/user3.jpg', icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
-    { message: 'Jessica Renee is off sick today', image: 'assets/user1.jpg', icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' }
+    { message: "Daniel Martinz's Birthday", image: this.defaultEmployeeImage, icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
+    { message: "Amelia Curr's Birthday", image: this.defaultEmployeeImage, icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
+    { message: "Emma Lewis's Birthday", image: this.defaultEmployeeImage, icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
+    { message: 'Madison Andrew is off sick today', image: this.defaultEmployeeImage, icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
+    { message: 'Victoria Celestie is off sick today', image: this.defaultEmployeeImage, icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
+    { message: 'Daniel Patrick is off sick today', image: this.defaultEmployeeImage, icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
+    { message: 'Jessica Renee is off sick today', image: this.defaultEmployeeImage, icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' }
   ];
 
   
@@ -496,15 +498,15 @@ roleEmployees: any[] = [];
   todayEvents = [
     {
       text: "Daniel Martinz's Birthday",
-      image: 'assets/user1.jpg'
+      image: this.defaultEmployeeImage
     },
     {
       text: "Amelia Curr's Birthday",
-      image: 'assets/user2.jpg'
+      image: this.defaultEmployeeImage
     },
     {
       text: "Emma Lewis's Birthday",
-      image: 'assets/user3.jpg'
+      image: this.defaultEmployeeImage
     }
   ];
 
@@ -1106,7 +1108,7 @@ private applyLoginUser(
       employee.image ??
       employee.profileImage ??
       employee.Image ??
-      'assets/user1.jpg'
+      this.defaultEmployeeImage
 
   };
 
@@ -1356,7 +1358,7 @@ private loadAdminProfile(): void {
         ...admin,
         name: admin.FullName ?? admin.fullName ?? admin.Name ?? admin.name ?? '',
         role: admin.AdminType ?? admin.adminType ?? this.role,
-        image: admin.image ?? admin.profileImage ?? admin.Image ?? 'assets/user1.jpg'
+        image: admin.image ?? admin.profileImage ?? admin.Image ?? this.defaultEmployeeImage
       };
       this.currentUserName = this.currentUser.name;
       this.role = admin.AdminType ?? admin.adminType ?? this.role;
@@ -2002,7 +2004,7 @@ findCurrentManager(
       name: 'Not Assigned',
       role: 'Not Assigned',
       department: '',
-      image: 'assets/user1.jpg',
+      image: this.defaultEmployeeImage,
       isAbsent: false
     };
     return;
@@ -2037,7 +2039,7 @@ findCurrentManager(
       manager.EmployeePhoto ||
       manager.employeePhoto ||
       manager.image ||
-      'assets/user1.jpg',
+      this.defaultEmployeeImage,
 
     isAbsent:
       manager.IsAbsent === true ||
@@ -2913,7 +2915,7 @@ computeUpcomingLeaves(
             leave.EmployeePhoto ||
             leave.employeePhoto ||
             leave.image ||
-            'assets/default-user.png',
+            this.defaultEmployeeImage,
 
           bgColor:
             colors[
@@ -4526,7 +4528,13 @@ getRecentActivityImage(activity: any): string {
       : !!activityName && employeeName === activityName;
   });
 
-  return employee?.EmployeePhoto || employee?.employeePhoto || employee?.image || 'assets/user1.jpg';
+  return employee?.EmployeePhoto || employee?.employeePhoto || employee?.image || this.defaultEmployeeImage;
+}
+
+useDefaultEmployeeImage(event: Event): void {
+  const image = event.target as HTMLImageElement;
+  image.onerror = null;
+  image.src = this.defaultEmployeeImage;
 }
 
 

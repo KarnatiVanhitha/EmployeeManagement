@@ -2092,7 +2092,7 @@
     <div class="welcome-section">
 
       <div class="user-avatar">
-        <img [src]="currentUser.image || 'assets/user1.jpg'" [alt]="" />
+        <img [src]="currentUser?.image || defaultEmployeeImage" (error)="useDefaultEmployeeImage($event)" alt="Employee profile" />
       </div>
 
       <div>
@@ -2221,7 +2221,7 @@
 
         <div class="profile-content">
 
-          <img [src]="currentUser.image || 'assets/user1.jpg'" class="profile-image" />
+          <img [src]="currentUser?.image || defaultEmployeeImage" (error)="useDefaultEmployeeImage($event)" class="profile-image" alt="Employee profile" />
 
           <h4>
             {{ currentUserName || 'Unknown User' }}
@@ -2303,7 +2303,7 @@
 
           <div class="manager-avatar">
 
-            <img [src]="managerInfo.image || 'assets/user1.jpg'" alt="Manager" />
+            <img [src]="managerInfo.image || defaultEmployeeImage" (error)="useDefaultEmployeeImage($event)" alt="Manager" />
 
           </div>
 
@@ -3212,20 +3212,12 @@
 
             <div class="team-avatar">
 
-              <img *ngIf="member.EmployeePhoto || member.employeePhoto"
-                [src]="member.EmployeePhoto || member.employeePhoto" alt="Avatar" class="avatar-img rounded-circle"
+              <img
+                [src]="member.EmployeePhoto || member.employeePhoto || defaultEmployeeImage"
+                (error)="useDefaultEmployeeImage($event)"
+                [alt]="member.FullName || member.Name || 'Employee'"
+                class="avatar-img rounded-circle"
                 style="width:36px; height:36px; object-fit:cover;" />
-
-              <span *ngIf="!member.EmployeePhoto && !member.employeePhoto">
-                {{
-                (
-                member.FullName ||
-                member.Name ||
-                member.name ||
-                'U'
-                ).charAt(0)
-                }}
-              </span>
 
             </div>
 
@@ -3404,11 +3396,12 @@
 
                 <div class="employee-icon">
 
-                  <img *ngIf="member.EmployeePhoto || member.employeePhoto"
-                    [src]="member.EmployeePhoto || member.employeePhoto" alt="Avatar" class="rounded-circle"
+                  <img
+                    [src]="member.EmployeePhoto || member.employeePhoto || defaultEmployeeImage"
+                    (error)="useDefaultEmployeeImage($event)"
+                    [alt]="member.FullName || member.Name || 'Employee'"
+                    class="rounded-circle"
                     style="width:36px; height:36px; object-fit:cover;" />
-
-                  <i *ngIf="!member.EmployeePhoto && !member.employeePhoto" class="bi bi-person"></i>
 
                 </div>
 
@@ -4144,7 +4137,7 @@
 
         <div class="upcoming-leave">
 
-          <img [src]="leave.image || 'assets/user1.jpg'" class="upcoming-avatar" />
+          <img [src]="leave.image || defaultEmployeeImage" (error)="useDefaultEmployeeImage($event)" class="upcoming-avatar" alt="Employee profile" />
 
 
           <div>
