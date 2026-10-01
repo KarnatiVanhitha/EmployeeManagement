@@ -13,6 +13,7 @@ export class AddEmployeeComponent {
   constructor(private employeeService: EmployeeService, private managerService: ManagerService, private route:ActivatedRoute,private router:Router) { }
 
  employees: any[] = [];
+ existingManagers: any[] = [];
  managerRoles: string[] = [];
   totalMembers = 0;
   totalProjects = 0;
@@ -126,6 +127,7 @@ export class AddEmployeeComponent {
   ngOnInit(): void {
     this.isSelfRegistration = this.router.url === '/employee-signup';
     this.loadEmployees();
+    this.loadExistingManagers();
     this.loadDepartmentAndRoles();
     this.loaddetails();
   }
@@ -185,6 +187,18 @@ export class AddEmployeeComponent {
         console.error(err);
       }
     });
+}
+
+loadExistingManagers(): void {
+  this.managerService.getManagers().subscribe({
+    next: (data: any) => {
+      this.existingManagers = Array.isArray(data) ? data : [];
+    },
+    error: (err) => {
+      console.error('Error loading manager details:', err);
+      this.existingManagers = [];
+    }
+  });
 }
 
 onDepartmentChange(): void {

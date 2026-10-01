@@ -339,6 +339,31 @@
                   <i class="bi bi-exclamation-circle-fill"></i> {{ roleError }}
                 </div>
               </div>
+
+              <div class="col-12" *ngIf="existingManagers.length > 0">
+                <h6 class="fw-semibold mb-2">Current Managers</h6>
+                <div class="table-responsive">
+                  <table class="table table-sm align-middle mb-0">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Team / Department</th>
+                        <th>Email</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let existingManager of existingManagers">
+                        <td>{{ existingManager.ManagerName || existingManager.FullName || existingManager.managerName }}</td>
+                        <td>{{ existingManager.RoleName || existingManager.roleName || 'Manager' }}</td>
+                        <td>{{ existingManager.TeamName || existingManager.teamName || existingManager.DepartmentName || '—' }}</td>
+                        <td>{{ existingManager.Email || existingManager.email || '—' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               <div class="col-md-6">
                 <label class="form-label fw-semibold">
                   Employment Type
