@@ -85,7 +85,7 @@ roleEmployees: any[] = [];
   leaveStats = {
     pending: 0,
     approved: 0,
-    declined: 0
+    rejected: 0
   };
 
   leaveFormVisible = false;
@@ -3118,39 +3118,20 @@ filterMonthlyLeaves(): void {
   console.log('All Leaves:', this.monthlyLeaves);
 
   this.leaveStats = {
+    pending: this.monthlyLeaves.filter((leave: any) => {
+      const status = String(leave.Status ?? leave.status ?? '').trim().toLowerCase();
+      return status === 'pending';
+    }).length,
 
-    pending: this.monthlyLeaves.filter(
-      (leave: any) =>
-        String(
-          leave.Status ??
-          leave.status ??
-          ''
-        )
-          .trim()
-          .toLowerCase() === 'pending'
-    ).length,
+    approved: this.monthlyLeaves.filter((leave: any) => {
+      const status = String(leave.Status ?? leave.status ?? '').trim().toLowerCase();
+      return status === 'approved';
+    }).length,
 
-    approved: this.monthlyLeaves.filter(
-      (leave: any) =>
-        String(
-          leave.Status ??
-          leave.status ??
-          ''
-        )
-          .trim()
-          .toLowerCase() === 'approved'
-    ).length,
-
-    declined: this.monthlyLeaves.filter(
-      (leave: any) =>
-        String(
-          leave.Status ??
-          leave.status ??
-          ''
-        )
-          .trim()
-          .toLowerCase() === 'declined'
-    ).length
+    rejected: this.monthlyLeaves.filter((leave: any) => {
+      const status = String(leave.Status ?? leave.status ?? '').trim().toLowerCase();
+      return status === 'rejected' || status === 'declined';
+    }).length
   };
 
   console.log('All Leave Stats:', this.leaveStats);
