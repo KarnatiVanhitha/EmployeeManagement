@@ -649,30 +649,30 @@ onImageChange(event: any): void {
     hasError = true;
   }
 
-  if (!this.employee.PresentAddress?.trim()) {
+  if (!this.isSelfRegistration && !this.employee.PresentAddress?.trim()) {
     this.presentAddressError = 'Present Address is required';
     hasError = true;
   }
 
-  if (!this.employee.PermanentAddress?.trim()) {
+  if (!this.isSelfRegistration && !this.employee.PermanentAddress?.trim()) {
     this.permanentAddressError = 'Permanent Address is required';
     hasError = true;
   }
 
-  if (!this.employee.EmergencyContactName?.trim()) {
+  if (!this.isSelfRegistration && !this.employee.EmergencyContactName?.trim()) {
     this.emergencyNameError = 'Emergency Contact Name is required';
     hasError = true;
   }
 
-  if (!this.employee.EmergencyRelationship?.trim()) {
+  if (!this.isSelfRegistration && !this.employee.EmergencyRelationship?.trim()) {
     this.emergencyRelationError = 'Emergency Relationship is required';
     hasError = true;
   }
 
-  if (!this.employee.EmergencyPhoneNumber?.trim()) {
+  if (!this.isSelfRegistration && !this.employee.EmergencyPhoneNumber?.trim()) {
     this.emergencyPhoneError = 'Emergency Phone Number is required';
     hasError = true;
-  } else {
+  } else if (this.employee.EmergencyPhoneNumber?.trim()) {
     const emergencyRegex = /^\+?[0-9()\-\s]{7,20}$/;
     if (!emergencyRegex.test(this.employee.EmergencyPhoneNumber)) {
       this.emergencyPhoneError = 'Please enter a valid Emergency Phone Number';
@@ -871,4 +871,3 @@ onImageChange(event: any): void {
 
 }
 };
-

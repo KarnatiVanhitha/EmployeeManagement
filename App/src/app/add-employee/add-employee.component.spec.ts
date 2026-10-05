@@ -10,15 +10,17 @@ import { AddEmployeeComponent } from './add-employee.component';
 describe('AddEmployeeComponent', () => {
   let component: AddEmployeeComponent;
   let fixture: ComponentFixture<AddEmployeeComponent>;
+  let employeeService: jasmine.SpyObj<EmployeeService>;
 
   beforeEach(() => {
-    const employeeService = jasmine.createSpyObj<EmployeeService>(
+    employeeService = jasmine.createSpyObj<EmployeeService>(
       'EmployeeService',
-      ['getEmployees', 'getDepartmentRoles', 'getRolesByDepartment']
+      ['getEmployees', 'getDepartmentRoles', 'getRolesByDepartment', 'addEmployee']
     );
     employeeService.getEmployees.and.returnValue(of([]));
     employeeService.getDepartmentRoles.and.returnValue(of({ departments: [], roles: [] }));
     employeeService.getRolesByDepartment.and.returnValue(of([]));
+    employeeService.addEmployee.and.returnValue(of({ isManager: 0 }));
 
     const managerService = jasmine.createSpyObj<ManagerService>(
       'ManagerService',
@@ -53,5 +55,33 @@ describe('AddEmployeeComponent', () => {
     ]);
 
     expect(roles.map((role: any) => role.RoleID)).toEqual([1, 3]);
+  });
+
+  it('allows signup with the required profile fields and no optional address or emergency details', () => {
+    component.isSelfRegistration = true;
+    component.employee = {
+      ...component.employee,
+      FullName: 'Taylor Employee',
+      Email: 'taylor@desidea.com',
+      MobileNumber: '1234567890',
+      Password: 'Password1',
+      ConfirmPassword: 'Password1',
+      Gender: 'Female',
+      DateOfBirth: '1995-01-01',
+      JoiningDate: '2026-10-05',
+      DepartmentID: '1',
+      RoleID: '1',
+      EmploymentType: 'Full Time',
+      Experience: '2'
+    };
+
+    component.registerEmployee();
+
+    expect(employeeService.addEmployee).toHaveBeenCalled();
+    expect(component.presentAddressError).toBe('');
+    expect(component.permanentAddressError).toBe('');
+    expect(component.emergencyNameError).toBe('');
+    expect(component.emergencyRelationError).toBe('');
+    expect(component.emergencyPhoneError).toBe('');
   });
 });

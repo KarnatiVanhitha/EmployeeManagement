@@ -24,10 +24,11 @@ export class ForgotPasswordComponent {
 verifyEmail(): void {
   this.emailerror = '';
   this.successMessage = '';
+  const email = this.email.trim();
   // Email Required & Email Validation
    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!this.email.trim()) {
+  if (!email) {
 
     this.emailerror = "Email is required.";
     return;
@@ -35,7 +36,7 @@ verifyEmail(): void {
   }
  
 
-  else if (!emailPattern.test(this.email)) {
+  else if (!emailPattern.test(email)) {
 
 
     this.emailerror = "Please enter a valid Email Address.";
@@ -45,13 +46,14 @@ verifyEmail(): void {
 
    if (this.authService.forgotpassword === 1) {
 
-      this.authService.verifyEmail(this.email).subscribe({
+      this.authService.verifyEmail(email).subscribe({
 
         next: (res: any) => {
 
           this.successMessage = res.message;
-          localStorage.setItem("resetEmail", this.email);
+          localStorage.setItem("resetEmail", email);
           localStorage.setItem("resetType", "admin");
+          this.authService.forgotpassword = 0;
           setTimeout(() => {
           this.router.navigate(['/reset-password']);
           }, 2000); 
@@ -70,14 +72,15 @@ verifyEmail(): void {
     // Employee Forgot Password
     else if (this.authService.forgotpassword === 2) {
 
-      this.employeeService.verifyEmail(this.email).subscribe({
+      this.employeeService.verifyEmail(email).subscribe({
 
         next: (res: any) => {
 
    
           this.successMessage = res.message;
-          localStorage.setItem("resetEmail", this.email);
+          localStorage.setItem("resetEmail", email);
           localStorage.setItem("resetType", "employee");
+          this.authService.forgotpassword = 0;
           setTimeout(() => {
             this.router.navigate(['/reset-password']);
           }, 2000);
@@ -91,6 +94,10 @@ verifyEmail(): void {
 
       });
 
+    }
+
+    else {
+      this.emailerror = 'Open Forgot Password from your employee or admin login page.';
     }
 
   }

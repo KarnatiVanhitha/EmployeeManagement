@@ -7,6 +7,17 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
 
   private apiUrl = '/api/admins';
+  private _forgotpassword = 0;
+
+  get forgotpassword(): number {
+    const storedType = sessionStorage.getItem('forgotpasswordType');
+    return storedType === null ? this._forgotpassword : Number(storedType);
+  }
+
+  set forgotpassword(value: number) {
+    this._forgotpassword = value;
+    sessionStorage.setItem('forgotpasswordType', String(value));
+  }
 
   constructor(private http: HttpClient) { }
 
@@ -20,5 +31,4 @@ export class AuthService {
   resetPassword(data: any) {
     return this.http.post(`${this.apiUrl}/reset-password`, data);
   }
-  forgotpassword=0;
 }
