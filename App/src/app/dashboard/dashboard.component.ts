@@ -4512,7 +4512,8 @@ private loadPromotionActivities(): void {
     },
     error: (err) => {
       console.error('Failed to load promotion activities:', err);
-      this.toastService.showError('Unable to load promotion activities.');
+      this.promotionActivities = [];
+      this.refreshRecentActivities();
     }
   });
 }
