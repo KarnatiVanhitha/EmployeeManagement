@@ -1,473 +1,61 @@
 <div class="container-fluid py-4">
-      <small class="text-success text " *ngIf="successMessage">{{ successMessage }}</small>
-    <!------------------------------------------------------- Header -------------------------------------------------------------------->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="mb-4">
+    <h3 class="fw-bold mb-1">Department Managers</h3>
+    <p class="text-muted mb-0">Managers by department</p>
+  </div>
 
-        <div>
-            <h3 class="fw-bold mb-1">Team Wise Manager</h3>
-            <p class="text-muted mb-0">
-                Manage team managers and their teams
-            </p>
-        </div>
-
-    </div>
-
-    <!--------------------------------------------------------- Statistics ----------------------------------------------------------------------->
-
-    <div class="row g-3 mb-4">
-
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <div class="row">
         <div class="col-md-6">
-
-            <div class="card shadow-sm border-0">
-
-                <div class="card-body text-center">
-
-                    <i class="bi bi-diagram-3-fill fs-2 text-primary"></i>
-
-                    <h3 class="mt-2">{{ managers.length }}</h3>
-
-                    <p class="text-muted mb-0">Total Teams</p>
-
-                </div>
-
-            </div>
-
+          <input
+            type="search"
+            class="form-control"
+            placeholder="Search department, manager, or email"
+            [(ngModel)]="searchText">
         </div>
-
-        <div class="col-md-6">
-
-            <div class="card shadow-sm border-0">
-
-                <div class="card-body text-center">
-
-                    <i class="bi bi-person-workspace fs-2 text-success"></i>
-
-                    <h3 class="mt-2">{{ managers.length }}</h3>
-
-                    <p class="text-muted mb-0">Managers</p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-    <!--------------------------------------------------------- Search ----------------------------------------------------------------------->
-
-    <div class="card shadow-sm border-0 mb-4">
-
-        <div class="card-body">
-
-            <div class="row">
-
-                <div class="col-md-6">
-
-                    <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Search Team"
-                        [(ngModel)]="searchText">
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!--------------------------------------------------------- No Data ----------------------------------------------------------------------->
-
-    <div
-        class="card shadow-sm border-0"
-        *ngIf="filteredManagers().length==0">
-
-        <div class="card-body text-center py-5">
-
-            <i class="bi bi-person-x fs-1 text-secondary"></i>
-
-            <h4 class="mt-3">
-                No Team Managers Added
-            </h4>
-
-        </div>
-
-    </div>
-
-    <!------------------------------------------------------ Manager Cards --------------------------------------------------------------->
-
-    <div class="row g-4">
-
-        <div
-            class="col-lg-4 col-md-6"
-            *ngFor="let manager of filteredManagers()">
-
-            <div class="card shadow-sm border-0 h-100"
-                 [class.current-employee-department]="isCurrentEmployeeDepartment(manager)">
-
-                <div class="card-header bg-white">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <h5 class="mb-0">
-                            {{manager.TeamName}}
-                        </h5>
-                        <span class="badge bg-primary ms-2" *ngIf="isCurrentEmployeeDepartment(manager)">
-                            Your Department
-                        </span>
-
-                        <div class="dropdown">
-
-                            <button
-                                class="btn btn-light btn-sm"
-                                data-bs-toggle="dropdown">
-
-                                <i class="bi bi-three-dots-vertical"></i>
-
-                            </button>
-
-                            <ul class="dropdown-menu">
-
-                                <li>
-
-                                    <button
-                                        class="dropdown-item"
-                                        (click)="editManager(manager)">
-
-                                        Edit
-
-                                    </button>
-
-                                </li>
-
-                                <li>
-
-                                    <button
-                                        class="dropdown-item text-danger"
-                                        (click)="deleteManager(manager.ManagerID)">
-
-                                        Delete
-
-                                    </button>
-
-                                </li>
-
-                            </ul>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="card-body">
-
-                    <div class="d-flex align-items-center mb-3">
-                      <img
-                        class="manager-card-avatar me-3"
-                        [src]="managerImage(manager)"
-                        (error)="useDefaultManagerImage($event)"
-                        [alt]="manager.ManagerName || 'Manager'">
-                        <div>
-
-                            <h5 class="mb-1">
-                                {{manager.ManagerName}}
-                            </h5>
-
-                            <small class="text-muted">
-                                {{manager.Email}}
-                                
-                            </small>
-
-                            <small class="text-muted d-block" *ngIf="manager.DepartmentName">
-                              {{manager.DepartmentName}}
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                    <hr>
-
-                    <div class="row text-center mb-3">
-
-                        <div class="col">
-
-                            <h4 class="text-primary mb-0">
-                                {{manager.Members}}
-                            </h4>
-
-                            <small class="text-muted">Members</small>
-
-                        </div>
-
-                        <div class="col">
-
-                            <h4 class="text-success mb-0">
-                                {{manager.Projects}}
-                            </h4>
-
-                            <small class="text-muted">Projects</small>
-
-                        </div>
-
-                        <div class="col">
-
-                            <h4 class="text-info mb-0">
-                                {{ getTeamLeadsForManager(manager).length }}
-                            </h4>
-
-                            <small class="text-muted">Team Leads</small>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Team Leads Quick Preview -->
-                    <div class="mb-2" *ngIf="getTeamLeadsForManager(manager).length > 0">
-                      <small class="fw-bold text-secondary d-block mb-1">
-                        <i class="bi bi-person-lines-fill me-1"></i>Team Leads:
-                      </small>
-                      <div class="d-flex flex-wrap gap-1">
-                        <span
-                          *ngFor="let tl of getTeamLeadsForManager(manager)"
-                          class="badge bg-light text-dark border">
-                          {{ tl.FullName || tl.fullName }}
-                        </span>
-                      </div>
-                    </div>
-
-                    <!-- Upcoming Leaves Preview -->
-                    <div *ngIf="getUpcomingLeavesForManager(manager).length > 0">
-                      <small class="fw-bold text-danger d-block mb-1">
-                        <i class="bi bi-calendar-event me-1"></i>Upcoming Leaves ({{ getUpcomingLeavesForManager(manager).length }}):
-                      </small>
-                      <div class="d-flex flex-wrap gap-1">
-                        <span
-                          *ngFor="let l of getUpcomingLeavesForManager(manager)"
-                          class="badge bg-danger-subtle text-danger border">
-                          {{ l.ApplicantName || l.applicantName || l.FullName || 'Employee' }} ({{ l.StartDate | date:'dd MMM' }})
-                        </span>
-                      </div>
-                    </div>
-
-                </div>
-
-                <div class="card-footer bg-white">
-                    <button
-                    class="btn btn-outline-primary btn-sm w-100"
-                    (click)="viewManager(manager)">
-
-                    View Full Details
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-<div class="modal fade" id="managerModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ isEditMode ? 'Edit Manager Profile' : 'Add Manager' }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label class="form-label" for="manager-name">Manager name</label>
-          <input id="manager-name" class="form-control" [(ngModel)]="manager.ManagerName" name="ManagerName">
-          <small class="text-danger" *ngIf="managerNameError">{{ managerNameError }}</small>
-        </div>
-        <div class="mb-3">
-          <label class="form-label" for="manager-email">Email</label>
-          <input id="manager-email" type="email" class="form-control" [(ngModel)]="manager.Email" name="Email">
-          <small class="text-danger" *ngIf="emailError">{{ emailError }}</small>
-        </div>
-        <div class="mb-3">
-          <label class="form-label" for="manager-team">Department</label>
-          <input id="manager-team" class="form-control" [(ngModel)]="manager.TeamName" name="TeamName">
-          <small class="text-danger" *ngIf="teamNameError">{{ teamNameError }}</small>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="saveManager()">Save changes</button>
       </div>
     </div>
   </div>
-</div>
 
-<!-------------------------------------------------------- View Manager Modal ---------------------------------------------------------------->
-<div class="modal fade" id="viewManagerModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-
-    <div class="modal-content rounded-4 shadow">
-
-    
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">
-          <i class="bi bi-person-badge-fill me-2"></i>
-          Manager Details & Team Overview
-        </h5>
-
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal">
-        </button>
-      </div>
-
-      
-      <div class="modal-body">
-
-        <div class="manager-detail-profile">
-          <img
-            class="manager-detail-avatar"
-            [src]="managerImage(selectedManager)"
-            (error)="useDefaultManagerImage($event)"
-            [alt]="selectedManager.ManagerName || 'Manager'">
-          <div>
-            <h5 class="mb-1">{{ selectedManager.ManagerName }}</h5>
-            <span class="text-muted">{{ selectedManager.DepartmentName || selectedManager.TeamName }}</span>
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-5 fw-bold">Manager Name</div>
-          <div class="col-7">{{ selectedManager.ManagerName }}</div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-5 fw-bold">Email</div>
-          <div class="col-7">{{ selectedManager.Email }}</div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-5 fw-bold">Department / Team</div>
-          <div class="col-7">{{ selectedManager.TeamName }}</div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-5 fw-bold">Members</div>
-          <div class="col-7">{{ selectedManager.Members }}</div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-5 fw-bold">Projects</div>
-          <div class="col-7">{{ selectedManager.Projects }}</div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-5 fw-bold">Status</div>
-          <div class="col-7">
-
-            <span
-              class="badge"
-              [ngClass]="selectedManager.IsActive ? 'bg-success' : 'bg-danger'">
-
-              {{ selectedManager.IsActive ? 'Active' : 'Inactive' }}
-
-            </span>
-
-          </div>
-        </div>
-
-        <hr>
-
-        <!-- Team Leads Section -->
-        <div class="mb-4">
-          <h6 class="fw-bold text-primary mb-2">
-            <i class="bi bi-people-fill me-1"></i>
-            Department Team Leads
-          </h6>
-
-          <div *ngIf="selectedManager.teamLeads && selectedManager.teamLeads.length > 0; else noLeads">
-            <div class="table-responsive">
-              <table class="table table-sm table-bordered align-middle mb-0">
-                <thead class="table-light">
-                  <tr>
-                    <th>Lead Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let lead of selectedManager.teamLeads">
-                    <td class="fw-semibold">{{ lead.FullName || lead.fullName }}</td>
-                    <td>{{ lead.Email || lead.email }}</td>
-                    <td>{{ lead.MobileNumber || lead.mobileNumber || '-' }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <ng-template #noLeads>
-            <p class="text-muted small mb-0">No Team Leads assigned to this department yet.</p>
-          </ng-template>
-        </div>
-
-        <hr>
-
-        <!-- Upcoming Leaves Section -->
-        <div>
-          <h6 class="fw-bold text-danger mb-2">
-            <i class="bi bi-calendar2-week me-1"></i>
-            Upcoming Team Leaves
-          </h6>
-
-          <div *ngIf="selectedManager.upcomingLeaves && selectedManager.upcomingLeaves.length > 0; else noLeaves">
-            <div class="table-responsive">
-              <table class="table table-sm table-bordered align-middle mb-0">
-                <thead class="table-light">
-                  <tr>
-                    <th>Employee</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Leave Type</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let leave of selectedManager.upcomingLeaves">
-                    <td class="fw-semibold">{{ leave.ApplicantName || leave.applicantName || leave.FullName || 'Employee' }}</td>
-                    <td>{{ leave.StartDate | date:'mediumDate' }}</td>
-                    <td>{{ leave.EndDate | date:'mediumDate' }}</td>
-                    <td><span class="badge bg-info-subtle text-dark">{{ leave.LeaveType || leave.type }}</span></td>
-                    <td>
-                      <span class="badge" [ngClass]="leave.Status === 'Approved' ? 'bg-success' : 'bg-warning text-dark'">
-                        {{ leave.Status || leave.status || 'Pending' }}
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <ng-template #noLeaves>
-            <p class="text-muted small mb-0">No upcoming leaves scheduled for this team.</p>
-          </ng-template>
-        </div>
-
-      </div>
-
-      
-      <div class="modal-footer">
-        <button
-          class="btn btn-secondary"
-          data-bs-dismiss="modal">
-          Close
-        </button>
-      </div>
-
+  <div
+    class="card shadow-sm border-0"
+    *ngIf="filteredManagers().length === 0">
+    <div class="card-body text-center py-5">
+      <i class="bi bi-person-x fs-1 text-secondary"></i>
+      <h4 class="mt-3">No department managers found</h4>
     </div>
-  </div> 
+  </div>
+
+  <div class="row g-4">
+    <div
+      class="col-lg-4 col-md-6"
+      *ngFor="let manager of filteredManagers()">
+      <div
+        class="card shadow-sm border-0 h-100"
+        [class.current-employee-department]="isCurrentEmployeeDepartment(manager)">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            {{ manager.DepartmentName || manager.departmentName || manager.TeamName || manager.teamName }}
+          </h5>
+          <span
+            class="badge bg-primary ms-2"
+            *ngIf="isCurrentEmployeeDepartment(manager)">
+            Your Department
+          </span>
+        </div>
+
+        <div class="card-body">
+          <h5 class="mb-1">
+            {{ manager.ManagerName || manager.FullName || manager.managerName }}
+          </h5>
+          <a
+            class="text-muted text-decoration-none"
+            [href]="'mailto:' + (manager.Email || manager.email)">
+            {{ manager.Email || manager.email }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

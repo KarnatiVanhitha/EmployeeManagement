@@ -1,68 +1,52 @@
-import { Component } from '@angular/core';
-import { ManagerService } from '../services/managers.service';
+import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../services/employee.service';
-import { LeaveService } from '../services/leave.service';
-import { SettingsandprofileComponent } from '../settingsandprofile/settingsandprofile.component';
-
-declare const bootstrap: any;
+import { ManagerService } from '../services/managers.service';
 
 @Component({
   selector: 'app-managers',
   templateUrl: './managers.component.html',
   styleUrls: ['./managers.component.css']
 })
-export class ManagersComponent {
-  role:any=''; 
+export class ManagersComponent implements OnInit {
   managers: any[] = [];
   employees: any[] = [];
-  leaves: any[] = [];
+  searchText = '';
+
   private currentEmployeeId: number | null = null;
   private currentDepartmentId: number | null = null;
   private currentDepartmentName = '';
-  isEditMode = false;
-  selectedManager: any = {};
 
   constructor(
     private managerService: ManagerService,
-    private employeeService: EmployeeService,
-    private leaveService: LeaveService
-  ) { }
-
-  searchText = '';
-
-  totalMembers = 0;
-  totalProjects = 0;
-  successMessage = '';
-  managerNameError = '';
-  emailError = '';
-  teamNameError = '';
-  membersError = '';
-  projectsError = '';
-
-  readonly defaultManagerImage = 'https://www.kindpng.com/picc/m/146-1468390_transparent-shadow-person-png-missing-profile-picture-icon.png';
-
-  manager: any = {
-    id: null,
-    ManagerName: '',
-    Email: '',
-    TeamName: '',
-    Members: 0,
-    Projects: 0,
-    image: this.defaultManagerImage
-  };
+    private employeeService: EmployeeService
+  ) {}
 
   ngOnInit(): void {
     this.currentEmployeeId = this.employeeService.getCurrentEmployeeId();
+
     const loggedInUser = this.employeeService.getLoggedInUser();
     this.currentDepartmentId = this.toPositiveNumber(
-      loggedInUser?.DepartmentID ?? loggedInUser?.departmentId ?? loggedInUser?.DepartmentId
+      loggedInUser?.DepartmentID ??
+      loggedInUser?.departmentId ??
+      loggedInUser?.DepartmentId
     );
     this.currentDepartmentName = this.normalizeDepartmentName(
       loggedInUser?.DepartmentName ?? loggedInUser?.departmentName
     );
+
     this.loadManagers();
     this.loadEmployees();
-    this.loadLeaves();
+  }
+
+  loadManagers(): void {
+    this.managerService.getManagers().subscribe({
+      next: (data: any) => {
+        this.managers = Array.isArray(data) ? data : [];
+      },
+      error: (err) => {
+        console.error('Error loading managers:', err);
+      }
+    });
   }
 
   loadEmployees(): void {
@@ -77,422 +61,85 @@ export class ManagersComponent {
     });
   }
 
-  loadLeaves(): void {
-    this.leaveService.getLeaves().subscribe({
-      next: (data: any) => {
-        this.leaves = Array.isArray(data) ? data : [];
-      },
-      error: (err: any) => {
-        console.error('Error loading leaves in ManagersComponent:', err);
-      }
-    });
-  }
-
-// ------------------------------------------------------------LoadManagers------------------------------------------------------------
-loadManagers(): void {
-
-  this.managerService.getManagers().subscribe({
-
-    next: (data: any) => {
-
-      console.log(data);
-
-      this.managers = data;
-
-      this.calculateSummary();
-
-    },
-
-    error: (err) => {
-
-      console.error(err);
-
+  private resolveCurrentEmployeeDepartment(): void {
+    if (this.currentEmployeeId === null) {
+      return;
     }
 
-  });
+    const currentEmployee = this.employees.find((employee: any) => {
+      const employeeId = employee.EmployeeID ??
+        employee.employeeId ??
+        employee.EmployeeId ??
+        employee.id;
+      return Number(employeeId) === this.currentEmployeeId;
+    });
 
-}
-
-private resolveCurrentEmployeeDepartment(): void {
-  if (this.currentEmployeeId === null) {
-    return;
+    if (currentEmployee) {
+      this.currentDepartmentId = this.toPositiveNumber(
+        currentEmployee.DepartmentID ??
+        currentEmployee.departmentId ??
+        currentEmployee.DepartmentId
+      );
+      this.currentDepartmentName = this.normalizeDepartmentName(
+        currentEmployee.DepartmentName ??
+        currentEmployee.departmentName ??
+        currentEmployee.Department
+      );
+    }
   }
 
-  const currentEmployee = this.employees.find((employee: any) => {
-    const employeeId = employee.EmployeeID ??
-      employee.employeeId ??
-      employee.EmployeeId ??
-      employee.id;
-    return Number(employeeId) === this.currentEmployeeId;
-  });
+  isCurrentEmployeeDepartment(manager: any): boolean {
+    if (!manager || (this.currentDepartmentId === null && !this.currentDepartmentName)) {
+      return false;
+    }
 
-  if (currentEmployee) {
-    this.currentDepartmentId = this.toPositiveNumber(
-      currentEmployee.DepartmentID ??
-      currentEmployee.departmentId ??
-      currentEmployee.DepartmentId
+    const managerDepartmentId = this.toPositiveNumber(
+      manager.DepartmentID ?? manager.departmentId ?? manager.DepartmentId
     );
-    this.currentDepartmentName = this.normalizeDepartmentName(
-      currentEmployee.DepartmentName ??
-      currentEmployee.departmentName ??
-      currentEmployee.Department
+    if (this.currentDepartmentId !== null && managerDepartmentId !== null) {
+      return this.currentDepartmentId === managerDepartmentId;
+    }
+
+    const managerDepartmentName = this.normalizeDepartmentName(
+      manager.DepartmentName ?? manager.departmentName ??
+      manager.TeamName ?? manager.teamName
     );
-  }
-}
-
-isCurrentEmployeeDepartment(manager: any): boolean {
-  if (!manager || (this.currentDepartmentId === null && !this.currentDepartmentName)) {
-    return false;
+    return !!this.currentDepartmentName &&
+      managerDepartmentName === this.currentDepartmentName;
   }
 
-  const managerDepartmentId = this.toPositiveNumber(
-    manager.DepartmentID ?? manager.departmentId ?? manager.DepartmentId
-  );
-  if (this.currentDepartmentId !== null && managerDepartmentId !== null) {
-    return this.currentDepartmentId === managerDepartmentId;
-  }
-
-  const managerDepartmentName = this.normalizeDepartmentName(
-    manager.DepartmentName ?? manager.departmentName ??
-    manager.TeamName ?? manager.teamName
-  );
-  return !!this.currentDepartmentName &&
-    managerDepartmentName === this.currentDepartmentName;
-}
-
-private toPositiveNumber(value: any): number | null {
-  if (value === null || value === undefined || value === '') {
-    return null;
-  }
-  const numberValue = Number(value);
-  return Number.isFinite(numberValue) && numberValue > 0 ? numberValue : null;
-}
-
-private normalizeDepartmentName(value: any): string {
-  return String(value ?? '').trim().toLowerCase();
-}
-
-managerImage(manager: any): string {
-  return manager?.EmployeePhoto || manager?.employeePhoto || manager?.image || this.defaultManagerImage;
-}
-
-useDefaultManagerImage(event: Event): void {
-  const image = event.target as HTMLImageElement;
-  image.onerror = null;
-  image.src = this.defaultManagerImage;
-}
-
-// ------------------------------------------------------------SaveManager &UpdateManager------------------------------------------------------------
-saveManager(): void {
-
-  // Clear previous errors
-  this.managerNameError = '';
-  this.emailError = '';
-  this.teamNameError = '';
-  this.membersError = '';
-  this.projectsError = '';
-
-  // Manager Name
-  if (!this.manager.ManagerName?.trim()) {
-    this.managerNameError = "Manager Name is required.";
-  }
-
-  // Email
-  if (!this.manager.Email?.trim()) {
-
-    this.emailError = "Email is required.";
-
-  } else {
-
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(this.manager.Email)) {
-
-      this.emailError = "Please enter a valid Email Address.";
-
+  filteredManagers(): any[] {
+    const query = this.searchText.trim().toLowerCase();
+    if (!query) {
+      return this.managers;
     }
 
-  }
-
-  // Team Name
-  if (!this.manager.TeamName?.trim()) {
-
-    this.teamNameError = "Team Name is required.";
-
-  }
-
-  // Members
-  // Stop if any validation failed
-  if (
-    this.managerNameError ||
-    this.emailError ||
-    this.teamNameError
-  ) {
-
-    return;
-
-  }
-
-  // ------------------------------
-  // Existing Save/Update Logic
-  // ------------------------------
-
-  if (this.isEditMode) {
-
-    this.managerService.updateManager(
-      this.manager.ManagerID,
-      this.manager
-    ).subscribe({
-
-      next: (res: any) => {
-
-        this.successMessage = res.message;
-
-        setTimeout(() => {
-          this.successMessage = '';
-        }, 2000);
-
-        this.loadManagers();
-
-        this.resetForm();
-
-        this.isEditMode = false;
-
-        bootstrap.Modal.getInstance(
-          document.getElementById("managerModal")
-        )?.hide();
-
-      },
-
-      error: (err) => {
-
-        console.log(err);
-
-      }
-
-    });
-
-  } else {
-
-    this.managerService.addManager(this.manager).subscribe({
-
-      next: (res: any) => {
-
-        this.successMessage = res.message;
-
-        setTimeout(() => {
-          this.successMessage = '';
-        }, 2000);
-
-        this.loadManagers();
-
-        this.resetForm();
-
-        bootstrap.Modal.getInstance(
-          document.getElementById("managerModal")
-        )?.hide();
-
-      },
-
-      error: (err) => {
-
-        console.log(err);
-
-      }
-
-    });
-
-  }
-
-}
-// ------------------------------------------------------------EditManager------------------------------------------------------------
-
- editManager(manager: any): void {
-
-  this.manager = {
-
-    ManagerID: manager.ManagerID,
-    ManagerName: manager.ManagerName || manager.FullName || manager.managerName || '',
-    Email: manager.Email || manager.email || '',
-    TeamName: manager.DepartmentName || manager.TeamName || manager.teamName || '',
-    Members: manager.Members || 0,
-    Projects: manager.Projects || 0
-
-  };
-
-  this.isEditMode = true;
-
-  const modalElement = document.getElementById('managerModal');
-  if (modalElement) {
-    new bootstrap.Modal(modalElement).show();
-  }
-
-}
-// ------------------------------------------------------------DeleteManager------------------------------------------------------------
-  deleteManager(id: number): void {
-
-  if (!confirm("Delete this manager?")) {
-
-    return;
-
-  }
-
-  this.managerService.deleteManager(id).subscribe({
-
-    next: (res: any) => {
-      
-      this.successMessage = res.message;
-      setTimeout(() => {  
-            this.successMessage = '';
-
-        }, 2000);
-      this.loadManagers();
-
-    },
-
-    error: (err) => {
-
-      console.log(err);
-
-    }
-
-  });
-
-}
-// ------------------------------------------------------------FilteredManagers------------------------------------------------------------
-
-filteredManagers(): any[] {
-
-  if (!this.searchText) {
-
-    return this.managers;
-
-  }
-
-  return this.managers.filter((manager: any) =>
-
-    manager.ManagerName?.toLowerCase().includes(this.searchText.toLowerCase()) ||
-
-    manager.Email?.toLowerCase().includes(this.searchText.toLowerCase()) ||
-
-    manager.TeamName?.toLowerCase().includes(this.searchText.toLowerCase())
-
-  );
-
-}
-// ------------------------------------------------------------CalculateSummary------------------------------------------------------------
- calculateSummary(): void {
-
-  this.totalMembers = 0;
-
-  this.totalProjects = 0;
-
-  this.managers.forEach((manager: any) => {
-
-    this.totalMembers += Number(manager.Members);
-
-    this.totalProjects += Number(manager.Projects);
-
-  });
-
-}
-// ------------------------------------------------------------ResetForm------------------------------------------------------------
-  resetForm(): void {
-
-    this.manager = {
-
-      id: null,
-
-      ManagerName: '',
-
-      Email: '',
-
-      TeamName: '',
-
-      Members: 0,
-
-      Projects: 0,
-
-      image: this.defaultManagerImage
-
-    };
-
-  }
-  // ------------------------------------------------------------Get Team Leads for Manager------------------------------------------------------------
-  getTeamLeadsForManager(manager: any): any[] {
-    if (!manager || !this.employees || this.employees.length === 0) {
-      return [];
-    }
-
-    const managerDeptName = (manager.TeamName || manager.DepartmentName || '').toLowerCase().trim();
-    const managerDeptId = Number(manager.DepartmentID || manager.departmentId);
-
-    return this.employees.filter((emp: any) => {
-      const empDeptName = (emp.DepartmentName || emp.departmentName || '').toLowerCase().trim();
-      const empDeptId = Number(emp.DepartmentID || emp.departmentId);
-      const role = (emp.RoleName || emp.roleName || emp.Role || emp.role || emp.Designation || '').toLowerCase().trim();
-
-      const isTL = role === 'team lead' || role === 'teamlead' || role.includes('team lead') || role.includes('lead');
-      const sameDept = (managerDeptId && empDeptId && managerDeptId === empDeptId) ||
-                       (managerDeptName && empDeptName && managerDeptName === empDeptName);
-
-      return isTL && sameDept;
+    return this.managers.filter((manager: any) => {
+      const department = manager.DepartmentName ??
+        manager.departmentName ??
+        manager.TeamName ??
+        manager.teamName ??
+        '';
+      const name = manager.ManagerName ??
+        manager.FullName ??
+        manager.managerName ??
+        '';
+      const email = manager.Email ?? manager.email ?? '';
+
+      return [department, name, email]
+        .some((value) => String(value).toLowerCase().includes(query));
     });
   }
 
-  // ------------------------------------------------------------Get Upcoming Leaves for Manager Team------------------------------------------------------------
-  getUpcomingLeavesForManager(manager: any): any[] {
-    if (!manager || !this.leaves || this.leaves.length === 0) {
-      return [];
+  private toPositiveNumber(value: any): number | null {
+    if (value === null || value === undefined || value === '') {
+      return null;
     }
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const managerDeptName = (manager.TeamName || manager.DepartmentName || '').toLowerCase().trim();
-    const managerDeptId = Number(manager.DepartmentID || manager.departmentId);
-
-    // Collect employee IDs in manager's department
-    const deptEmpIds = new Set(
-      this.employees
-        .filter((emp: any) => {
-          const empDeptName = (emp.DepartmentName || emp.departmentName || '').toLowerCase().trim();
-          const empDeptId = Number(emp.DepartmentID || emp.departmentId);
-          return (managerDeptId && empDeptId && managerDeptId === empDeptId) ||
-                 (managerDeptName && empDeptName && managerDeptName === empDeptName);
-        })
-        .map((emp: any) => String(emp.EmployeeID || emp.employeeId || emp.id))
-    );
-
-    return this.leaves.filter((leave: any) => {
-      const startValue = leave.StartDate ?? leave.startDate;
-      if (!startValue) return false;
-      const start = new Date(startValue);
-      const status = (leave.Status ?? leave.status ?? '').toLowerCase();
-      const empId = String(leave.EmployeeID ?? leave.employeeId ?? '');
-
-      const isDeptLeave = deptEmpIds.size > 0 ? deptEmpIds.has(empId) : true;
-      return start >= today && status === 'approved' && isDeptLeave;
-    }).slice(0, 5);
+    const numberValue = Number(value);
+    return Number.isFinite(numberValue) && numberValue > 0 ? numberValue : null;
   }
 
-  // ------------------------------------------------------------ViewManager------------------------------------------------------------
-  viewManager(manager: any): void {
-    const teamLeads = this.getTeamLeadsForManager(manager);
-    const upcomingLeaves = this.getUpcomingLeavesForManager(manager);
-
-    this.selectedManager = {
-      ...manager,
-      teamLeads,
-      upcomingLeaves
-    };
-
-    const modalElement = document.getElementById('viewManagerModal');
-
-    if (modalElement) {
-      const modal = new bootstrap.Modal(modalElement);
-      modal.show();
-    }
+  private normalizeDepartmentName(value: any): string {
+    return String(value ?? '').trim().toLowerCase();
   }
-
 }

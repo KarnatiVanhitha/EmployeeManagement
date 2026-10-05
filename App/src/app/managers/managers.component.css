@@ -33,32 +33,6 @@
     color:#555;
 }
 
-.manager-card-avatar {
-    width: 52px;
-    height: 52px;
-    flex: 0 0 52px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #eaf1ec;
-}
-
 .current-employee-department {
-    border: 2px solid #0d6efd !important;
-    box-shadow: 0 0.5rem 1.25rem rgba(13, 110, 253, 0.2) !important;
-}
-
-.manager-detail-profile {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.manager-detail-avatar {
-    width: 80px;
-    height: 80px;
-    flex: 0 0 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #eaf1ec;
+    box-shadow: 0 0.75rem 1.5rem rgba(33, 112, 89, 0.24) !important;
 }

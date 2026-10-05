@@ -179,7 +179,7 @@ export class AddEmployeeComponent {
     this.employeeService.getDepartmentRoles().subscribe({
       next: (data) => {
         this.departments = data.departments;
-        this.roles = data.roles;
+        this.roles = this.uniqueRoles(data.roles);
       },
       error: (err) => {
         console.error(err);
@@ -213,7 +213,7 @@ onDepartmentChange(): void {
   this.employeeService.getRolesByDepartment(departmentId).subscribe({
     next: (data: any) => {
       console.log('Roles fetched for department:', data);
-      this.roles = data;
+      this.roles = this.uniqueRoles(data);
       const currentRoleId = Number(this.employee.RoleID);
       if (!this.roles.some((role: any) => Number(role.RoleID) === currentRoleId)) {
         this.employee.RoleID = '';
@@ -225,6 +225,26 @@ onDepartmentChange(): void {
       this.employee.RoleID = '';
       this.showToast('Error loading roles for this department. Please try again.', 'error');
     }
+  });
+}
+
+private uniqueRoles(roles: any[]): any[] {
+  if (!Array.isArray(roles)) {
+    return [];
+  }
+
+  const seenRoleNames = new Set<string>();
+  return roles.filter((role: any) => {
+    const roleName = String(role?.RoleName ?? role?.roleName ?? '')
+      .trim()
+      .toLocaleLowerCase();
+
+    if (!roleName || seenRoleNames.has(roleName)) {
+      return false;
+    }
+
+    seenRoleNames.add(roleName);
+    return true;
   });
 }
 //=============================================================UPDATEEMPLOYEE=======================================================//
@@ -851,5 +871,4 @@ onImageChange(event: any): void {
 
 }
 };
-
 
