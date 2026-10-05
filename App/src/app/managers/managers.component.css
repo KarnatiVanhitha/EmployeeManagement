@@ -42,6 +42,11 @@
     background: #eaf1ec;
 }
 
+.current-employee-department {
+    border: 2px solid #0d6efd !important;
+    box-shadow: 0 0.5rem 1.25rem rgba(13, 110, 253, 0.2) !important;
+}
+
 .manager-detail-profile {
     display: flex;
     align-items: center;

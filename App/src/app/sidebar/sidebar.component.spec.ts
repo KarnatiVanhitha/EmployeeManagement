@@ -21,4 +21,26 @@ describe('SidebarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('shows office links for any non-school role', () => {
+    component.role = 'R&D Manager';
+    expect(component.isOfficeRole).toBeTrue();
+
+    component.role = 'Custom Office Role';
+    expect(component.isOfficeRole).toBeTrue();
+  });
+
+  it('normalizes role names and excludes school roles', () => {
+    component.role = '  PROJECT_MANAGER ';
+    expect(component.isOfficeRole).toBeTrue();
+
+    component.role = 'School Admin';
+    expect(component.isOfficeRole).toBeFalse();
+
+    component.role = 'student';
+    expect(component.isOfficeRole).toBeFalse();
+
+    component.role = '';
+    expect(component.isOfficeRole).toBeFalse();
+  });
 });

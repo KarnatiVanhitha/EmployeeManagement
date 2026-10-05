@@ -105,7 +105,8 @@
             class="col-lg-4 col-md-6"
             *ngFor="let manager of filteredManagers()">
 
-            <div class="card shadow-sm border-0 h-100">
+            <div class="card shadow-sm border-0 h-100"
+                 [class.current-employee-department]="isCurrentEmployeeDepartment(manager)">
 
                 <div class="card-header bg-white">
 
@@ -114,6 +115,9 @@
                         <h5 class="mb-0">
                             {{manager.TeamName}}
                         </h5>
+                        <span class="badge bg-primary ms-2" *ngIf="isCurrentEmployeeDepartment(manager)">
+                            Your Department
+                        </span>
 
                         <div class="dropdown">
 

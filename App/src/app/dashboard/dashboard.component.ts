@@ -461,24 +461,11 @@ roleEmployees: any[] = [];
     'Assignment submission deadline this Friday for 10th Grade'
   ];
 
-  recentActivities = [
-    { name: 'John Carter', action: 'Added New Project HRMS Dashboard', time: '06:20 PM' },
-    { name: 'Sophia White', action: 'Commented on Uploaded Document', time: '04:00 PM' },
-    { name: 'Michael Johnson', action: 'Approved Task Projects', time: '02:30 PM' },
-    { name: 'Emily Clark', action: 'Requesting Access to Module Tickets', time: '12:10 PM' },
-    { name: 'David Anderson', action: 'Downloaded App Reports', time: '10:40 AM' },
-    { name: 'Olivia Haris', action: 'Completed ticket module in HRMS', time: '09:50 AM' }
-  ];
+  recentActivities: any[] = [];
 
-  todayActivities = [
-    { message: "Daniel Martinz's Birthday", image: this.defaultEmployeeImage, icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
-    { message: "Amelia Curr's Birthday", image: this.defaultEmployeeImage, icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
-    { message: "Emma Lewis's Birthday", image: this.defaultEmployeeImage, icon: 'bi bi-gift', iconBg: '#ede7f6', iconColor: '#5e35b1' },
-    { message: 'Madison Andrew is off sick today', image: this.defaultEmployeeImage, icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
-    { message: 'Victoria Celestie is off sick today', image: this.defaultEmployeeImage, icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
-    { message: 'Daniel Patrick is off sick today', image: this.defaultEmployeeImage, icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' },
-    { message: 'Jessica Renee is off sick today', image: this.defaultEmployeeImage, icon: 'bi bi-calendar-x', iconBg: '#fff3e0', iconColor: '#fb8c00' }
-  ];
+  todayActivities: any[] = [];
+
+  private promotionActivities: any[] = [];
 
   
   // =========================================================
@@ -491,25 +478,6 @@ roleEmployees: any[] = [];
 
 
   
-  // =========================================================
-  // TODAY EVENTS
-  // =========================================================
-
-  todayEvents = [
-    {
-      text: "Daniel Martinz's Birthday",
-      image: this.defaultEmployeeImage
-    },
-    {
-      text: "Amelia Curr's Birthday",
-      image: this.defaultEmployeeImage
-    },
-    {
-      text: "Emma Lewis's Birthday",
-      image: this.defaultEmployeeImage
-    }
-  ];
-
  // =========================================================
 // ROLE DASHBOARD CONFIGURATION
 // =========================================================
@@ -950,6 +918,8 @@ ngOnInit(): void {
       this.loadStudentData();
       if (this.isOfficeAdmin()) {
         this.loadOfficeDashboardData();
+      } else {
+        this.loadActivityEmployees();
       }
       return;
     }
@@ -980,6 +950,8 @@ ngOnInit(): void {
       this.loadStudentData();
       if (this.isOfficeAdmin()) {
         this.loadOfficeDashboardData();
+      } else {
+        this.loadActivityEmployees();
       }
       return;
     }
@@ -1390,6 +1362,8 @@ loadOfficeDashboardData(): void {
   }).subscribe({
     next: ({ employees, managers, leaves, meetings, holidays }: any) => {
       this.employee = Array.isArray(employees) ? employees : [];
+      this.refreshRecentActivities();
+      this.refreshTodayActivities();
       this.officeDashboardManagers = Array.isArray(managers) ? managers : [];
       this.leaveRequests = Array.isArray(leaves) ? leaves : [];
       this.totalEmployees = this.employee.length;
@@ -1412,6 +1386,22 @@ loadOfficeDashboardData(): void {
       this.officeDashboardLoading = false;
     }
   });
+  this.loadPromotionActivities();
+}
+
+private loadActivityEmployees(): void {
+  this.employeeService.getEmployees().subscribe({
+    next: (employees) => {
+      this.employee = Array.isArray(employees) ? employees : [];
+      this.refreshRecentActivities();
+      this.refreshTodayActivities();
+    },
+    error: (err) => {
+      console.error('Failed to load employees for dashboard activities:', err);
+      this.toastService.showError('Unable to load employee activities.');
+    }
+  });
+  this.loadPromotionActivities();
 }
 
 private refreshOfficeDashboardSummaries(): void {
@@ -1641,6 +1631,8 @@ loadDashboardData(): void {
         Array.isArray(employees)
           ? employees
           : [];
+      this.refreshRecentActivities();
+      this.refreshTodayActivities();
 
       this.totalEmployees =
         this.employee.length;
@@ -1775,6 +1767,7 @@ loadDashboardData(): void {
 
   this.loadMyAppliedLeaves(this.leaveRequests);
   this.calculateLeaveBalances();
+  this.loadPromotionActivities();
 }
 
 
@@ -3331,13 +3324,22 @@ generateCalendar(): void {
 
 loadCalendarEvents(): void {
   forkJoin({
-    meetings: this.calendarService.getMeetings().pipe(catchError(() => of([]))),
-    holidays: this.calendarService.getHolidays().pipe(catchError(() => of([])))
+    meetings: this.calendarService.getMeetings().pipe(catchError((err) => {
+      console.error('Failed to load calendar meetings:', err);
+      this.toastService.showError('Unable to load calendar meetings.');
+      return of([]);
+    })),
+    holidays: this.calendarService.getHolidays().pipe(catchError((err) => {
+      console.error('Failed to load calendar holidays:', err);
+      this.toastService.showError('Unable to load calendar holidays.');
+      return of([]);
+    }))
   }).subscribe(({ meetings, holidays }: any) => {
     this.calendarEvents = [
       ...(Array.isArray(holidays) ? holidays : []).map((event: any) => ({ ...event, category: 'Holiday' })),
       ...(Array.isArray(meetings) ? meetings : []).map((event: any) => ({ ...event, category: 'Meeting' }))
     ];
+    this.refreshTodayActivities();
   });
 }
 
@@ -3452,54 +3454,23 @@ loadEvents(): void {
 
     try {
 
-      this.events =
-        JSON.parse(
-          savedEvents
-        );
+      const parsedEvents = JSON.parse(savedEvents);
+      this.events = Array.isArray(parsedEvents) ? parsedEvents : [];
 
-    } catch {
+    } catch (error) {
 
       this.events = [];
+      console.error('Failed to read saved calendar events:', error);
+      this.toastService.showError('Unable to load saved calendar events.');
 
     }
 
   } else {
-
-    this.events = [
-
-      {
-        title:
-          'Parents Teacher Meet',
-
-        date:
-          '15-Jul-2026',
-
-        startTime:
-          '09:00 AM',
-
-        endTime:
-          '10:30 AM'
-      },
-
-      {
-        title:
-          'Vacation Meeting',
-
-        date:
-          '07-Jul-2026',
-
-        startTime:
-          '09:00 AM',
-
-        endTime:
-          '10:30 AM'
-      }
-
-    ];
-
-    this.saveEvents();
+    this.events = [];
 
   }
+
+  this.refreshTodayActivities();
 
 }
 
@@ -3516,6 +3487,8 @@ saveEvents(): void {
       this.events
     )
   );
+
+  this.refreshTodayActivities();
 
 }
 
@@ -4529,6 +4502,141 @@ getRecentActivityImage(activity: any): string {
   });
 
   return employee?.EmployeePhoto || employee?.employeePhoto || employee?.image || this.defaultEmployeeImage;
+}
+
+private loadPromotionActivities(): void {
+  this.employeeService.getPromotions().subscribe({
+    next: (promotions) => {
+      this.promotionActivities = Array.isArray(promotions) ? promotions : [];
+      this.refreshRecentActivities();
+    },
+    error: (err) => {
+      console.error('Failed to load promotion activities:', err);
+      this.toastService.showError('Unable to load promotion activities.');
+    }
+  });
+}
+
+private refreshRecentActivities(): void {
+  const today = this.activityDateKey(new Date());
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - 30);
+  const cutoff = this.activityDateKey(cutoffDate);
+
+  const newEmployees = this.employee
+    .map((employee: any) => {
+      const date = this.activityDateKey(
+        employee.CreatedAt ??
+        employee.createdAt ??
+        employee.CreatedDate ??
+        employee.CreatedOn ??
+        employee.DateCreated ??
+        employee.RegisteredAt ??
+        employee.JoiningDate ??
+        employee.joiningDate
+      );
+      const name = this.getEmployeeName(employee);
+      const role = employee.RoleName ?? employee.roleName ?? employee.Role ?? employee.role;
+
+      return {
+        EmployeeID: employee.EmployeeID ?? employee.employeeId ?? employee.EmployeeId ?? employee.id,
+        name,
+        action: role ? `Joined as ${role}` : 'Joined the organization',
+        date,
+        type: 'new-employee'
+      };
+    })
+    .filter((activity: any) => activity.name !== 'Unknown Employee' &&
+      activity.date >= cutoff && activity.date <= today);
+
+  const promotions = this.promotionActivities
+    .map((promotion: any) => ({
+      EmployeeID: promotion.EmployeeID ?? promotion.employeeId,
+      name: promotion.FullName ?? promotion.fullName ?? 'Unknown Employee',
+      action: `Promoted from ${promotion.PreviousRoleName} to ${promotion.NewRoleName}`,
+      date: this.activityDateKey(promotion.ChangedAt ?? promotion.changedAt),
+      type: 'promotion'
+    }))
+    .filter((activity: any) => activity.date >= cutoff && activity.date <= today);
+
+  this.recentActivities = [...newEmployees, ...promotions]
+    .sort((left: any, right: any) => right.date.localeCompare(left.date))
+    .slice(0, 8)
+    .map((activity: any) => ({
+      ...activity,
+      time: new Date(`${activity.date}T00:00:00`).toLocaleDateString()
+    }));
+}
+
+private refreshTodayActivities(): void {
+  const today = this.activityDateKey(new Date());
+
+  const birthdays = this.employee
+    .filter((employee: any) => {
+      const birthday = this.activityDateKey(
+        employee.DateOfBirth ??
+        employee.dateOfBirth ??
+        employee.DOB ??
+        employee.dob
+      );
+      return birthday && birthday.slice(5) === today.slice(5);
+    })
+    .map((employee: any) => ({
+      message: `${this.getEmployeeName(employee)}'s Birthday`,
+      icon: 'bi bi-gift',
+      iconBg: '#ede7f6',
+      iconColor: '#5e35b1'
+    }));
+
+  const events = [...this.calendarEvents, ...this.events]
+    .filter((event: any) =>
+      this.activityDateKey(event.date ?? event.Date) === today
+    )
+    .map((event: any) => {
+      const title = event.title ?? event.Title ?? event.name ?? event.Name ?? 'Untitled event';
+      const category = event.category ?? event.Type ?? event.type;
+      const isHoliday = String(category ?? '').toLowerCase() === 'holiday';
+
+      return {
+        message: category ? `${category}: ${title}` : title,
+        icon: isHoliday ? 'bi bi-calendar2-event' : 'bi bi-calendar-event',
+        iconBg: isHoliday ? '#e8f5e9' : '#e3f2fd',
+        iconColor: isHoliday ? '#2e7d32' : '#1565c0'
+      };
+    });
+
+  this.todayActivities = [...birthdays, ...events];
+}
+
+private activityDateKey(value: any): string {
+  if (!value) {
+    return '';
+  }
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime())
+      ? ''
+      : `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
+  }
+
+  const text = String(value).trim();
+  const isoDate = text.match(/^(\d{4}-\d{2}-\d{2})/);
+  if (isoDate) {
+    return isoDate[1];
+  }
+
+  const legacyDate = text.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/);
+  if (legacyDate) {
+    const parsed = new Date(`${legacyDate[2]} ${legacyDate[1]}, ${legacyDate[3]}`);
+    if (!Number.isNaN(parsed.getTime())) {
+      return `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, '0')}-${String(parsed.getDate()).padStart(2, '0')}`;
+    }
+  }
+
+  const parsed = new Date(text);
+  return Number.isNaN(parsed.getTime())
+    ? ''
+    : `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, '0')}-${String(parsed.getDate()).padStart(2, '0')}`;
 }
 
 useDefaultEmployeeImage(event: Event): void {

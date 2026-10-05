@@ -6,21 +6,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit{
-  role:any='';
+  role = '';
   readonly schoolFeaturesEnabled = false;
- ngOnInit(): void {
-  this.role=localStorage.getItem('role');
- }
- get isOfficeRole(): boolean {
-  const officeRoles = [
-    'office', 'Administrator', 'HR Manager', 'Project Manager', 'Team Lead',
-    'Software Developer', 'UI/UX Designer', 'QA Engineer', 'DevOps Engineer',
-    'Accountant', 'Receptionist', 'Support Executive', 'IT Manager', 
-    'Finance Manager', 'Administration Manager', 'Sales Manager', 
-    'Marketing Manager', 'Operations Manager', 'Customer Support Manager', 
-    'R&D Manager', 'Training Manager', 'Product Owner', 'Scrum Master', 
-    'Business Analyst', 'Project Coordinator', 'Technical Lead'
-  ];
-  return officeRoles.includes(this.role);
-}
+
+  ngOnInit(): void {
+    this.role = localStorage.getItem('role')?.trim() ?? '';
+  }
+
+  get isOfficeRole(): boolean {
+    const normalizedRole = this.role.toLowerCase().replace(/[\s_-]/g, '');
+    const schoolRoles = new Set([
+      'school',
+      'schooladmin',
+      'schooladministrator',
+      'teacher',
+      'student',
+      'staff'
+    ]);
+
+    return !!normalizedRole &&
+      !schoolRoles.has(normalizedRole) &&
+      !normalizedRole.startsWith('school');
+  }
 }

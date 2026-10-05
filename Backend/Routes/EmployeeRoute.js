@@ -8,6 +8,8 @@ const employeeController = require("../Controllers/EmployeeController");
 // Get all employees
 router.get("/", employeeController.getEmployees);
 
+// Recent role changes recorded as promotions
+router.get("/promotions", employeeController.getPromotions);
 
 // IMPORTANT:
 // /managers MUST COME BEFORE /:id

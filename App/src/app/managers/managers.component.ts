@@ -16,6 +16,9 @@ export class ManagersComponent {
   managers: any[] = [];
   employees: any[] = [];
   leaves: any[] = [];
+  private currentEmployeeId: number | null = null;
+  private currentDepartmentId: number | null = null;
+  private currentDepartmentName = '';
   isEditMode = false;
   selectedManager: any = {};
 
@@ -49,6 +52,14 @@ export class ManagersComponent {
   };
 
   ngOnInit(): void {
+    this.currentEmployeeId = this.employeeService.getCurrentEmployeeId();
+    const loggedInUser = this.employeeService.getLoggedInUser();
+    this.currentDepartmentId = this.toPositiveNumber(
+      loggedInUser?.DepartmentID ?? loggedInUser?.departmentId ?? loggedInUser?.DepartmentId
+    );
+    this.currentDepartmentName = this.normalizeDepartmentName(
+      loggedInUser?.DepartmentName ?? loggedInUser?.departmentName
+    );
     this.loadManagers();
     this.loadEmployees();
     this.loadLeaves();
@@ -58,6 +69,7 @@ export class ManagersComponent {
     this.employeeService.getEmployees().subscribe({
       next: (data: any) => {
         this.employees = Array.isArray(data) ? data : [];
+        this.resolveCurrentEmployeeDepartment();
       },
       error: (err: any) => {
         console.error('Error loading employees in ManagersComponent:', err);
@@ -99,6 +111,65 @@ loadManagers(): void {
 
   });
 
+}
+
+private resolveCurrentEmployeeDepartment(): void {
+  if (this.currentEmployeeId === null) {
+    return;
+  }
+
+  const currentEmployee = this.employees.find((employee: any) => {
+    const employeeId = employee.EmployeeID ??
+      employee.employeeId ??
+      employee.EmployeeId ??
+      employee.id;
+    return Number(employeeId) === this.currentEmployeeId;
+  });
+
+  if (currentEmployee) {
+    this.currentDepartmentId = this.toPositiveNumber(
+      currentEmployee.DepartmentID ??
+      currentEmployee.departmentId ??
+      currentEmployee.DepartmentId
+    );
+    this.currentDepartmentName = this.normalizeDepartmentName(
+      currentEmployee.DepartmentName ??
+      currentEmployee.departmentName ??
+      currentEmployee.Department
+    );
+  }
+}
+
+isCurrentEmployeeDepartment(manager: any): boolean {
+  if (!manager || (this.currentDepartmentId === null && !this.currentDepartmentName)) {
+    return false;
+  }
+
+  const managerDepartmentId = this.toPositiveNumber(
+    manager.DepartmentID ?? manager.departmentId ?? manager.DepartmentId
+  );
+  if (this.currentDepartmentId !== null && managerDepartmentId !== null) {
+    return this.currentDepartmentId === managerDepartmentId;
+  }
+
+  const managerDepartmentName = this.normalizeDepartmentName(
+    manager.DepartmentName ?? manager.departmentName ??
+    manager.TeamName ?? manager.teamName
+  );
+  return !!this.currentDepartmentName &&
+    managerDepartmentName === this.currentDepartmentName;
+}
+
+private toPositiveNumber(value: any): number | null {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+  const numberValue = Number(value);
+  return Number.isFinite(numberValue) && numberValue > 0 ? numberValue : null;
+}
+
+private normalizeDepartmentName(value: any): string {
+  return String(value ?? '').trim().toLowerCase();
 }
 
 managerImage(manager: any): string {

@@ -18,6 +18,18 @@ async function getEmployees(req, res) {
     }
 }
 
+async function getPromotions(req, res) {
+    try {
+        const promotions = await employeeModel.getPromotions();
+        res.json(promotions);
+    } catch (err) {
+        console.error("Error fetching employee promotions:", err);
+        res.status(500).json({
+            message: err.message
+        });
+    }
+}
+
 async function addEmployee(req, res) {
     try {
         if (!isDesideaEmail(req.body.Email)) {
@@ -297,6 +309,7 @@ const resetPassword = async (req, res) => {
 }
 module.exports = {
     getEmployees,
+    getPromotions,
     addEmployee,
     deleteEmployee,
     getEmployeeById,

@@ -1,5 +1,39 @@
 const { sql } = require("../config/db");
 
+async function initPromotionHistoryTable() {
+    await sql.query(`
+        IF OBJECT_ID('dbo.EmployeePromotionHistory', 'U') IS NULL
+        BEGIN
+            CREATE TABLE dbo.EmployeePromotionHistory (
+                PromotionID INT IDENTITY(1,1) PRIMARY KEY,
+                EmployeeID INT NOT NULL,
+                PreviousRoleName NVARCHAR(100) NOT NULL,
+                NewRoleName NVARCHAR(100) NOT NULL,
+                ChangedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+            );
+        END
+    `);
+}
+
+async function getPromotions() {
+    const result = await sql.query(`
+        SELECT
+            promotion.PromotionID,
+            promotion.EmployeeID,
+            promotion.PreviousRoleName,
+            promotion.NewRoleName,
+            promotion.ChangedAt,
+            employee.FullName,
+            employee.EmployeePhoto
+        FROM dbo.EmployeePromotionHistory promotion
+        INNER JOIN Employees employee ON employee.EmployeeID = promotion.EmployeeID
+        WHERE employee.IsActive = 1
+          AND promotion.ChangedAt >= DATEADD(day, -30, SYSUTCDATETIME())
+        ORDER BY promotion.ChangedAt DESC
+    `);
+    return result.recordset;
+}
+
 async function getEmployees() {
     const result = await sql.query(`
         SELECT 
@@ -97,6 +131,16 @@ async function addEmployee(employee) {
 // UPDATE
 async function updateEmployee(id, employee) {
 
+    const currentEmployee = await new sql.Request()
+        .input("EmployeeID", sql.Int, id)
+        .query(`
+            SELECT employee.RoleID, role.RoleName
+            FROM Employees employee
+            LEFT JOIN Roles role ON role.RoleID = employee.RoleID
+            WHERE employee.EmployeeID = @EmployeeID
+        `);
+    const previousRole = currentEmployee.recordset[0];
+
     await sql.query`
         UPDATE Employees
         SET
@@ -119,6 +163,26 @@ async function updateEmployee(id, employee) {
             RoleID = ${employee.RoleID}
         WHERE EmployeeID = ${id}
     `;
+
+    if (previousRole && Number(previousRole.RoleID) !== Number(employee.RoleID)) {
+        const newRoleResult = await new sql.Request()
+            .input("RoleID", sql.Int, employee.RoleID)
+            .query("SELECT RoleName FROM Roles WHERE RoleID = @RoleID");
+        const newRoleName = newRoleResult.recordset[0]?.RoleName;
+
+        if (previousRole.RoleName && newRoleName) {
+            await new sql.Request()
+                .input("EmployeeID", sql.Int, id)
+                .input("PreviousRoleName", sql.NVarChar(100), previousRole.RoleName)
+                .input("NewRoleName", sql.NVarChar(100), newRoleName)
+                .query(`
+                    INSERT INTO dbo.EmployeePromotionHistory
+                        (EmployeeID, PreviousRoleName, NewRoleName)
+                    VALUES
+                        (@EmployeeID, @PreviousRoleName, @NewRoleName)
+                `);
+        }
+    }
 
 }
 
@@ -247,6 +311,8 @@ async function getManagers() {
 }
 module.exports = {
     getEmployees,
+    getPromotions,
+    initPromotionHistoryTable,
     addEmployee,
     updateEmployee,
     deleteEmployee,

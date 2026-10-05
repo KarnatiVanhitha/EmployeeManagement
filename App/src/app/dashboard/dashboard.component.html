@@ -1242,26 +1242,17 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>03 Jun 2026</td>
-                  <td>Updated Student Records</td>
+                <tr *ngFor="let activity of recentActivities">
+                  <td>{{ activity.time }}</td>
+                  <td><strong>{{ activity.name }}</strong> {{ activity.action }}</td>
                   <td>
-                    <span class="badge bg-success">Completed</span>
+                    <span class="badge" [ngClass]="activity.type === 'promotion' ? 'bg-primary' : 'bg-success'">
+                      {{ activity.type === 'promotion' ? 'Promoted' : 'New employee' }}
+                    </span>
                   </td>
                 </tr>
-                <tr>
-                  <td>02 Jun 2026</td>
-                  <td>Processed Fee Payments</td>
-                  <td>
-                    <span class="badge bg-success">Completed</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>01 Jun 2026</td>
-                  <td>Leave Application Review</td>
-                  <td>
-                    <span class="badge bg-warning text-dark">Pending</span>
-                  </td>
+                <tr *ngIf="!recentActivities.length">
+                  <td colspan="3" class="text-center text-muted py-3">No recent employee activity.</td>
                 </tr>
               </tbody>
             </table>
@@ -4015,6 +4006,10 @@
 
             </span>
 
+          </div>
+
+          <div class="empty-state text-center text-muted py-4" *ngIf="!todayActivities.length">
+            No events or birthdays today.
           </div>
 
         </div>

@@ -38,6 +38,12 @@ export class EmployeeService {
 
   }
 
+  getPromotions(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/promotions`
+    );
+  }
+
 
   // =========================================================
   // GET EMPLOYEE BY ID
