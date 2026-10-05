@@ -58,7 +58,7 @@ if (this.emailError || this.passwordError) {
 
 
   const loginData = {
-    Email: this.email,
+    Email: this.email.trim(),
     Password: this.password
   };
 

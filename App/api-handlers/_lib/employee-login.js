@@ -7,8 +7,9 @@ module.exports = async function employeeLoginHandler(req, res) {
         return res.status(405).json({ success: false, message: "Method not allowed" });
     }
 
-    const { Email, Password } = req.body || {};
-    if (!/^[^\s@]+@desidea\.com$/i.test(String(Email || "").trim())) {
+    const { Email: submittedEmail, Password } = req.body || {};
+    const Email = String(submittedEmail || "").trim();
+    if (!/^[^\s@]+@desidea\.com$/i.test(Email)) {
         return res.status(401).json({
             message: "Only @desidea.com employee accounts can sign in"
         });

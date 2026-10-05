@@ -13,7 +13,8 @@ module.exports = async function adminLoginHandler(req, res) {
         return res.status(405).json({ success: false, message: "Method not allowed" });
     }
 
-    const { Email, Password } = req.body || {};
+    const { Email: submittedEmail, Password } = req.body || {};
+    const Email = String(submittedEmail || "").trim();
     if (!Email || !Password) {
         return res.status(400).json({ message: "Email and password are required" });
     }

@@ -35,13 +35,20 @@ module.exports = async function passwordRecoveryHandler(req, res, accountType) {
             : [
                 { table: "Employees", userType: undefined, resetMessage: "Password reset successfully." }
             ];
+        let inactiveAccountFound = false;
 
         for (const account of accounts) {
             const accountResult = await pool.request()
                 .input("Email", sql.NVarChar(100), Email)
-                .query(`SELECT Email FROM ${account.table} WHERE Email = @Email`);
+                .query(`SELECT Email, IsActive FROM ${account.table} WHERE Email = @Email`);
 
-            if (!accountResult.recordset[0]) {
+            const matchingAccount = accountResult.recordset[0];
+            if (!matchingAccount) {
+                continue;
+            }
+
+            if (!matchingAccount.IsActive) {
+                inactiveAccountFound = true;
                 continue;
             }
 
@@ -53,16 +60,28 @@ module.exports = async function passwordRecoveryHandler(req, res, accountType) {
                 return res.status(200).json(response);
             }
 
-            await pool.request()
+            const updateResult = await pool.request()
                 .input("Email", sql.NVarChar(100), Email)
                 .input("NewPassword", sql.NVarChar(255), NewPassword)
                 .query(`
                     UPDATE ${account.table}
                     SET Password = @NewPassword
-                    WHERE Email = @Email
+                    WHERE Email = @Email AND IsActive = 1
                 `);
 
+            if (!updateResult.rowsAffected[0]) {
+                return res.status(403).json({
+                    message: "This account is inactive and cannot sign in. Contact your administrator."
+                });
+            }
+
             return res.status(200).json({ message: account.resetMessage });
+        }
+
+        if (inactiveAccountFound) {
+            return res.status(403).json({
+                message: "This account is inactive and cannot sign in. Contact your administrator."
+            });
         }
 
         return res.status(404).json({ message: "Email not found." });

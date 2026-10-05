@@ -56,7 +56,7 @@ export class AdminLoginComponent {
 
     const loginData = {
 
-      Email: this.email,
+      Email: this.email.trim(),
 
       Password: this.password
 
