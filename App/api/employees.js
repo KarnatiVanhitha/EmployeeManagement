@@ -49,7 +49,7 @@ module.exports = async function employeesHandler(req, res) {
     if (req.query?.route === "login") {
         return employeeLoginHandler(req, res);
     }
-    if (req.query?.route === "id") {
+    if (req.query?.route === "id" || req.query?.id || ((req.method === "PUT" || req.method === "DELETE") && req.body?.EmployeeID)) {
         return employeeByIdHandler(req, res);
     }
 
