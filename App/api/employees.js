@@ -1,6 +1,7 @@
 const sql = require("mssql");
 const employeeLoginHandler = require("../api-handlers/_lib/employee-login");
 const employeeByIdHandler = require("../api-handlers/_lib/employee-by-id");
+const passwordRecoveryHandler = require("../api-handlers/_lib/password-recovery");
 
 let poolPromise;
 
@@ -48,6 +49,9 @@ function isDesideaEmail(email) {
 module.exports = async function employeesHandler(req, res) {
     if (req.query?.route === "login") {
         return employeeLoginHandler(req, res);
+    }
+    if (req.query?.route === "verify-email" || req.query?.route === "reset-password") {
+        return passwordRecoveryHandler(req, res, "employee");
     }
     if (req.query?.route === "id" || req.query?.id || ((req.method === "PUT" || req.method === "DELETE") && req.body?.EmployeeID)) {
         return employeeByIdHandler(req, res);

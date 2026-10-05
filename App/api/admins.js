@@ -1,10 +1,14 @@
 const { getDatabaseConfig, getConnectionPool } = require("../serverless/database");
 const adminLoginHandler = require("../api-handlers/_lib/admin-login");
 const adminByIdHandler = require("../api-handlers/_lib/admin-by-id");
+const passwordRecoveryHandler = require("../api-handlers/_lib/password-recovery");
 
 module.exports = async function adminsHandler(req, res) {
     if (req.query?.route === "login") {
         return adminLoginHandler(req, res);
+    }
+    if (req.query?.route === "verify-email" || req.query?.route === "reset-password") {
+        return passwordRecoveryHandler(req, res, "admin");
     }
     if (req.query?.route === "id") {
         return adminByIdHandler(req, res);
