@@ -36,6 +36,8 @@ export class DashboardComponent implements OnInit {
   // from EmployeeService (not just whatever localStorage says).
   currentEmployee: any = null;
 
+  needsProfileCompletion = false;
+
   teamProgress: number = 0;
 completedTraining: number = 0;
 
@@ -1110,6 +1112,30 @@ private applyCurrentEmployee(employee: any): void {
     user: employee,
     role: employee?.RoleName ?? employee?.roleName
   });
+  this.needsProfileCompletion = this.isEmployeeProfileIncomplete(employee);
+}
+
+private isEmployeeProfileIncomplete(employee: any): boolean {
+  if (!employee) {
+    return false;
+  }
+
+  const departmentId = employee.DepartmentID ?? employee.departmentId ?? employee.departmentID;
+  const roleId = employee.RoleID ?? employee.roleId ?? employee.roleID;
+  const requiredFields = [
+    employee.MobileNumber ?? employee.mobileNumber,
+    employee.Gender ?? employee.gender,
+    employee.DateOfBirth ?? employee.dateOfBirth,
+    employee.JoiningDate ?? employee.joiningDate,
+    departmentId,
+    roleId,
+    employee.EmploymentType ?? employee.employmentType,
+    employee.Experience ?? employee.experience
+  ];
+
+  return requiredFields.some((value) =>
+    value === null || value === undefined || String(value).trim() === ''
+  ) || Number(departmentId) <= 0 || Number(roleId) <= 0;
 }
 
 

@@ -35,8 +35,8 @@ module.exports = async function employeeLoginHandler(req, res) {
                     d.DepartmentName,
                     r.RoleName
                 FROM Employees e
-                INNER JOIN Roles r ON e.RoleID = r.RoleID
-                INNER JOIN Departments d ON e.DepartmentID = d.DepartmentID
+                LEFT JOIN Roles r ON e.RoleID = r.RoleID
+                LEFT JOIN Departments d ON e.DepartmentID = d.DepartmentID
                 WHERE e.Email = @Email
                     AND e.Password = @Password
                     AND e.IsActive = 1

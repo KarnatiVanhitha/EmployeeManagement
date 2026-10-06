@@ -69,7 +69,7 @@ if (this.emailError || this.passwordError) {
       this.loginSuccess = res.message;
 
       localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("role", res.role);
+      localStorage.setItem("role", res.role || 'Employee');
       localStorage.setItem(
         "loggedInUser",
         JSON.stringify(res.user)

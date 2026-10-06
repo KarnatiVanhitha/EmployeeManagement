@@ -127,6 +127,20 @@ async function addEmployee(employee) {
 
 }
 
+async function registerEmployeeAccount(account) {
+    const result = await new sql.Request()
+        .input("FullName", sql.NVarChar(100), account.FullName)
+        .input("Email", sql.NVarChar(100), account.Email)
+        .input("Password", sql.NVarChar(255), account.Password)
+        .query(`
+            INSERT INTO Employees (FullName, Email, Password, IsActive)
+            OUTPUT INSERTED.EmployeeID, INSERTED.FullName, INSERTED.Email
+            VALUES (@FullName, @Email, @Password, 1)
+        `);
+
+    return result.recordset[0];
+}
+
 
 // UPDATE
 async function updateEmployee(id, employee) {
@@ -229,10 +243,10 @@ async function login(Email, Password) {
       r.RoleName
     FROM Employees e
 
-    INNER JOIN Roles r
+    LEFT JOIN Roles r
       ON e.RoleID = r.RoleID
 
-    INNER JOIN Departments d
+    LEFT JOIN Departments d
       ON e.DepartmentID = d.DepartmentID
 
     WHERE e.Email = ${Email}
@@ -314,6 +328,7 @@ module.exports = {
     getPromotions,
     initPromotionHistoryTable,
     addEmployee,
+    registerEmployeeAccount,
     updateEmployee,
     deleteEmployee,
     getEmployeeById,

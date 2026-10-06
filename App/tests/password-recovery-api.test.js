@@ -30,7 +30,8 @@ test("Vercel rewrites password recovery URLs to the corresponding API handlers",
         "/api/admins/verify-email",
         "/api/admins/reset-password",
         "/api/employees/verify-email",
-        "/api/employees/reset-password"
+        "/api/employees/reset-password",
+        "/api/employees/signup"
     ]) {
         assert.ok(rewriteSources.includes(route), `Missing Vercel rewrite for ${route}`);
     }

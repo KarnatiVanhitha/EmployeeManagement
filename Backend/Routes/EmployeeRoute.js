@@ -23,6 +23,8 @@ router.get("/:id", employeeController.getEmployeeById);
 // Add employee
 router.post("/", employeeController.addEmployee);
 
+router.post("/signup", employeeController.registerEmployeeAccount);
+
 
 // Update employee
 router.put("/:id", employeeController.updateEmployee);

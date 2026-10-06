@@ -53,3 +53,65 @@ test("rejects methods other than GET and POST", async () => {
     assert.equal(response.statusCode, 405);
     assert.equal(response.headers.Allow, "GET, POST");
 });
+
+test("validates signup account details before accessing the database", async () => {
+    const response = createResponse();
+    await employeesHandler({
+        method: "POST",
+        query: { route: "signup" },
+        body: { FullName: "Taylor", Email: "invalid@example.com", Password: "password1" }
+    }, response);
+
+    assert.equal(response.statusCode, 400);
+    assert.equal(response.body.message, "Employee email must use the @desidea.com domain");
+});
+
+test("requires a valid name and password for signup", async () => {
+    const emptyNameResponse = createResponse();
+    await employeesHandler({
+        method: "POST",
+        query: { route: "signup" },
+        body: { FullName: " ", Email: "taylor@desidea.com", Password: "password1" }
+    }, emptyNameResponse);
+    assert.equal(emptyNameResponse.statusCode, 400);
+    assert.equal(emptyNameResponse.body.message, "Full name is required");
+
+    const shortPasswordResponse = createResponse();
+    await employeesHandler({
+        method: "POST",
+        query: { route: "signup" },
+        body: { FullName: "Taylor", Email: "taylor@desidea.com", Password: "short" }
+    }, shortPasswordResponse);
+    assert.equal(shortPasswordResponse.statusCode, 400);
+    assert.equal(shortPasswordResponse.body.message, "Password must contain at least 8 characters");
+});
+
+test("valid signup requests reach database configuration validation", async () => {
+    const names = ["DB_SERVER", "DB_DATABASE", "DB_USER", "DB_PASSWORD"];
+    const previousValues = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+    names.forEach((name) => delete process.env[name]);
+
+    try {
+        const response = createResponse();
+        await employeesHandler({
+            method: "POST",
+            query: { route: "signup" },
+            body: {
+                FullName: "Taylor Employee",
+                Email: "taylor@desidea.com",
+                Password: "Password1"
+            }
+        }, response);
+
+        assert.equal(response.statusCode, 503);
+        assert.equal(response.body.message, "Database is not configured");
+    } finally {
+        names.forEach((name) => {
+            if (previousValues[name] === undefined) {
+                delete process.env[name];
+            } else {
+                process.env[name] = previousValues[name];
+            }
+        });
+    }
+});

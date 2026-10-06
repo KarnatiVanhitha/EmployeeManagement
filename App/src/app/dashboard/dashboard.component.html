@@ -2105,6 +2105,19 @@
     </div>
   </div>
 
+  <a
+    *ngIf="needsProfileCompletion"
+    routerLink="/employee-signup"
+    class="profile-completion-notice"
+    role="status">
+    <span class="profile-completion-icon"><i class="bi bi-person-vcard"></i></span>
+    <span>
+      <strong>Complete Step 2 of your signup</strong>
+      <small>Add your employee details to finish setting up your account.</small>
+    </span>
+    <i class="bi bi-arrow-right ms-auto" aria-hidden="true"></i>
+  </a>
+
 
   <!-- ========================================================= -->
   <!-- COMMON SUMMARY CARDS -->

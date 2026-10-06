@@ -75,6 +75,17 @@ export class EmployeeService {
 
   }
 
+  registerEmployeeAccount(account: {
+    FullName: string;
+    Email: string;
+    Password: string;
+  }): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/signup`,
+      account
+    );
+  }
+
 
   // =========================================================
   // UPDATE EMPLOYEE

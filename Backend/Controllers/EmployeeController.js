@@ -120,6 +120,51 @@ async function addEmployee(req, res) {
     }
 
 }
+
+async function registerEmployeeAccount(req, res) {
+    try {
+        const { FullName, Email: submittedEmail, Password } = req.body || {};
+        const Email = String(submittedEmail || '').trim();
+
+        if (typeof FullName !== 'string' || !FullName.trim()) {
+            return res.status(400).json({ message: "Full name is required" });
+        }
+        if (!isDesideaEmail(Email)) {
+            return res.status(400).json({
+                message: "Employee email must use the @desidea.com domain"
+            });
+        }
+        if (typeof Password !== 'string' || Password.length < 8) {
+            return res.status(400).json({
+                message: "Password must contain at least 8 characters"
+            });
+        }
+
+        const existingEmployee = await employeeModel.getEmployeeByEmail(Email);
+        if (existingEmployee) {
+            return res.status(409).json({
+                message: "An account with this email already exists"
+            });
+        }
+
+        const employee = await employeeModel.registerEmployeeAccount({
+            FullName: FullName.trim(),
+            Email,
+            Password
+        });
+
+        return res.status(201).json({
+            message: "Employee account created successfully",
+            employee
+        });
+    } catch (err) {
+        console.error("Employee signup failed:", err);
+        return res.status(500).json({
+            message: "Unable to create employee account"
+        });
+    }
+}
+
 async function getEmployeeById(req, res) {
 
     try {
@@ -311,6 +356,7 @@ module.exports = {
     getEmployees,
     getPromotions,
     addEmployee,
+    registerEmployeeAccount,
     deleteEmployee,
     getEmployeeById,
     updateEmployee,

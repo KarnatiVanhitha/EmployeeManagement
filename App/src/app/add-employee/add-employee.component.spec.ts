@@ -23,6 +23,7 @@ describe('AddEmployeeComponent', () => {
         'getLoggedInUser',
         'getCurrentEmployeeId',
         'isLoggedIn',
+        'registerEmployeeAccount',
         'addEmployee',
         'updateEmployee'
       ]
@@ -34,6 +35,7 @@ describe('AddEmployeeComponent', () => {
     employeeService.getLoggedInUser.and.returnValue(null);
     employeeService.getCurrentEmployeeId.and.returnValue(null);
     employeeService.isLoggedIn.and.returnValue(false);
+    employeeService.registerEmployeeAccount.and.returnValue(of({ message: 'Account created' }));
     employeeService.addEmployee.and.returnValue(of({ isManager: 0 }));
     employeeService.updateEmployee.and.returnValue(of({ message: 'Profile Updated Successfully' }));
 
@@ -72,32 +74,25 @@ describe('AddEmployeeComponent', () => {
     expect(roles.map((role: any) => role.RoleID)).toEqual([1, 3]);
   });
 
-  it('allows signup with the required profile fields and no optional address or emergency details', () => {
+  it('creates the account from signup step 1 without moving to step 2', () => {
     component.isSelfRegistration = true;
     component.employee = {
       ...component.employee,
       FullName: 'Taylor Employee',
       Email: 'taylor@desidea.com',
-      MobileNumber: '1234567890',
       Password: 'Password1',
-      ConfirmPassword: 'Password1',
-      Gender: 'Female',
-      DateOfBirth: '1995-01-01',
-      JoiningDate: '2026-10-05',
-      DepartmentID: '1',
-      RoleID: '1',
-      EmploymentType: 'Full Time',
-      Experience: '2'
+      ConfirmPassword: 'Password1'
     };
 
-    component.registerEmployee();
+    component.createSignupAccount();
 
-    expect(employeeService.addEmployee).toHaveBeenCalled();
-    expect(component.presentAddressError).toBe('');
-    expect(component.permanentAddressError).toBe('');
-    expect(component.emergencyNameError).toBe('');
-    expect(component.emergencyRelationError).toBe('');
-    expect(component.emergencyPhoneError).toBe('');
+    expect(employeeService.registerEmployeeAccount).toHaveBeenCalledWith({
+      FullName: 'Taylor Employee',
+      Email: 'taylor@desidea.com',
+      Password: 'Password1'
+    });
+    expect(component.signupStep).toBe(1);
+    expect(employeeService.addEmployee).not.toHaveBeenCalled();
   });
 
   it('opens step 2 and prefills the existing employee profile when signed in', () => {

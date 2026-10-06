@@ -50,6 +50,60 @@ module.exports = async function employeesHandler(req, res) {
     if (req.query?.route === "login") {
         return employeeLoginHandler(req, res);
     }
+    if (req.query?.route === "signup") {
+        if (req.method !== "POST") {
+            res.setHeader("Allow", "POST");
+            return res.status(405).json({ success: false, message: "Method not allowed" });
+        }
+
+        const { FullName, Email: submittedEmail, Password } = req.body || {};
+        const Email = String(submittedEmail || "").trim();
+        if (typeof FullName !== "string" || !FullName.trim()) {
+            return res.status(400).json({ message: "Full name is required" });
+        }
+        if (!isDesideaEmail(Email)) {
+            return res.status(400).json({ message: "Employee email must use the @desidea.com domain" });
+        }
+        if (typeof Password !== "string" || Password.length < 8) {
+            return res.status(400).json({ message: "Password must contain at least 8 characters" });
+        }
+
+        const config = getDatabaseConfig();
+        if (!config) {
+            return res.status(503).json({
+                success: false,
+                message: "Database is not configured"
+            });
+        }
+
+        try {
+            const pool = await getConnectionPool(config);
+            const existing = await pool.request()
+                .input("Email", sql.NVarChar(100), Email)
+                .query("SELECT EmployeeID FROM Employees WHERE Email = @Email");
+            if (existing.recordset.length > 0) {
+                return res.status(409).json({ message: "An account with this email already exists" });
+            }
+
+            const result = await pool.request()
+                .input("FullName", sql.NVarChar(100), String(FullName).trim())
+                .input("Email", sql.NVarChar(100), Email)
+                .input("Password", sql.NVarChar(255), Password)
+                .query(`
+                    INSERT INTO Employees (FullName, Email, Password, IsActive)
+                    OUTPUT INSERTED.EmployeeID, INSERTED.FullName, INSERTED.Email
+                    VALUES (@FullName, @Email, @Password, 1)
+                `);
+
+            return res.status(201).json({
+                message: "Employee account created successfully",
+                employee: result.recordset[0]
+            });
+        } catch (error) {
+            console.error("Employee signup API failed:", error);
+            return res.status(500).json({ message: "Unable to create employee account" });
+        }
+    }
     if (req.query?.route === "verify-email" || req.query?.route === "reset-password") {
         return passwordRecoveryHandler(req, res, "employee");
     }

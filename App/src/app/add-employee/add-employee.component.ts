@@ -197,7 +197,7 @@ export class AddEmployeeComponent {
     return value ? String(value).substring(0, 10) : '';
   }
 
-  nextSignupStep(): void {
+  createSignupAccount(): void {
     this.clearErrors();
     let hasError = false;
 
@@ -233,9 +233,24 @@ export class AddEmployeeComponent {
       hasError = true;
     }
 
-    if (!hasError) {
-      this.signupStep = 2;
+    if (hasError) {
+      return;
     }
+
+    this.employeeService.registerEmployeeAccount({
+      FullName: this.employee.FullName.trim(),
+      Email: this.employee.Email.trim(),
+      Password: this.employee.Password
+    }).subscribe({
+      next: () => {
+        this.showToast('Account created. Log in to complete Step 2 from your dashboard.', 'success');
+        setTimeout(() => this.router.navigate(['/']), 1800);
+      },
+      error: (err) => {
+        console.error('Error creating employee account:', err);
+        this.showToast(err.error?.message || 'Unable to create your account. Please try again.', 'error');
+      }
+    });
   }
 
   previousSignupStep(): void {
@@ -632,6 +647,11 @@ onImageChange(event: any): void {
   registerEmployee(): void {
 
   // ---------------- Validation ----------------
+  if (this.isSelfRegistration && !this.isCompletingProfile) {
+    this.showToast('Create your account in Step 1, then log in to complete Step 2.', 'error');
+    return;
+  }
+
   this.clearErrors();
   let hasError = false;
 
