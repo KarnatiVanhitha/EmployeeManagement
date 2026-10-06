@@ -1821,21 +1821,6 @@
   font-weight: 600;
 }
 
-.dashboard-container button:not(.btn-close):not(.rounded-circle):not(.office-admin-icon-action):not(.btn-link),
-.dashboard-container .btn:not(.btn-close):not(.rounded-circle):not(.office-admin-icon-action):not(.btn-link),
-.office-admin-dashboard button:not(.btn-close):not(.office-admin-icon-action),
-.office-admin-dashboard .office-admin-header-actions > a {
-  display: inline-flex;
-  width: 150px !important;
-  min-width: 150px !important;
-  height: 44px !important;
-  min-height: 44px !important;
-  align-items: center;
-  justify-content: center;
-  padding: 0 12px !important;
-  white-space: nowrap;
-}
-
 .dashboard-container .btn-primary {
   background: #26745f;
   border-color: #26745f;

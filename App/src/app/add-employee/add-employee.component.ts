@@ -124,13 +124,15 @@ export class AddEmployeeComponent {
 
 
   ngOnInit(): void {
-    this.isSelfRegistration = this.router.url.split('?')[0] === '/employee-signup';
+    const currentPath = this.router.url.split('?')[0];
+    this.isSelfRegistration = currentPath === '/employee-signup' ||
+      currentPath === '/home/complete-profile';
     this.loadEmployees();
     this.loadExistingManagers();
     this.loadDepartmentAndRoles();
     this.loaddetails();
 
-    if (this.isSelfRegistration && this.employeeService.isLoggedIn()) {
+    if (currentPath === '/home/complete-profile' && this.employeeService.isLoggedIn()) {
       this.loadSelfRegistrationProfile();
     }
   }

@@ -2107,7 +2107,7 @@
 
   <a
     *ngIf="needsProfileCompletion"
-    routerLink="/employee-signup"
+    routerLink="/home/complete-profile"
     class="profile-completion-notice"
     role="status">
     <span class="profile-completion-icon"><i class="bi bi-person-vcard"></i></span>
@@ -4312,7 +4312,9 @@
 
             <th>End</th>
 
-            <th>Action</th>
+            <th>Edit</th>
+
+            <th>Delete</th>
 
           </tr>
 
@@ -4343,20 +4345,21 @@
             </td>
 
             <td>
-
-              <button class="btn btn-sm btn-outline-white me-1" (click)="editEvent(i)">
-
-                <i class="bi bi-pencil"></i>
-
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-white event-action-button"
+                (click)="editEvent(i)">
+                <i class="bi bi-pencil"></i> Edit
               </button>
+            </td>
 
-
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteEvent(i)">
-
-                <i class="bi bi-trash"></i>
-
+            <td>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-danger event-action-button"
+                (click)="deleteEvent(i)">
+                <i class="bi bi-trash"></i> Delete
               </button>
-
             </td>
 
           </tr>
@@ -4364,7 +4367,7 @@
 
           <tr *ngIf="!events.length">
 
-            <td colspan="5" class="text-center">
+            <td colspan="6" class="text-center">
 
               No events available.
 

@@ -60,6 +60,7 @@ const routes: Routes = [
       { path: "Reviews", component: ReviewsComponent },
       { path: "holidays", component: HolidaysComponent },
       { path: "employee", component: EmployeeComponent },
+      { path: "complete-profile", component: AddEmployeeComponent },
       { path: 'add-employee/:id', component: AddEmployeeComponent },
       { path: "add-employee", component: AddEmployeeComponent },
       { path: "managers", component: ManagersComponent },

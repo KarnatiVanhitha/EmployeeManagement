@@ -95,9 +95,41 @@ describe('AddEmployeeComponent', () => {
     expect(employeeService.addEmployee).not.toHaveBeenCalled();
   });
 
-  it('opens step 2 and prefills the existing employee profile when signed in', () => {
+  it('keeps employee signup on step 1 when signed in', () => {
     const router = TestBed.inject(Router);
     (router as any).url = '/employee-signup';
+    employeeService.isLoggedIn.and.returnValue(true);
+    employeeService.getLoggedInUser.and.returnValue({
+      EmployeeID: 42,
+      FullName: 'Taylor Employee',
+      Email: 'taylor@desidea.com'
+    });
+    employeeService.getCurrentEmployeeId.and.returnValue(42);
+    employeeService.getEmployeeById.and.returnValue(of({
+      EmployeeID: 42,
+      FullName: 'Taylor Employee',
+      Email: 'taylor@desidea.com',
+      MobileNumber: '1234567890',
+      Gender: 'Female',
+      DateOfBirth: '1995-01-01T00:00:00.000Z',
+      JoiningDate: '2026-10-05T00:00:00.000Z',
+      DepartmentID: 1,
+      RoleID: 1,
+      EmploymentType: 'Full Time',
+      Experience: 2
+    }));
+
+    component.ngOnInit();
+
+    expect(component.isSelfRegistration).toBeTrue();
+    expect(component.isCompletingProfile).toBeFalse();
+    expect(component.signupStep).toBe(1);
+    expect(employeeService.getEmployeeById).not.toHaveBeenCalled();
+  });
+
+  it('opens step 2 and prefills the existing profile from the dashboard route', () => {
+    const router = TestBed.inject(Router);
+    (router as any).url = '/home/complete-profile';
     employeeService.isLoggedIn.and.returnValue(true);
     employeeService.getLoggedInUser.and.returnValue({
       EmployeeID: 42,
