@@ -35,6 +35,12 @@
   border: 3px solid #ddd;
 }
 
+.profile-placeholder {
+  color: var(--primary-color);
+  font-size: 80px;
+  line-height: 1;
+}
+
 .tab-button {
   border: 1px solid #d4d4d4;
   background: #f5f8f5;
@@ -198,7 +204,12 @@
 
 .form-grid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.full-width {
+  grid-column: 1 / -1;
 }
 
 label {
@@ -213,6 +224,8 @@ input[type="email"],
 input[type="tel"],
 input[type="password"],
 input[type="time"],
+input[type="date"],
+input[type="number"],
 textarea,
 select {
   width: 100%;
@@ -320,6 +333,18 @@ textarea {
 }
 
 @media (max-width: 640px) {
+  .settings-profile-page {
+    padding: 1rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
   .tabs-wrapper {
     justify-content: space-between;
   }

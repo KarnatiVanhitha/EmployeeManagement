@@ -16,29 +16,27 @@
     <aside class="summary-panel">
       <div class="profile-card summary-card">
         <div class="profile-avatar">
-  <img
-    [src]="profile.image || 'assets/default-avatar.png'"
-    alt="Profile Image"
-    class="profile-image"
-  />
-</div>
+          <img *ngIf="profile.image" [src]="profile.image" alt="Profile image" class="profile-image" />
+          <i *ngIf="!profile.image" class="bi bi-person-circle profile-placeholder" aria-hidden="true"></i>
+        </div>
         <div class="profile-meta">
-          <h3>{{ profile.fullName }}</h3>
-          <p class="badge">{{ profile.role }}</p>
+          <h3>{{ profile.fullName || 'Employee profile' }}</h3>
+          <p class="badge">{{ profile.role || 'Role not assigned' }}</p>
         </div>
         <div class="summary-details">
-          <div><strong>School</strong><span>{{ profile.school }}</span></div>
-          <div><strong>Email</strong><span>{{ profile.email }}</span></div>
-          <div><strong>Phone</strong><span>{{ profile.phone }}</span></div>
-          <div><strong>Joined</strong><span>{{ profile.joined }}</span></div>
+          <div><strong>Employee ID</strong><span>{{ profile.employeeId || 'Not provided' }}</span></div>
+          <div><strong>Department</strong><span>{{ profile.departmentName || 'Not assigned' }}</span></div>
+          <div><strong>Email</strong><span>{{ profile.email || 'Not provided' }}</span></div>
+          <div><strong>Phone</strong><span>{{ profile.phone || 'Not provided' }}</span></div>
+          <div><strong>Joined</strong><span>{{ profile.joined || 'Not provided' }}</span></div>
         </div>
         <label class="upload-label">
-          Upload avatar
+          Change profile photo
           <input type="file" accept="image/*" (change)="uploadAvatar($event)" />
         </label>
       </div>
 
-      <div class="stats-grid">
+      <div class="stats-grid" *ngIf="!isEmployeeProfile">
         <div class="stat-card">
           <span>{{ teacherCount }}</span>
           <p>Teachers</p>
@@ -59,51 +57,116 @@
 
       <div *ngIf="activeTab === 'profile'" class="card">
         <div class="card-header">
-          <h3>Profile Information</h3>
-          <p>Keep your key account details up to date.</p>
+          <h3>Employee Profile</h3>
+          <p>Review and update your employee details. Fields without saved information are left blank.</p>
         </div>
         <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="form-grid">
           <label>
             Full name
-            <input type="text" formControlName="fullName" />
+            <input type="text" formControlName="fullName" autocomplete="name" />
             <span class="field-error" *ngIf="profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched">Please enter at least 3 characters.</span>
           </label>
 
           <label>
-            Role
-            <input type="text" formControlName="role" />
-          </label>
-
-          <label>
             Email address
-            <input type="email" formControlName="email" />
+            <input type="email" formControlName="email" autocomplete="email" />
             <span class="field-error" *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">Enter a valid email address.</span>
           </label>
 
           <label>
             Phone number
-            <input type="tel" formControlName="phone" />
-            <span class="field-error" *ngIf="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched">Enter a valid phone number.</span>
+            <input type="tel" formControlName="phone" autocomplete="tel" />
           </label>
 
           <label>
-            School name
-            <input type="text" formControlName="school" />
+            Gender
+            <select formControlName="gender">
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
           </label>
 
           <label>
-            Address
-            <textarea rows="2" formControlName="address"></textarea>
+            Date of birth
+            <input type="date" formControlName="dateOfBirth" />
           </label>
 
-          <label class="full-width">
-            Profile summary
-            <textarea rows="4" formControlName="bio"></textarea>
-            <span class="field-note">Max 250 characters.</span>
+          <label>
+            Department
+            <select formControlName="departmentId" (change)="onDepartmentChange()">
+              <option value="">Select department</option>
+              <option *ngFor="let department of departments" [value]="department.DepartmentID ?? department.departmentId">
+                {{ department.DepartmentName ?? department.departmentName }}
+              </option>
+            </select>
           </label>
 
-          <div class="button-row">
-            <button type="submit" class="btn-primary">Save profile</button>
+          <label>
+            Role
+            <select formControlName="roleId">
+              <option value="">Select role</option>
+              <option *ngFor="let role of roles" [value]="role.RoleID ?? role.roleId">
+                {{ role.RoleName ?? role.roleName }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Joining date
+            <input type="date" formControlName="joiningDate" />
+          </label>
+
+          <label>
+            Employment type
+            <select formControlName="employmentType">
+              <option value="">Select employment type</option>
+              <option value="Full Time">Full Time</option>
+              <option value="Part Time">Part Time</option>
+              <option value="Contract">Contract</option>
+            </select>
+          </label>
+
+          <label>
+            Salary
+            <input type="number" min="0" step="0.01" formControlName="salary" />
+          </label>
+
+          <label>
+            Experience (years)
+            <input type="number" min="0" step="0.1" formControlName="experience" />
+          </label>
+
+          <label>
+            Present address
+            <textarea rows="3" formControlName="presentAddress"></textarea>
+          </label>
+
+          <label>
+            Permanent address
+            <textarea rows="3" formControlName="permanentAddress"></textarea>
+          </label>
+
+          <label>
+            Emergency contact name
+            <input type="text" formControlName="emergencyContactName" />
+          </label>
+
+          <label>
+            Emergency contact relationship
+            <input type="text" formControlName="emergencyRelationship" />
+          </label>
+
+          <label>
+            Emergency contact phone
+            <input type="tel" formControlName="emergencyPhoneNumber" />
+          </label>
+
+          <div class="button-row full-width">
+            <button type="submit" class="btn-primary" [disabled]="isSavingProfile">
+              {{ isSavingProfile ? 'Saving...' : 'Save profile' }}
+            </button>
           </div>
         </form>
       </div>
@@ -124,9 +187,30 @@
             <input type="checkbox" formControlName="smsAlerts" />
           </label>
 
-          <label class="switch-row">
-            <span>Dark mode</span>
-            <input type="checkbox" formControlName="darkMode" />
+          <label>
+            Appearance
+            <select formControlName="theme">
+              <option value="light">Light mode</option>
+              <option value="dark">Dark mode</option>
+            </select>
+          </label>
+
+          <label>
+            Font
+            <select formControlName="fontFamily">
+              <option value="Kumbh Sans">Kumbh Sans</option>
+              <option value="Arial">Arial</option>
+              <option value="Georgia">Georgia</option>
+            </select>
+          </label>
+
+          <label>
+            Font size
+            <select formControlName="fontSize">
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
           </label>
 
           <label class="switch-row">

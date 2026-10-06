@@ -15,13 +15,91 @@
   --transition: all 0.18s ease;
 }
 
+html {
+  font-size: 16px;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
   background: linear-gradient(135deg, var(--bg-start), var(--bg-end)) !important;
   color: var(--accent-slate) !important;
-  font-family: 'Kumbh Sans', 'Segoe UI', sans-serif;
+  font-family: var(--app-font-family, 'Kumbh Sans'), 'Segoe UI', sans-serif;
   transition: var(--transition);
+}
+
+body.app-dark-mode {
+  background: #17211d !important;
+  color: #e5eee9 !important;
+}
+
+body.app-dark-mode .main,
+body.app-dark-mode .content,
+body.app-dark-mode .settings-profile-page,
+body.app-dark-mode .account-bar,
+body.app-dark-mode .mobile-topbar {
+  background: #17211d !important;
+  color: #e5eee9 !important;
+}
+
+body.app-dark-mode .card,
+body.app-dark-mode .summary-card,
+body.app-dark-mode .stat-card,
+body.app-dark-mode .session-row,
+body.app-dark-mode .activity-list li {
+  background: #22312b !important;
+  color: #e5eee9 !important;
+}
+
+body.app-dark-mode .card-header,
+body.app-dark-mode .page-header,
+body.app-dark-mode .profile-meta,
+body.app-dark-mode .summary-details,
+body.app-dark-mode .account-profile-link,
+body.app-dark-mode label {
+  color: #e5eee9 !important;
+}
+
+body.app-dark-mode .summary-details span,
+body.app-dark-mode .page-header p,
+body.app-dark-mode .card-header p,
+body.app-dark-mode .session-row p,
+body.app-dark-mode .stat-card p {
+  color: #c2d1c8 !important;
+}
+
+body.app-dark-mode .tab-button {
+  background: #22312b !important;
+  border-color: #52645a !important;
+  color: #e5eee9 !important;
+}
+
+body.app-dark-mode .tab-button.active {
+  background: #26745f !important;
+  border-color: #26745f !important;
+}
+
+body.app-dark-mode .upload-label {
+  border-color: #52645a !important;
+  color: #b4d9ca !important;
+}
+
+body.app-dark-mode .settings-profile-page input,
+body.app-dark-mode .settings-profile-page textarea,
+body.app-dark-mode .settings-profile-page select {
+  background: #17211d !important;
+  border-color: #52645a !important;
+  color: #e5eee9 !important;
+}
+
+body.app-dark-mode .sidebar {
+  background: #1d2a24 !important;
+  color: #e5eee9 !important;
+}
+
+body.app-dark-mode .menu a,
+body.app-dark-mode .submenu-item {
+  color: #d2e0d8 !important;
 }
 
 * {

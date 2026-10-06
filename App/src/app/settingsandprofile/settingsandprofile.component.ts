@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TeacherService } from '../services/teacher.service';
+import { EmployeeService } from '../services/employee.service';
 
 @Component({
   selector: 'app-settingsandprofile',
@@ -14,17 +15,35 @@ export class SettingsandprofileComponent implements OnInit {
   teacherCount = 0;
   staffCount = 0;
   studentCount = 0;
+  employeeId: number | null = null;
+  isEmployeeProfile = false;
+  isSavingProfile = false;
+  departments: any[] = [];
+  roles: any[] = [];
 
   profile = {
     image: '',
-    fullName: 'Admin User',
-    role: 'Administrator',
-    email: 'admin@schoolapp.com',
-    phone: '+1 (555) 123-4567',
-    school: 'Sunrise Academy',
-    address: '123 School Street, Cityville',
-    bio: 'Responsible for managing school operations, staff, students, and system settings.',
-    joined: '2022-08-14'
+    fullName: '',
+    role: '',
+    email: '',
+    phone: '',
+    school: '',
+    address: '',
+    bio: '',
+    joined: '',
+    employeeId: '',
+    gender: '',
+    dateOfBirth: '',
+    departmentId: '',
+    departmentName: '',
+    roleId: '',
+    employmentType: '',
+    salary: '',
+    experience: '',
+    permanentAddress: '',
+    emergencyContactName: '',
+    emergencyRelationship: '',
+    emergencyPhoneNumber: ''
   };
 
   profileForm!: FormGroup;
@@ -35,7 +54,9 @@ export class SettingsandprofileComponent implements OnInit {
   preferences = {
     emailNotifications: true,
     smsAlerts: false,
-    darkMode: false,
+    theme: 'light',
+    fontFamily: 'Kumbh Sans',
+    fontSize: 'medium',
     profileVisibleToStaff: true,
     weeklySummary: 'weekly'
   };
@@ -59,49 +80,211 @@ export class SettingsandprofileComponent implements OnInit {
     { time: '2 days ago', event: 'Enabled daily email reminders for teachers.' }
   ];
 
-  constructor(private formBuilder: FormBuilder, private teacherService: TeacherService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private teacherService: TeacherService,
+    private employeeService: EmployeeService
+  ) {}
 
   ngOnInit(): void {
-  this.loadCounts();
+    this.loadCounts();
+    this.loadPreferences();
+    this.initializeForms();
 
-  const savedProfile = localStorage.getItem('profile');
-
-  if (savedProfile) {
-    this.profile = JSON.parse(savedProfile);
+    this.employeeId = this.employeeService.getCurrentEmployeeId();
+    if (this.employeeId !== null) {
+      this.isEmployeeProfile = true;
+      this.loadEmployeeProfile(this.employeeId);
+      this.loadDepartmentsAndRoles();
+    }
   }
 
-  this.profileForm = this.formBuilder.group({
-    fullName: [this.profile.fullName, [Validators.required, Validators.minLength(3)]],
-    role: [this.profile.role, Validators.required],
-    email: [this.profile.email, [Validators.required, Validators.email]],
-    phone: [this.profile.phone, [Validators.required, Validators.pattern(/^[0-9+()\s-]+$/)]],
-    school: [this.profile.school, Validators.required],
-    address: [this.profile.address, Validators.required],
-    bio: [this.profile.bio, Validators.maxLength(250)]
-  });
+  private initializeForms(): void {
+    this.profileForm = this.formBuilder.group({
+      fullName: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: [''],
+      gender: [''],
+      dateOfBirth: [''],
+      departmentId: [''],
+      roleId: [''],
+      joiningDate: [''],
+      employmentType: [''],
+      salary: [''],
+      experience: [''],
+      presentAddress: [''],
+      permanentAddress: [''],
+      emergencyContactName: [''],
+      emergencyRelationship: [''],
+      emergencyPhoneNumber: ['']
+    });
 
-  this.preferencesForm = this.formBuilder.group({
-    emailNotifications: [this.preferences.emailNotifications],
-    smsAlerts: [this.preferences.smsAlerts],
-    darkMode: [this.preferences.darkMode],
-    profileVisibleToStaff: [this.preferences.profileVisibleToStaff],
-    weeklySummary: [this.preferences.weeklySummary]
-  });
+    this.preferencesForm = this.formBuilder.group({
+      emailNotifications: [this.preferences.emailNotifications],
+      smsAlerts: [this.preferences.smsAlerts],
+      theme: [this.preferences.theme],
+      fontFamily: [this.preferences.fontFamily],
+      fontSize: [this.preferences.fontSize],
+      profileVisibleToStaff: [this.preferences.profileVisibleToStaff],
+      weeklySummary: [this.preferences.weeklySummary]
+    });
 
-  this.securityForm = this.formBuilder.group({
-    currentPassword: ['', Validators.required],
-    newPassword: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', Validators.required],
-    twoFactorAuth: [true]
-  });
+    this.securityForm = this.formBuilder.group({
+      currentPassword: ['', Validators.required],
+      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required],
+      twoFactorAuth: [true]
+    });
 
-  this.notificationsForm = this.formBuilder.group({
-    messageAlerts: [this.notifications.messageAlerts],
-    eventUpdates: [this.notifications.eventUpdates],
-    newsletter: [this.notifications.newsletter],
-    reminderTime: [this.notifications.reminderTime]
-  });
-}
+    this.notificationsForm = this.formBuilder.group({
+      messageAlerts: [this.notifications.messageAlerts],
+      eventUpdates: [this.notifications.eventUpdates],
+      newsletter: [this.notifications.newsletter],
+      reminderTime: [this.notifications.reminderTime]
+    });
+  }
+
+  private loadEmployeeProfile(employeeId: number): void {
+    this.employeeService.getEmployeeById(employeeId).subscribe({
+      next: (response: any) => {
+        const employee = response?.employee ?? response?.data ?? response;
+        if (!employee || typeof employee !== 'object') {
+          this.setMessage('Employee profile details could not be loaded.', 'error');
+          return;
+        }
+
+        this.profile = {
+          ...this.profile,
+          image: employee.EmployeePhoto ?? employee.employeePhoto ?? '',
+          fullName: employee.FullName ?? employee.fullName ?? '',
+          email: employee.Email ?? employee.email ?? '',
+          phone: employee.MobileNumber ?? employee.mobileNumber ?? '',
+          role: employee.RoleName ?? employee.roleName ?? '',
+          school: employee.DepartmentName ?? employee.departmentName ?? '',
+          joined: this.dateInputValue(employee.JoiningDate ?? employee.joiningDate),
+          employeeId: String(employee.EmployeeID ?? employee.employeeId ?? employeeId),
+          gender: employee.Gender ?? employee.gender ?? '',
+          dateOfBirth: this.dateInputValue(employee.DateOfBirth ?? employee.dateOfBirth),
+          departmentId: String(employee.DepartmentID ?? employee.departmentId ?? ''),
+          departmentName: employee.DepartmentName ?? employee.departmentName ?? '',
+          roleId: String(employee.RoleID ?? employee.roleId ?? ''),
+          employmentType: employee.EmploymentType ?? employee.employmentType ?? '',
+          salary: employee.Salary ?? employee.salary ?? '',
+          experience: employee.Experience ?? employee.experience ?? '',
+          address: employee.PresentAddress ?? employee.presentAddress ?? '',
+          permanentAddress: employee.PermanentAddress ?? employee.permanentAddress ?? '',
+          emergencyContactName: employee.EmergencyContactName ?? employee.emergencyContactName ?? '',
+          emergencyRelationship: employee.EmergencyRelationship ?? employee.emergencyRelationship ?? '',
+          emergencyPhoneNumber: employee.EmergencyPhoneNumber ?? employee.emergencyPhoneNumber ?? ''
+        };
+
+        this.profileForm.patchValue({
+          fullName: this.profile.fullName,
+          email: this.profile.email,
+          phone: this.profile.phone,
+          gender: this.profile.gender,
+          dateOfBirth: this.profile.dateOfBirth,
+          departmentId: this.profile.departmentId,
+          roleId: this.profile.roleId,
+          joiningDate: this.profile.joined,
+          employmentType: this.profile.employmentType,
+          salary: this.profile.salary,
+          experience: this.profile.experience,
+          presentAddress: this.profile.address,
+          permanentAddress: this.profile.permanentAddress,
+          emergencyContactName: this.profile.emergencyContactName,
+          emergencyRelationship: this.profile.emergencyRelationship,
+          emergencyPhoneNumber: this.profile.emergencyPhoneNumber
+        });
+
+        if (this.profile.departmentId) {
+          this.loadRolesForDepartment(Number(this.profile.departmentId), this.profile.roleId);
+        }
+      },
+      error: (error) => {
+        console.error('Unable to load employee profile:', error);
+        this.setMessage(error.error?.message || 'Employee profile details could not be loaded.', 'error');
+      }
+    });
+  }
+
+  private loadDepartmentsAndRoles(): void {
+    this.employeeService.getDepartmentRoles().subscribe({
+      next: (data: any) => {
+        this.departments = Array.isArray(data?.departments) ? data.departments : [];
+      },
+      error: (error) => {
+        console.error('Unable to load departments:', error);
+        this.setMessage('Departments could not be loaded.', 'error');
+      }
+    });
+  }
+
+  onDepartmentChange(): void {
+    const departmentId = Number(this.profileForm.get('departmentId')?.value);
+    this.profileForm.patchValue({ roleId: '' });
+
+    if (!departmentId) {
+      this.roles = [];
+      return;
+    }
+
+    this.loadRolesForDepartment(departmentId);
+  }
+
+  private loadRolesForDepartment(departmentId: number, selectedRoleId: any = ''): void {
+    this.employeeService.getRolesByDepartment(departmentId).subscribe({
+      next: (data: any) => {
+        this.roles = Array.isArray(data) ? data : [];
+        const matchingRole = this.roles.some(
+          (role: any) => Number(role.RoleID ?? role.roleId) === Number(selectedRoleId)
+        );
+        this.profileForm.patchValue({ roleId: matchingRole ? selectedRoleId : '' });
+      },
+      error: (error) => {
+        console.error('Unable to load roles for selected department:', error);
+        this.roles = [];
+        this.profileForm.patchValue({ roleId: '' });
+        this.setMessage('Roles for the selected department could not be loaded.', 'error');
+      }
+    });
+  }
+
+  private loadPreferences(): void {
+    const savedPreferences = localStorage.getItem('appPreferences');
+    if (!savedPreferences) {
+      this.applyPreferences();
+      return;
+    }
+
+    try {
+      const saved = JSON.parse(savedPreferences);
+      if (saved && typeof saved === 'object' && !Array.isArray(saved)) {
+        this.preferences = { ...this.preferences, ...saved };
+      }
+    } catch (error) {
+      console.error('Unable to read saved preferences:', error);
+    }
+
+    this.applyPreferences();
+  }
+
+  private applyPreferences(): void {
+    document.body.classList.toggle('app-dark-mode', this.preferences.theme === 'dark');
+    document.documentElement.style.fontSize =
+      this.preferences.fontSize === 'small' ? '14px' :
+      this.preferences.fontSize === 'large' ? '18px' : '16px';
+    const fontFamilies = ['Kumbh Sans', 'Arial', 'Georgia'];
+    const fontFamily = fontFamilies.includes(this.preferences.fontFamily)
+      ? this.preferences.fontFamily
+      : 'Kumbh Sans';
+    document.documentElement.style.setProperty('--app-font-family', fontFamily);
+  }
+
+  private dateInputValue(value: any): string {
+    return value ? String(value).substring(0, 10) : '';
+  }
+
   selectTab(tab: string): void {
     this.activeTab = tab;
     this.message = '';
@@ -109,30 +292,96 @@ export class SettingsandprofileComponent implements OnInit {
 
  saveProfile(): void {
   if (this.profileForm.invalid) {
-    this.setMessage(
-      'Please fix validation errors before saving profile.',
-      'error'
-    );
+    this.profileForm.markAllAsTouched();
+    this.setMessage('Please enter a valid name and email address before saving.', 'error');
     return;
   }
 
-  this.profile = {
-    ...this.profile,
-    ...this.profileForm.value
+  if (this.employeeId === null) {
+    this.setMessage('No signed-in employee profile is available to update.', 'error');
+    return;
+  }
+
+  this.isSavingProfile = true;
+  const formValue = this.profileForm.getRawValue();
+  const employeeData = {
+    EmployeePhoto: this.profile.image || null,
+    FullName: formValue.fullName.trim(),
+    Email: formValue.email.trim(),
+    MobileNumber: formValue.phone,
+    Gender: formValue.gender,
+    DateOfBirth: formValue.dateOfBirth,
+    DepartmentID: formValue.departmentId,
+    RoleID: formValue.roleId,
+    JoiningDate: formValue.joiningDate,
+    EmploymentType: formValue.employmentType,
+    Salary: formValue.salary,
+    Experience: formValue.experience,
+    PresentAddress: formValue.presentAddress,
+    PermanentAddress: formValue.permanentAddress,
+    EmergencyContactName: formValue.emergencyContactName,
+    EmergencyRelationship: formValue.emergencyRelationship,
+    EmergencyPhoneNumber: formValue.emergencyPhoneNumber
   };
 
-  localStorage.setItem(
-    'profile',
-    JSON.stringify(this.profile)
-  );
+  this.employeeService.updateEmployee(this.employeeId, employeeData).subscribe({
+    next: () => {
+      this.isSavingProfile = false;
+      const selectedDepartment = this.departments.find(
+        (department: any) => Number(department.DepartmentID ?? department.departmentId) === Number(formValue.departmentId)
+      );
+      const selectedRole = this.roles.find(
+        (role: any) => Number(role.RoleID ?? role.roleId) === Number(formValue.roleId)
+      );
 
-  this.setMessage(
-    'Profile information saved successfully.',
-    'success'
-  );
+      this.profile = {
+        ...this.profile,
+        image: employeeData.EmployeePhoto || this.profile.image,
+        fullName: employeeData.FullName,
+        email: employeeData.Email,
+        phone: employeeData.MobileNumber,
+        role: selectedRole?.RoleName ?? selectedRole?.roleName ?? this.profile.role,
+        school: selectedDepartment?.DepartmentName ?? selectedDepartment?.departmentName ?? this.profile.school,
+        joined: employeeData.JoiningDate,
+        departmentId: employeeData.DepartmentID,
+        departmentName: selectedDepartment?.DepartmentName ?? selectedDepartment?.departmentName ?? '',
+        roleId: employeeData.RoleID,
+        gender: employeeData.Gender,
+        dateOfBirth: employeeData.DateOfBirth,
+        employmentType: employeeData.EmploymentType,
+        salary: employeeData.Salary,
+        experience: employeeData.Experience,
+        address: employeeData.PresentAddress,
+        permanentAddress: employeeData.PermanentAddress,
+        emergencyContactName: employeeData.EmergencyContactName,
+        emergencyRelationship: employeeData.EmergencyRelationship,
+        emergencyPhoneNumber: employeeData.EmergencyPhoneNumber
+      };
+
+      const user = this.employeeService.getLoggedInUser() || {};
+      const updatedUser = {
+        ...user,
+        EmployeeID: this.employeeId,
+        FullName: employeeData.FullName,
+        Email: employeeData.Email,
+        EmployeePhoto: this.profile.image,
+        RoleName: this.profile.role
+      };
+      this.employeeService.setLoggedInUser(updatedUser);
+      window.dispatchEvent(new CustomEvent('employeeProfileUpdated', { detail: updatedUser }));
+      this.setMessage('Profile information saved successfully.', 'success');
+    },
+    error: (error) => {
+      this.isSavingProfile = false;
+      console.error('Unable to save employee profile:', error);
+      this.setMessage(error.error?.message || 'Profile information could not be saved.', 'error');
+    }
+  });
 }
   savePreferences(): void {
     this.preferences = { ...this.preferences, ...this.preferencesForm.value };
+    localStorage.setItem('appPreferences', JSON.stringify(this.preferences));
+    this.applyPreferences();
     this.setMessage('Preferences updated successfully.', 'success');
   }
 
@@ -158,23 +407,34 @@ export class SettingsandprofileComponent implements OnInit {
     this.setMessage('Notification preferences saved successfully.', 'success');
   }
 
- uploadAvatar(event: any): void {
-  const file = event.target.files[0];
-
-  if (file) {
-    const reader = new FileReader();
-
-    reader.onload = (e: any) => {
-      this.profile.image = e.target.result;
-
-      localStorage.setItem(
-        'profile',
-        JSON.stringify(this.profile)
-      );
-    };
-
-    reader.readAsDataURL(file);
+ uploadAvatar(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) {
+    return;
   }
+  if (!file.type.startsWith('image/')) {
+    this.setMessage('Choose a valid image file.', 'error');
+    input.value = '';
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    this.setMessage('Profile images must be 5 MB or smaller.', 'error');
+    input.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    if (typeof reader.result !== 'string') {
+      this.setMessage('The selected profile image could not be read.', 'error');
+      return;
+    }
+    this.profile.image = reader.result;
+    this.setMessage('Image selected. Save your profile to apply it.', 'success');
+  };
+  reader.onerror = () => this.setMessage('The selected profile image could not be read.', 'error');
+  reader.readAsDataURL(file);
 }
 
   private loadCounts(): void {
