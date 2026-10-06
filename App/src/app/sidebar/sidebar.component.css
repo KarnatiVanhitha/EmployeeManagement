@@ -57,6 +57,17 @@
   color: #273a34;
 }
 
+.menu > li.menu-item:hover > a,
+.menu > li.menu-item:hover > i,
+.menu .menu-item:hover > a,
+.menu .menu-item:hover > i,
+.menu .menu-item:hover > div,
+.menu .menu-item:hover > div span,
+.menu .menu-item:hover > div i,
+.menu .submenu-item:hover {
+  color: #fff !important;
+}
+
 span {
   font-size: 13px;
 }
