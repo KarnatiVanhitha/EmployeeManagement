@@ -12,3 +12,17 @@
 .table td {
   vertical-align: middle;
 }
+
+.employee-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.employee-actions .btn {
+  width: 36px !important;
+  min-width: 36px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+}

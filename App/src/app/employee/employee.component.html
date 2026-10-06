@@ -24,9 +24,7 @@
               <th>Department</th>
               <th>Role</th>
               <th>Joining Date</th>
-              <th>View</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              <th>Actions</th>
             </tr>
 
           </thead>
@@ -50,41 +48,38 @@
               <td>{{ emp.JoiningDate }}</td>
 
               <td>
-
-                <div class="d-flex gap-2">
-
+                <div class="employee-actions">
                   <button
                     class="btn btn-sm btn-info text-white"
+                    type="button"
+                    aria-label="View employee"
+                    title="View employee"
                     (click)="viewEmployee(emp)">
                     <i class="bi bi-eye"></i>
                   </button>
-                </div>
-                </td>
-                <td>
-                  <div class="d-flex gap-2">
-                    <button
-                      class="btn btn-warning btn-sm"
-                      (click)="editEmployee(emp)">
-                      <i class="bi bi-pencil-square"></i>
-                    </button>
-                  </div>
-                </td>
-                <td>
-                   <div class="d-flex gap-2">
+                  <button
+                    class="btn btn-warning btn-sm"
+                    type="button"
+                    aria-label="Edit employee"
+                    title="Edit employee"
+                    (click)="editEmployee(emp)">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
                   <button
                     class="btn btn-sm btn-danger"
+                    type="button"
+                    aria-label="Delete employee"
+                    title="Delete employee"
                     (click)="deleteEmployee(emp.EmployeeID)">
                     <i class="bi bi-trash"></i>
                   </button>
-
                 </div>
-
               </td>
 
             </tr>
 
             <tr *ngIf="employees.length === 0">
-              <td colspan="10" class="text-center py-4">
+              <td colspan="8" class="text-center py-4">
                 No Employees Found
               </td>
             </tr>

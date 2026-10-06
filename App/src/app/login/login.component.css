@@ -48,6 +48,19 @@
 }
 
 .login-card form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.login-card form > .mb-3,
+.login-card form > .text-end {
+  width: 248px;
+  max-width: 100%;
+}
+
+.login-card form .form-control {
   width: 100%;
 }
 
