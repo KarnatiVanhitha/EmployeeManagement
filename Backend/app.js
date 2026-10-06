@@ -24,7 +24,7 @@ const jiraRoutes = require('./Routes/JiraRoute');
 
 // Table init functions (must run AFTER connectDB)
 const { initCalendarTables } = require("./Models/CalendarModel");
-const { initPromotionHistoryTable } = require("./Models/EmployeeModel");
+const { initPromotionHistoryTable, initSelfSignupColumns } = require("./Models/EmployeeModel");
 const { initTimesheetTable } = require("./Models/TimesheetModel");
 const { initUseCaseTable } = require("./Models/UseCaseModel");
 const { initSprintTable } = require("./Models/SprintModel");
@@ -72,6 +72,7 @@ async function initializeDatabase() {
             await initProjectsTable();
             await initTaskTable();
             await initRoleTable();
+            await initSelfSignupColumns();
             await initCalendarTables();
             await initPromotionHistoryTable();
             await initTimesheetTable();

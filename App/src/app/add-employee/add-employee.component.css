@@ -101,18 +101,27 @@
   border-color: #cbd5e1;
 }
 
-.employee-signup-page .signup-first-step > .d-flex {
-  justify-content: center !important;
-  margin-top: 24px !important;
+.employee-signup-page .signup-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
 }
 
 .employee-signup-page .signup-first-step .button {
+  display: inline-flex;
   width: 100%;
   max-width: 240px;
   height: 42px;
+  min-height: 42px;
   padding: 8px 16px !important;
   border-radius: 6px;
   font-weight: 700;
+}
+
+.employee-signup-page .signup-first-step .button:disabled {
+  cursor: wait;
+  opacity: 0.7;
 }
 
 @media screen and (max-width: 768px) {

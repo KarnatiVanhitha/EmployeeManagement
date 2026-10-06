@@ -33,6 +33,7 @@ export class AddEmployeeComponent {
   isEditMode = false;
   isSelfRegistration = false;
   isCompletingProfile = false;
+  isCreatingAccount = false;
   signupStep = 1;
 
   
@@ -200,6 +201,10 @@ export class AddEmployeeComponent {
   }
 
   createSignupAccount(): void {
+    if (this.isCreatingAccount) {
+      return;
+    }
+
     this.clearErrors();
     let hasError = false;
 
@@ -239,18 +244,24 @@ export class AddEmployeeComponent {
       return;
     }
 
+    this.isCreatingAccount = true;
     this.employeeService.registerEmployeeAccount({
       FullName: this.employee.FullName.trim(),
       Email: this.employee.Email.trim(),
       Password: this.employee.Password
     }).subscribe({
       next: () => {
+        this.isCreatingAccount = false;
         this.showToast('Account created. Log in to complete Step 2 from your dashboard.', 'success');
         setTimeout(() => this.router.navigate(['/']), 1800);
       },
       error: (err) => {
+        this.isCreatingAccount = false;
         console.error('Error creating employee account:', err);
-        this.showToast(err.error?.message || 'Unable to create your account. Please try again.', 'error');
+        this.showToast(
+          err.error?.message || 'Unable to create your account. Please check your details and try again.',
+          'error'
+        );
       }
     });
   }

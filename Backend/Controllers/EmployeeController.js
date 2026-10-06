@@ -159,8 +159,13 @@ async function registerEmployeeAccount(req, res) {
         });
     } catch (err) {
         console.error("Employee signup failed:", err);
+        if (err.number === 2601 || err.number === 2627) {
+            return res.status(409).json({
+                message: "An account with this email already exists"
+            });
+        }
         return res.status(500).json({
-            message: "Unable to create employee account"
+            message: "Unable to create your account. Please try again or contact support."
         });
     }
 }

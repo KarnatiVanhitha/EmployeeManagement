@@ -15,6 +15,52 @@ async function initPromotionHistoryTable() {
     `);
 }
 
+async function initSelfSignupColumns() {
+    await sql.query(`
+        IF EXISTS (
+            SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+              AND COLUMN_NAME = 'Gender' AND IS_NULLABLE = 'NO'
+        )
+            ALTER TABLE dbo.Employees ALTER COLUMN Gender varchar(20) NULL;
+
+        IF EXISTS (
+            SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+              AND COLUMN_NAME = 'DateOfBirth' AND IS_NULLABLE = 'NO'
+        )
+            ALTER TABLE dbo.Employees ALTER COLUMN DateOfBirth date NULL;
+
+        IF EXISTS (
+            SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+              AND COLUMN_NAME = 'JoiningDate' AND IS_NULLABLE = 'NO'
+        )
+            ALTER TABLE dbo.Employees ALTER COLUMN JoiningDate date NULL;
+
+        IF EXISTS (
+            SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+              AND COLUMN_NAME = 'DepartmentID' AND IS_NULLABLE = 'NO'
+        )
+            ALTER TABLE dbo.Employees ALTER COLUMN DepartmentID int NULL;
+
+        IF EXISTS (
+            SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+              AND COLUMN_NAME = 'RoleID' AND IS_NULLABLE = 'NO'
+        )
+            ALTER TABLE dbo.Employees ALTER COLUMN RoleID int NULL;
+
+        IF EXISTS (
+            SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+              AND COLUMN_NAME = 'EmploymentType' AND IS_NULLABLE = 'NO'
+        )
+            ALTER TABLE dbo.Employees ALTER COLUMN EmploymentType varchar(30) NULL;
+    `);
+}
+
 async function getPromotions() {
     const result = await sql.query(`
         SELECT
@@ -327,6 +373,7 @@ module.exports = {
     getEmployees,
     getPromotions,
     initPromotionHistoryTable,
+    initSelfSignupColumns,
     addEmployee,
     registerEmployeeAccount,
     updateEmployee,

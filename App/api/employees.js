@@ -78,6 +78,50 @@ module.exports = async function employeesHandler(req, res) {
 
         try {
             const pool = await getConnectionPool(config);
+            await pool.request().query(`
+                IF EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+                      AND COLUMN_NAME = 'Gender' AND IS_NULLABLE = 'NO'
+                )
+                    ALTER TABLE dbo.Employees ALTER COLUMN Gender varchar(20) NULL;
+
+                IF EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+                      AND COLUMN_NAME = 'DateOfBirth' AND IS_NULLABLE = 'NO'
+                )
+                    ALTER TABLE dbo.Employees ALTER COLUMN DateOfBirth date NULL;
+
+                IF EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+                      AND COLUMN_NAME = 'JoiningDate' AND IS_NULLABLE = 'NO'
+                )
+                    ALTER TABLE dbo.Employees ALTER COLUMN JoiningDate date NULL;
+
+                IF EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+                      AND COLUMN_NAME = 'DepartmentID' AND IS_NULLABLE = 'NO'
+                )
+                    ALTER TABLE dbo.Employees ALTER COLUMN DepartmentID int NULL;
+
+                IF EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+                      AND COLUMN_NAME = 'RoleID' AND IS_NULLABLE = 'NO'
+                )
+                    ALTER TABLE dbo.Employees ALTER COLUMN RoleID int NULL;
+
+                IF EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employees'
+                      AND COLUMN_NAME = 'EmploymentType' AND IS_NULLABLE = 'NO'
+                )
+                    ALTER TABLE dbo.Employees ALTER COLUMN EmploymentType varchar(30) NULL;
+            `);
+
             const existing = await pool.request()
                 .input("Email", sql.NVarChar(100), Email)
                 .query("SELECT EmployeeID FROM Employees WHERE Email = @Email");
@@ -101,7 +145,14 @@ module.exports = async function employeesHandler(req, res) {
             });
         } catch (error) {
             console.error("Employee signup API failed:", error);
-            return res.status(500).json({ message: "Unable to create employee account" });
+            if (error.number === 2601 || error.number === 2627) {
+                return res.status(409).json({
+                    message: "An account with this email already exists"
+                });
+            }
+            return res.status(500).json({
+                message: "Unable to create your account. Please try again or contact support."
+            });
         }
     }
     if (req.query?.route === "verify-email" || req.query?.route === "reset-password") {
