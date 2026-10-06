@@ -2013,11 +2013,6 @@ findCurrentManager(
     manager = currentEmployee;
   }
 
-  // 6. Fallback to any active manager in managers list
-  if (!manager && managers && managers.length > 0) {
-    manager = managers[0];
-  }
-
   if (!manager) {
     this.managerInfo = {
       name: 'Not Assigned',

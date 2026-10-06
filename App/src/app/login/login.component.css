@@ -52,10 +52,15 @@
 }
 
 .login-card form .Login-btn {
-  width: 100% !important;
+  display: inline-flex;
+  width: 248px !important;
+  max-width: 100%;
   min-width: 0 !important;
   height: 42px !important;
   min-height: 42px !important;
+  margin: 0 auto;
+  padding: 10px 16px !important;
+  border-radius: 6px;
 }
 
 /* Click Animation */

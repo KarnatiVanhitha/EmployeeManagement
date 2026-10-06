@@ -126,10 +126,10 @@
         <div class="row g-4">
 
           <!-- IMAGE -->
-          <div class="col-lg-3" *ngIf="isEditMode">
+          <div class="col-lg-3" *ngIf="isEditMode || isSelfRegistration">
 
             <label class="form-label fw-semibold">
-              Employee Photo <span class="text-danger">*</span>
+              Employee Photo <span class="text-danger" *ngIf="isEditMode || isSelfRegistration">*</span>
             </label>
 
             <div class="border rounded-4 p-4 text-center bg-light">

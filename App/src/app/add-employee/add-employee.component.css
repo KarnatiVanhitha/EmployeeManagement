@@ -110,11 +110,12 @@
 
 .employee-signup-page .signup-first-step .button {
   display: inline-flex;
-  width: 100%;
+  width: 100% !important;
   max-width: 240px;
-  height: 42px;
-  min-height: 42px;
-  padding: 8px 16px !important;
+  min-width: 0 !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 10px 16px !important;
   border-radius: 6px;
   font-weight: 700;
 }
