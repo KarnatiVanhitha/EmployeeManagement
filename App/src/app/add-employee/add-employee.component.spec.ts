@@ -161,6 +161,17 @@ describe('AddEmployeeComponent', () => {
     expect(component.employee.DateOfBirth).toBe('1995-01-01');
   });
 
+  it('returns to the dashboard when backing out of profile completion', () => {
+    const router = TestBed.inject(Router);
+    component.isCompletingProfile = true;
+    component.signupStep = 2;
+
+    component.previousSignupStep();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/home']);
+    expect(component.signupStep).toBe(2);
+  });
+
   it('updates the signed-in employee instead of creating a duplicate account', () => {
     component.isSelfRegistration = true;
     component.isCompletingProfile = true;

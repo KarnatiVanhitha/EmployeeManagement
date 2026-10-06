@@ -115,10 +115,6 @@
               {{ isCreatingAccount ? 'Creating Account...' : 'Create Account' }}
               <i *ngIf="!isCreatingAccount" class="bi bi-arrow-right ms-2"></i>
             </button>
-            <p class="text-center mt-3 mb-0 small text-muted">
-              Already have an account?
-              <a routerLink="/" class="fw-bold text-primary text-decoration-none">Log in</a>
-            </p>
           </div>
         </div>
 
@@ -517,10 +513,10 @@
          <button
       type="button"
       class="btn btn-outline-secondary px-4 py-3"
-      *ngIf="isSelfRegistration && !isCompletingProfile"
+      *ngIf="isSelfRegistration"
       (click)="previousSignupStep()">
 
-      <i class="bi bi-arrow-left me-2"></i> Back
+      <i class="bi bi-arrow-left me-2"></i> {{ isCompletingProfile ? 'Back to Dashboard' : 'Back' }}
 
     </button>
 
@@ -550,13 +546,6 @@
 
 </button>
         </div>
-
-        <div *ngIf="isSelfRegistration" class="text-center mt-4">
-          <a routerLink="/" class="fw-bold text-primary text-decoration-none">
-            <i class="bi bi-arrow-left me-1"></i> Back to Login
-          </a>
-        </div>
-
       </div>
 
     </div>

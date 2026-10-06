@@ -47,6 +47,17 @@
   align-items: center;
 }
 
+.login-card form {
+  width: 100%;
+}
+
+.login-card form .Login-btn {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 42px !important;
+  min-height: 42px !important;
+}
+
 /* Click Animation */
 .Login-btn:active {
   transform: scale(0.96);

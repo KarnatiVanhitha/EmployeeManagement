@@ -267,6 +267,11 @@ export class AddEmployeeComponent {
   }
 
   previousSignupStep(): void {
+    if (this.isCompletingProfile) {
+      this.router.navigate(['/home']);
+      return;
+    }
+
     this.signupStep = 1;
   }
   //=======================================================================LOADDEPARTMENTANDROLES=========================================================//
