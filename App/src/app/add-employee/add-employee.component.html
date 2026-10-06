@@ -54,7 +54,7 @@
   </div>
 
   <h1 *ngIf="isSelfRegistration" class="signup-title text-center fw-semibold">
-    Welcome, create your employee account
+    {{ isCompletingProfile ? 'Complete your employee profile' : 'Welcome, create your employee account' }}
   </h1>
 
   <!-- FORM CARD -->
@@ -506,7 +506,7 @@
          <button
       type="button"
       class="btn btn-outline-secondary px-4 py-3"
-      *ngIf="isSelfRegistration"
+      *ngIf="isSelfRegistration && !isCompletingProfile"
       (click)="previousSignupStep()">
 
       <i class="bi bi-arrow-left me-2"></i> Back
@@ -518,7 +518,7 @@
       *ngIf="!isEditMode && (!isSelfRegistration || signupStep === 2)"
     (click)="registerEmployee()">
 
-    {{ isSelfRegistration ? 'Create Employee Account' : 'Add Employee' }}
+    {{ isCompletingProfile ? 'Save Profile' : (isSelfRegistration ? 'Create Employee Account' : 'Add Employee') }}
 
 </button>
 

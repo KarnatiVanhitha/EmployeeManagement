@@ -32,6 +32,7 @@ export class AddEmployeeComponent {
   departments:any[]=[];
   isEditMode = false;
   isSelfRegistration = false;
+  isCompletingProfile = false;
   signupStep = 1;
 
   
@@ -123,11 +124,77 @@ export class AddEmployeeComponent {
 
 
   ngOnInit(): void {
-    this.isSelfRegistration = this.router.url === '/employee-signup';
+    this.isSelfRegistration = this.router.url.split('?')[0] === '/employee-signup';
     this.loadEmployees();
     this.loadExistingManagers();
     this.loadDepartmentAndRoles();
     this.loaddetails();
+
+    if (this.isSelfRegistration && this.employeeService.isLoggedIn()) {
+      this.loadSelfRegistrationProfile();
+    }
+  }
+
+  private loadSelfRegistrationProfile(): void {
+    const user = this.employeeService.getLoggedInUser();
+    const employeeId = this.employeeService.getCurrentEmployeeId();
+
+    if (!user || employeeId === null) {
+      return;
+    }
+
+    this.isCompletingProfile = true;
+    this.signupStep = 2;
+    this.employee.EmployeeID = employeeId;
+    this.employee.FullName = user.FullName ?? user.fullName ?? '';
+    this.employee.Email = user.Email ?? user.email ?? '';
+
+    this.employeeService.getEmployeeById(employeeId).subscribe({
+      next: (data: any) => {
+        const profile = data?.employee ?? data?.data ?? data;
+        if (!profile || typeof profile !== 'object') {
+          this.showToast('Your profile details could not be loaded.', 'error');
+          return;
+        }
+
+        const mobileValue = profile.MobileNumber ?? profile.mobileNumber ?? profile.Phone ?? profile.phone ?? '';
+        const mobileContainsEmail = typeof mobileValue === 'string' && mobileValue.includes('@');
+        const profilePhoto = profile.EmployeePhoto ?? profile.employeePhoto ?? profile.image ?? '';
+
+        this.employee = {
+          ...this.employee,
+          EmployeeID: employeeId,
+          EmployeePhoto: this.employee.EmployeePhoto || profilePhoto,
+          FullName: this.employee.FullName || profile.FullName || profile.fullName || '',
+          Email: this.employee.Email || profile.Email || profile.email || '',
+          MobileNumber: this.employee.MobileNumber || (mobileContainsEmail ? '' : mobileValue),
+          Gender: this.employee.Gender || profile.Gender || profile.gender || '',
+          DateOfBirth: this.employee.DateOfBirth || this.dateInputValue(profile.DateOfBirth ?? profile.dateOfBirth),
+          DepartmentID: this.employee.DepartmentID || profile.DepartmentID || profile.departmentID || profile.departmentId || '',
+          Designation: this.employee.Designation || profile.Designation || profile.designation || '',
+          JoiningDate: this.employee.JoiningDate || this.dateInputValue(profile.JoiningDate ?? profile.joiningDate),
+          EmploymentType: this.employee.EmploymentType || profile.EmploymentType || profile.employmentType || '',
+          Salary: this.employee.Salary || profile.Salary || profile.salary || '0',
+          Experience: this.employee.Experience || profile.Experience || profile.experience || '',
+          PresentAddress: this.employee.PresentAddress || profile.PresentAddress || profile.presentAddress || '',
+          PermanentAddress: this.employee.PermanentAddress || profile.PermanentAddress || profile.permanentAddress || '',
+          EmergencyContactName: this.employee.EmergencyContactName || profile.EmergencyContactName || profile.emergencyContactName || '',
+          EmergencyRelationship: this.employee.EmergencyRelationship || profile.EmergencyRelationship || profile.emergencyRelationship || '',
+          EmergencyPhoneNumber: this.employee.EmergencyPhoneNumber || profile.EmergencyPhoneNumber || profile.emergencyPhoneNumber || '',
+          RoleID: this.employee.RoleID || profile.RoleID || profile.roleID || profile.roleId || ''
+        };
+        this.employeeImagePreview = this.employee.EmployeePhoto;
+        this.onDepartmentChange();
+      },
+      error: (err) => {
+        console.error('Error loading signed-in employee profile:', err);
+        this.showToast(err.error?.message || 'Your profile details could not be loaded.', 'error');
+      }
+    });
+  }
+
+  private dateInputValue(value: any): string {
+    return value ? String(value).substring(0, 10) : '';
   }
 
   nextSignupStep(): void {
@@ -150,18 +217,18 @@ export class AddEmployeeComponent {
       }
     }
 
-    if (!this.employee.Password) {
+    if (!this.isCompletingProfile && !this.employee.Password) {
       this.passwordError = 'Password is required';
       hasError = true;
-    } else if (this.employee.Password.length < 8) {
+    } else if (!this.isCompletingProfile && this.employee.Password.length < 8) {
       this.passwordError = 'Password must contain at least 8 characters';
       hasError = true;
     }
 
-    if (!this.employee.ConfirmPassword) {
+    if (!this.isCompletingProfile && !this.employee.ConfirmPassword) {
       this.confirmPasswordError = 'Confirm Password is required';
       hasError = true;
-    } else if (this.employee.Password !== this.employee.ConfirmPassword) {
+    } else if (!this.isCompletingProfile && this.employee.Password !== this.employee.ConfirmPassword) {
       this.confirmPasswordError = 'Passwords do not match';
       hasError = true;
     }
@@ -595,18 +662,18 @@ onImageChange(event: any): void {
     }
   }
 
-  if (!this.employee.Password) {
+  if (!this.isCompletingProfile && !this.employee.Password) {
     this.passwordError = 'Password is required';
     hasError = true;
-  } else if (this.employee.Password.length < 8) {
+  } else if (!this.isCompletingProfile && this.employee.Password.length < 8) {
     this.passwordError = 'Password must contain at least 8 characters';
     hasError = true;
   }
 
-  if (!this.employee.ConfirmPassword) {
+  if (!this.isCompletingProfile && !this.employee.ConfirmPassword) {
     this.confirmPasswordError = 'Confirm Password is required';
     hasError = true;
-  } else if (this.employee.Password !== this.employee.ConfirmPassword) {
+  } else if (!this.isCompletingProfile && this.employee.Password !== this.employee.ConfirmPassword) {
     this.confirmPasswordError = 'Passwords do not match';
     hasError = true;
   }
@@ -694,7 +761,11 @@ onImageChange(event: any): void {
 
   // ---------------- Save Employee ----------------
 
-  this.employeeService.addEmployee(employeeData).subscribe({
+  const saveRequest = this.isCompletingProfile
+    ? this.employeeService.updateEmployee(this.employee.EmployeeID, employeeData)
+    : this.employeeService.addEmployee(employeeData);
+
+  saveRequest.subscribe({
 
     next: (res: any) => {
 
@@ -708,7 +779,7 @@ onImageChange(event: any): void {
       const roleName = (selectedRole?.RoleName || selectedRole?.roleName || '').toLowerCase().trim();
       const isTeamLead = roleName.includes('team lead') || roleName.includes('lead') || roleName === 'teamlead';
 
-      if (res.isManager === 1 && !isTeamLead) {
+      if (!this.isCompletingProfile && res.isManager === 1 && !isTeamLead) {
 
         console.log("Manager Role Detected");
 
@@ -748,13 +819,17 @@ onImageChange(event: any): void {
 
       }
 
-      this.successMessage = "Employee Added Successfully";
+      this.successMessage = this.isCompletingProfile
+        ? 'Profile Updated Successfully'
+        : 'Employee Added Successfully';
 
       setTimeout(() => {
 
         this.successMessage = "";
 
-        this.router.navigate([this.isSelfRegistration ? '/' : '/home/employee']);
+        this.router.navigate([
+          this.isCompletingProfile ? '/home' : (this.isSelfRegistration ? '/' : '/home/employee')
+        ]);
 
       }, 2000);
 

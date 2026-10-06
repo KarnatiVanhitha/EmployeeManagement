@@ -15,12 +15,27 @@ describe('AddEmployeeComponent', () => {
   beforeEach(() => {
     employeeService = jasmine.createSpyObj<EmployeeService>(
       'EmployeeService',
-      ['getEmployees', 'getDepartmentRoles', 'getRolesByDepartment', 'addEmployee']
+      [
+        'getEmployees',
+        'getDepartmentRoles',
+        'getRolesByDepartment',
+        'getEmployeeById',
+        'getLoggedInUser',
+        'getCurrentEmployeeId',
+        'isLoggedIn',
+        'addEmployee',
+        'updateEmployee'
+      ]
     );
     employeeService.getEmployees.and.returnValue(of([]));
     employeeService.getDepartmentRoles.and.returnValue(of({ departments: [], roles: [] }));
     employeeService.getRolesByDepartment.and.returnValue(of([]));
+    employeeService.getEmployeeById.and.returnValue(of({}));
+    employeeService.getLoggedInUser.and.returnValue(null);
+    employeeService.getCurrentEmployeeId.and.returnValue(null);
+    employeeService.isLoggedIn.and.returnValue(false);
     employeeService.addEmployee.and.returnValue(of({ isManager: 0 }));
+    employeeService.updateEmployee.and.returnValue(of({ message: 'Profile Updated Successfully' }));
 
     const managerService = jasmine.createSpyObj<ManagerService>(
       'ManagerService',
@@ -83,5 +98,63 @@ describe('AddEmployeeComponent', () => {
     expect(component.emergencyNameError).toBe('');
     expect(component.emergencyRelationError).toBe('');
     expect(component.emergencyPhoneError).toBe('');
+  });
+
+  it('opens step 2 and prefills the existing employee profile when signed in', () => {
+    const router = TestBed.inject(Router);
+    (router as any).url = '/employee-signup';
+    employeeService.isLoggedIn.and.returnValue(true);
+    employeeService.getLoggedInUser.and.returnValue({
+      EmployeeID: 42,
+      FullName: 'Taylor Employee',
+      Email: 'taylor@desidea.com'
+    });
+    employeeService.getCurrentEmployeeId.and.returnValue(42);
+    employeeService.getEmployeeById.and.returnValue(of({
+      EmployeeID: 42,
+      FullName: 'Taylor Employee',
+      Email: 'taylor@desidea.com',
+      MobileNumber: '1234567890',
+      Gender: 'Female',
+      DateOfBirth: '1995-01-01T00:00:00.000Z',
+      JoiningDate: '2026-10-05T00:00:00.000Z',
+      DepartmentID: 1,
+      RoleID: 1,
+      EmploymentType: 'Full Time',
+      Experience: 2
+    }));
+
+    component.ngOnInit();
+
+    expect(component.isCompletingProfile).toBeTrue();
+    expect(component.signupStep).toBe(2);
+    expect(component.employee.FullName).toBe('Taylor Employee');
+    expect(component.employee.Email).toBe('taylor@desidea.com');
+    expect(component.employee.MobileNumber).toBe('1234567890');
+    expect(component.employee.DateOfBirth).toBe('1995-01-01');
+  });
+
+  it('updates the signed-in employee instead of creating a duplicate account', () => {
+    component.isSelfRegistration = true;
+    component.isCompletingProfile = true;
+    component.employee = {
+      ...component.employee,
+      EmployeeID: 42,
+      FullName: 'Taylor Employee',
+      Email: 'taylor@desidea.com',
+      MobileNumber: '1234567890',
+      Gender: 'Female',
+      DateOfBirth: '1995-01-01',
+      JoiningDate: '2026-10-05',
+      DepartmentID: '1',
+      RoleID: '1',
+      EmploymentType: 'Full Time',
+      Experience: '2'
+    };
+
+    component.registerEmployee();
+
+    expect(employeeService.updateEmployee).toHaveBeenCalledWith(42, jasmine.any(Object));
+    expect(employeeService.addEmployee).not.toHaveBeenCalled();
   });
 });
