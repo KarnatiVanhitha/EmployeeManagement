@@ -63,6 +63,71 @@
 .calendar-table tbody tr{
     height:20%;
 }
+
+.meeting-toolbar {
+    gap: 16px;
+}
+
+.meeting-actions {
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.meeting-search {
+    flex: 0 1 220px;
+}
+
+.meeting-actions > button:not(.calendar-month-arrow) {
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 38px !important;
+    padding: 0 12px !important;
+}
+
+.meeting-actions > .calendar-month-arrow {
+    display: inline-flex !important;
+    width: 30px !important;
+    min-width: 30px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    flex: 0 0 30px;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #52645a !important;
+}
+
+.meeting-actions > .calendar-month-arrow:hover {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #26745f !important;
+}
+
+.meeting-actions > .calendar-month-arrow:focus-visible {
+    outline: 2px solid #26745f;
+    outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+    .meeting-toolbar {
+        align-items: stretch !important;
+        flex-direction: column;
+    }
+
+    .meeting-actions {
+        justify-content: flex-start;
+    }
+
+    .meeting-search {
+        flex: 1 1 100%;
+    }
+}
 .upcoming-meeting{
 
     background:#d1fae5;

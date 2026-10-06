@@ -11,11 +11,6 @@
       <i class="bi bi-list"></i>
     </button>
 
-    <a class="account-profile-link" routerLink="/home/settings" aria-label="Open settings and profile">
-      <img *ngIf="profileImage" [src]="profileImage" alt="" class="account-profile-image">
-      <i *ngIf="!profileImage" class="bi bi-person-circle account-profile-placeholder" aria-hidden="true"></i>
-    </a>
-
   </div>
 
   <!-- SIDEBAR -->
@@ -37,14 +32,6 @@
 
   <!-- MAIN -->
   <div class="main">
-
-    <header class="account-bar d-none d-lg-flex">
-      <a class="account-profile-link" routerLink="/home/settings">
-        <img *ngIf="profileImage" [src]="profileImage" alt="" class="account-profile-image">
-        <i *ngIf="!profileImage" class="bi bi-person-circle account-profile-placeholder" aria-hidden="true"></i>
-        <span>{{ profileName || 'Profile' }}</span>
-      </a>
-    </header>
 
     <div class="content">
       <router-outlet></router-outlet>
