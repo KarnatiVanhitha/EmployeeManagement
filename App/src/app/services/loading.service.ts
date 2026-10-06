@@ -9,13 +9,14 @@ export class LoadingService {
   readonly loading$ = this.loadingSubject.asObservable();
 
   private activeRequests = 0;
+  private activeNavigations = 0;
   private showTimer: ReturnType<typeof setTimeout> | null = null;
 
   beginRequest(): void {
     this.activeRequests += 1;
-    if (this.activeRequests === 1) {
+    if (this.activeRequests + this.activeNavigations === 1) {
       this.showTimer = setTimeout(() => {
-        if (this.activeRequests > 0) {
+        if (this.hasActiveWork()) {
           this.loadingSubject.next(true);
         }
         this.showTimer = null;
@@ -24,13 +25,41 @@ export class LoadingService {
   }
 
   endRequest(): void {
-    this.activeRequests = Math.max(0, this.activeRequests - 1);
-    if (this.activeRequests === 0) {
-      if (this.showTimer) {
-        clearTimeout(this.showTimer);
-        this.showTimer = null;
-      }
-      this.loadingSubject.next(false);
+    if (this.activeRequests > 0) {
+      this.activeRequests -= 1;
+      this.updateLoadingState();
     }
+  }
+
+  beginNavigation(): void {
+    this.activeNavigations += 1;
+    if (this.showTimer) {
+      clearTimeout(this.showTimer);
+      this.showTimer = null;
+    }
+    this.loadingSubject.next(true);
+  }
+
+  endNavigation(): void {
+    if (this.activeNavigations > 0) {
+      this.activeNavigations -= 1;
+      this.updateLoadingState();
+    }
+  }
+
+  private hasActiveWork(): boolean {
+    return this.activeRequests + this.activeNavigations > 0;
+  }
+
+  private updateLoadingState(): void {
+    if (this.hasActiveWork()) {
+      return;
+    }
+
+    if (this.showTimer) {
+      clearTimeout(this.showTimer);
+      this.showTimer = null;
+    }
+    this.loadingSubject.next(false);
   }
 }
