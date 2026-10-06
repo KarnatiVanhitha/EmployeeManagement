@@ -1,7 +1,7 @@
 <app-toast></app-toast>
 <router-outlet></router-outlet>
 
-<div class="app-loading-indicator" *ngIf="loading$ | async" role="status" aria-live="polite" aria-label="Loading">
+<div class="app-loading-indicator" *ngIf="(loading$ | async) && !isEmployeeSignupPage" role="status" aria-live="polite" aria-label="Loading">
 	<span class="app-loading-progress" aria-hidden="true"></span>
 	<span class="visually-hidden">Loading...</span>
 </div>

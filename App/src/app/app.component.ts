@@ -12,10 +12,12 @@ import { LoadingService } from './services/loading.service';
 export class AppComponent implements OnDestroy {
   title = 'App';
   loading$: Observable<boolean>;
+  isEmployeeSignupPage = false;
   private readonly navigationSubscription: Subscription;
 
   constructor(loadingService: LoadingService, router: Router) {
     this.loading$ = loadingService.loading$;
+    this.isEmployeeSignupPage = this.isSignupUrl(router.url);
     this.navigationSubscription = router.events.pipe(
       filter(event =>
         event instanceof NavigationStart ||
@@ -28,6 +30,9 @@ export class AppComponent implements OnDestroy {
         loadingService.beginNavigation();
       } else {
         loadingService.endNavigation();
+        if (event instanceof NavigationEnd) {
+          this.isEmployeeSignupPage = this.isSignupUrl(event.urlAfterRedirects);
+        }
       }
     });
     this.applySavedPreferences();
@@ -35,6 +40,10 @@ export class AppComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.navigationSubscription.unsubscribe();
+  }
+
+  private isSignupUrl(url: string): boolean {
+    return url.split('?')[0] === '/employee-signup';
   }
 
   private applySavedPreferences(): void {
