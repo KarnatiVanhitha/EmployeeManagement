@@ -3,6 +3,8 @@ import { EmployeeService } from '../services/employee.service';
 import { ManagerService } from '../services/managers.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
+import { LoadingService } from '../services/loading.service';
 declare const bootstrap: any;
 @Component({
   selector: 'app-add-employee',
@@ -10,7 +12,13 @@ declare const bootstrap: any;
   styleUrls: ['./add-employee.component.css']
 })
 export class AddEmployeeComponent {
-  constructor(private employeeService: EmployeeService, private managerService: ManagerService, private route:ActivatedRoute,private router:Router) { }
+  constructor(
+    private employeeService: EmployeeService,
+    private managerService: ManagerService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private loadingService: LoadingService
+  ) { }
 
  employees: any[] = [];
  existingManagers: any[] = [];
@@ -128,10 +136,12 @@ export class AddEmployeeComponent {
     const currentPath = this.router.url.split('?')[0];
     this.isSelfRegistration = currentPath === '/employee-signup' ||
       currentPath === '/home/complete-profile';
-    this.loadEmployees();
-    this.loadExistingManagers();
-    this.loadDepartmentAndRoles();
-    this.loaddetails();
+    if (currentPath !== '/employee-signup') {
+      this.loadEmployees();
+      this.loadExistingManagers();
+      this.loadDepartmentAndRoles();
+      this.loaddetails();
+    }
 
     if (currentPath === '/home/complete-profile' && this.employeeService.isLoggedIn()) {
       this.loadSelfRegistrationProfile();
@@ -245,11 +255,14 @@ export class AddEmployeeComponent {
     }
 
     this.isCreatingAccount = true;
+    this.loadingService.beginTask();
     this.employeeService.registerEmployeeAccount({
       FullName: this.employee.FullName.trim(),
       Email: this.employee.Email.trim(),
       Password: this.employee.Password
-    }).subscribe({
+    }).pipe(
+      finalize(() => this.loadingService.endTask())
+    ).subscribe({
       next: () => {
         this.isCreatingAccount = false;
         this.showToast('Account created. Log in to complete Step 2 from your dashboard.', 'success');

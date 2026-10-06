@@ -10,11 +10,28 @@ export class LoadingService {
 
   private activeRequests = 0;
   private activeNavigations = 0;
+  private activeTasks = 0;
   private showTimer: ReturnType<typeof setTimeout> | null = null;
+
+  beginTask(): void {
+    this.activeTasks += 1;
+    if (this.showTimer) {
+      clearTimeout(this.showTimer);
+      this.showTimer = null;
+    }
+    this.loadingSubject.next(true);
+  }
+
+  endTask(): void {
+    if (this.activeTasks > 0) {
+      this.activeTasks -= 1;
+      this.updateLoadingState();
+    }
+  }
 
   beginRequest(): void {
     this.activeRequests += 1;
-    if (this.activeRequests + this.activeNavigations === 1) {
+    if (this.activeRequests + this.activeNavigations + this.activeTasks === 1) {
       this.showTimer = setTimeout(() => {
         if (this.hasActiveWork()) {
           this.loadingSubject.next(true);
@@ -48,7 +65,7 @@ export class LoadingService {
   }
 
   private hasActiveWork(): boolean {
-    return this.activeRequests + this.activeNavigations > 0;
+    return this.activeRequests + this.activeNavigations + this.activeTasks > 0;
   }
 
   private updateLoadingState(): void {

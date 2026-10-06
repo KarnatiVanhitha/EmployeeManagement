@@ -21,6 +21,27 @@ describe('LoadingService', () => {
     expect(loadingStates[loadingStates.length - 1]).toBeFalse();
   });
 
+  it('shows the indicator immediately while an explicit task is running', () => {
+    service.beginTask();
+
+    expect(loadingStates).toEqual([false, true]);
+
+    service.endTask();
+
+    expect(loadingStates[loadingStates.length - 1]).toBeFalse();
+  });
+
+  it('keeps the indicator visible until both an explicit task and request finish', () => {
+    service.beginTask();
+    service.beginRequest();
+
+    service.endTask();
+    expect(loadingStates[loadingStates.length - 1]).toBeTrue();
+
+    service.endRequest();
+    expect(loadingStates[loadingStates.length - 1]).toBeFalse();
+  });
+
   it('keeps the indicator visible until both navigation and API requests finish', () => {
     service.beginNavigation();
     service.beginRequest();

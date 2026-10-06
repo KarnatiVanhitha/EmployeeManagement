@@ -12,12 +12,11 @@ import { LoadingService } from './services/loading.service';
 export class AppComponent implements OnDestroy {
   title = 'App';
   loading$: Observable<boolean>;
-  isEmployeeSignupPage = false;
   private readonly navigationSubscription: Subscription;
+  private readonly loadingNavigationIds = new Set<number>();
 
   constructor(loadingService: LoadingService, router: Router) {
     this.loading$ = loadingService.loading$;
-    this.isEmployeeSignupPage = this.isSignupUrl(router.url);
     this.navigationSubscription = router.events.pipe(
       filter(event =>
         event instanceof NavigationStart ||
@@ -27,11 +26,17 @@ export class AppComponent implements OnDestroy {
       )
     ).subscribe(event => {
       if (event instanceof NavigationStart) {
-        loadingService.beginNavigation();
-      } else {
-        loadingService.endNavigation();
-        if (event instanceof NavigationEnd) {
-          this.isEmployeeSignupPage = this.isSignupUrl(event.urlAfterRedirects);
+        if (!this.isLoginUrl(event.url) && !this.isSignupUrl(event.url)) {
+          this.loadingNavigationIds.add(event.id);
+          loadingService.beginNavigation();
+        }
+      } else if (
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError
+      ) {
+        if (this.loadingNavigationIds.delete(event.id)) {
+          loadingService.endNavigation();
         }
       }
     });
@@ -44,6 +49,11 @@ export class AppComponent implements OnDestroy {
 
   private isSignupUrl(url: string): boolean {
     return url.split('?')[0] === '/employee-signup';
+  }
+
+  private isLoginUrl(url: string): boolean {
+    const path = url.split('?')[0];
+    return path === '' || path === '/';
   }
 
   private applySavedPreferences(): void {
