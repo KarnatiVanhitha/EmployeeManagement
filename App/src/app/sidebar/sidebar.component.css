@@ -25,12 +25,13 @@
 
 .menu li:hover {
   transform: none;
-  background: #eaf2ec;
+  background: var(--primary-color);
+  color: #fff;
 }
 
 .menu li.active {
-  background: #26745f;
-  box-shadow: 0 5px 12px rgba(38, 116, 95, 0.16);
+  background: var(--primary-color);
+  box-shadow: 0 5px 12px var(--primary-glow-alpha);
   color: #fff;
 }
 
@@ -53,8 +54,8 @@
 }
 
 .menu-item:hover {
-  background: #eaf2ec;
-  color: #273a34;
+  background: var(--primary-color);
+  color: #fff;
 }
 
 .menu > li.menu-item:hover > a,
