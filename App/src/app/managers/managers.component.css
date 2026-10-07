@@ -36,3 +36,7 @@
 .current-employee-department {
     box-shadow: 0 0.75rem 1.5rem rgba(33, 112, 89, 0.24) !important;
 }
+
+.your-department-badge {
+  color: #fff !important;
+}

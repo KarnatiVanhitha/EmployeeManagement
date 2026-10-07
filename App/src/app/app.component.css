@@ -1,7 +1,7 @@
 * {
   box-sizing: border-box;
   font-family: 'Kumbh Sans', sans-serif !important;
-  color: #242124 !important;
+  color: #111111 !important;
 }
 
 html, body {
@@ -24,14 +24,14 @@ body {
   z-index: 20000;
   overflow: hidden;
   pointer-events: none;
-  background: rgba(38, 116, 95, 0.15);
+  background: rgba(79, 121, 66, 0.2);
 }
 
 .app-loading-progress {
   display: block;
   width: 35%;
   height: 100%;
-  background: #26745f;
+  background: #4f7942;
   animation: app-loading-progress 1.2s ease-in-out infinite;
 }
 
