@@ -33,7 +33,7 @@ body.app-dark-mode {
   color: #e5eee9 !important;
 }
 
-button:not(.btn-close),
+button:not(.password-toggle):not(.btn-close),
 .btn:not(.btn-close),
 .button {
   padding: 0.625rem !important;
@@ -45,7 +45,7 @@ button:not(.btn-close),
 }
 
 @media (max-width: 767.98px) {
-  button:not(.btn-close),
+  button:not(.password-toggle):not(.btn-close),
   .btn:not(.btn-close),
   .button {
     padding: 0.5rem !important;
@@ -58,7 +58,7 @@ button:not(.btn-close),
 }
 
 @media (max-width: 575.98px) {
-  button:not(.btn-close),
+  button:not(.password-toggle):not(.btn-close),
   .btn:not(.btn-close),
   .button {
     padding: 0.4rem !important;
@@ -160,7 +160,7 @@ textarea,
   transition: var(--transition);
 }
 
-button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
+button:not(.password-toggle):not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
 .btn:not(.sidebar-menu-toggle):not(.btn-close):not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
 .button:not(table .button):not(.modal .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button),
 .btn-primary:not(table .btn-primary):not(.modal .btn-primary):not(.toast .btn-primary):not(.app-toast .btn-primary):not(.custom-alert-toast .btn-primary):not([class*="notification"] .btn-primary):not([role="alert"] .btn-primary),
@@ -177,7 +177,7 @@ button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.t
   box-shadow: none !important;
 }
 
-button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(.rounded-circle):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
+button:not(.password-toggle):not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(.rounded-circle):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
 .btn:not(.sidebar-menu-toggle):not(.btn-close):not(.rounded-circle):not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
 .button:not(.rounded-circle):not(table .button):not(.modal .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button),
 .btn-primary:not(.btn-close):not(.rounded-circle):not(table .btn-primary):not(.modal .btn-primary):not(.toast .btn-primary):not(.app-toast .btn-primary):not(.custom-alert-toast .btn-primary):not([class*="notification"] .btn-primary):not([role="alert"] .btn-primary),
@@ -194,7 +194,7 @@ button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.t
   white-space: nowrap;
 }
 
-button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover,
+button:not(.password-toggle):not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover,
 .btn:not(.sidebar-menu-toggle):not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn):hover,
 .button:not(table .button):not(.modal .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button):hover,
 .btn-primary:not(table .btn-primary):not(.modal .btn-primary):not(.toast .btn-primary):not(.app-toast .btn-primary):not(.custom-alert-toast .btn-primary):not([class*="notification"] .btn-primary):not([role="alert"] .btn-primary):hover,
@@ -208,7 +208,7 @@ button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.t
   box-shadow: 0 10px 22px var(--focus-shadow) !important;
 }
 
-button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):focus,
+button:not(.password-toggle):not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):focus,
 .btn:not(.sidebar-menu-toggle):not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn):focus,
 .button:not(table .button):not(.modal .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button):focus,
 .btn-primary:not(table .btn-primary):not(.modal .btn-primary):not(.toast .btn-primary):not(.app-toast .btn-primary):not(.custom-alert-toast .btn-primary):not([class*="notification"] .btn-primary):not([role="alert"] .btn-primary):focus,
@@ -492,14 +492,14 @@ a:not(.btn):not([class*="btn-"]):hover {
 }
 
 .btn:not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
-button:not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button) {
+button:not(.password-toggle):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button) {
   border-radius: 7px;
   font-weight: 600;
   transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
 }
 
 .btn:not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn):hover,
-button:not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover {
+button:not(.password-toggle):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover {
   transform: none !important;
 }
 
@@ -753,7 +753,7 @@ body .pagination .page-link {
   }
 }
 
-button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(.rounded-circle):not(.rounded-pill):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
+button:not(.password-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(.rounded-circle):not(.rounded-pill):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
 .btn:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(.rounded-circle):not(.rounded-pill):not(table .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
 .button:not(.rounded-circle):not(.rounded-pill):not(table .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button),
 [role="button"]:not(.rounded-circle):not(.rounded-pill):not(table [role="button"]):not(.toast [role="button"]):not(.app-toast [role="button"]):not(.custom-alert-toast [role="button"]):not([class*="notification"] [role="button"]):not([role="alert"] [role="button"]),
@@ -763,7 +763,7 @@ input[type="reset"]:not(table input[type="reset"]):not([class*="notification"] i
   border-radius: 9px !important;
 }
 
-body button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
+body button:not(.password-toggle):not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
 body .btn:not(.sidebar-menu-toggle):not(.btn-close):not(table .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
 body .button:not(table .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button),
 body .Login-btn:not(table .Login-btn):not(.toast .Login-btn):not(.app-toast .Login-btn):not(.custom-alert-toast .Login-btn):not([class*="notification"] .Login-btn):not([role="alert"] .Login-btn) {
@@ -772,7 +772,7 @@ body .Login-btn:not(table .Login-btn):not(.toast .Login-btn):not(.app-toast .Log
   color: #fff !important;
 }
 
-body button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover,
+body button:not(.password-toggle):not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover,
 body .btn:not(.sidebar-menu-toggle):not(.btn-close):not(table .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn):hover,
 body .button:not(table .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button):hover,
 body .Login-btn:not(table .Login-btn):not(.toast .Login-btn):not(.app-toast .Login-btn):not(.custom-alert-toast .Login-btn):not([class*="notification"] .Login-btn):not([role="alert"] .Login-btn):hover {
