@@ -19,7 +19,7 @@ h2{
 }
 .input-box::placeholder,
 .input-box select {
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 100% !important;
@@ -39,20 +39,20 @@ option{
   border: 0.5px solid #d1d5db !important;
   /* padding: 16px !important; */
   gap: 11px !important;
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 14px !important;
   font-weight: 500 !important;
   box-shadow: none !important;
   color: #8A8A8A !important;
 }
  .table th {
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 12px !important;
   font-weight: 700 !important;
 }
 
 .table td {
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 12px !important;
   font-weight: 500 !important;
 }

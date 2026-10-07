@@ -131,15 +131,9 @@ export class AppComponent {
             ? '18px'
             : '16px';
 
-      const fontFamilies = ['Kumbh Sans', 'Arial', 'Georgia'];
-
-      const fontFamily = fontFamilies.includes(preferences.fontFamily)
-        ? preferences.fontFamily
-        : 'Kumbh Sans';
-
       document.documentElement.style.setProperty(
         '--app-font-family',
-        fontFamily
+        'Arial'
       );
 
     } catch (error) {

@@ -24,7 +24,7 @@ body {
   min-height: 100vh;
   background: linear-gradient(135deg, var(--bg-start), var(--bg-end)) !important;
   color: var(--accent-slate) !important;
-  font-family: var(--app-font-family, 'Kumbh Sans'), 'Segoe UI', sans-serif;
+  font-family: Arial, sans-serif;
   transition: var(--transition);
 }
 
@@ -371,7 +371,7 @@ input:focus {
 
 .custom-alert-content {
   flex-grow: 1;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #1e293b;
@@ -647,7 +647,7 @@ body .pagination .page-link {
 .office-admin-dashboard {
   background: transparent !important;
   color: #273a34 !important;
-  font-family: 'Kumbh Sans', 'Segoe UI', sans-serif;
+  font-family: Arial, sans-serif;
 }
 
 .dashboard-container .dashboard-header {

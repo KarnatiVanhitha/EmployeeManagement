@@ -13,7 +13,7 @@
 }
 
 .staff-table th {
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 12px !important;
   font-weight: 700 !important;
   color: #475569;
@@ -21,7 +21,7 @@
 }
 
 .staff-table td {
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 13px !important;
   font-weight: 500 !important;
   color: #334155;

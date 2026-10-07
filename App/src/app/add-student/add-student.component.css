@@ -45,7 +45,7 @@ input {
   border: 0.5px solid #d1d5db !important;
   /* padding: 16px !important; */
   gap: 11px !important;
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 14px !important;
   font-weight: 500 !important;
   box-shadow: none !important;

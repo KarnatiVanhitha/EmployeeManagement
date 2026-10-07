@@ -1,12 +1,12 @@
  .table th {
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 12px !important;
   font-weight: 700 !important;
   color: #4F4F4F;
 }
 
 .table td {
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 12px !important;
   font-weight: 500 !important;
   color: #4F4F4F;

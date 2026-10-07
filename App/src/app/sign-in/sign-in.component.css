@@ -13,7 +13,7 @@ input {
 }
 
 input::placeholder {
-  font-family: "Kumbh Sans", sans-serif;
+  font-family: Arial, sans-serif;
   font-weight: 500;
   font-style: normal;
   font-size: 14px;
@@ -57,7 +57,7 @@ button:hover {
 .title {
   width: 665px !important;
   height: 45px !important;
-  font-family: "Kumbh Sans", sans-serif !important;
+  font-family: Arial, sans-serif;
   font-weight: 600 !important;
   font-size: 36px !important;
   line-height: 100% !important;
@@ -67,7 +67,7 @@ button:hover {
 }
 
 .subtitle {
-  font-family: "Inter", sans-serif !important;
+  font-family: Arial, sans-serif;
   font-weight: 500 !important;
   font-size: 16px !important;
   line-height: 25px !important;

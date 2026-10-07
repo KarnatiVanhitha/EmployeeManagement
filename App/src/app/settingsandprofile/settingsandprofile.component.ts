@@ -55,7 +55,7 @@ export class SettingsandprofileComponent implements OnInit {
     emailNotifications: true,
     smsAlerts: false,
     theme: 'light',
-    fontFamily: 'Kumbh Sans',
+    fontFamily: 'Arial',
     fontSize: 'medium',
     profileVisibleToStaff: true,
     weeklySummary: 'weekly'
@@ -271,14 +271,11 @@ export class SettingsandprofileComponent implements OnInit {
 
   private applyPreferences(): void {
     document.body.classList.toggle('app-dark-mode', this.preferences.theme === 'dark');
+    this.preferences.fontFamily = 'Arial';
     document.documentElement.style.fontSize =
       this.preferences.fontSize === 'small' ? '14px' :
       this.preferences.fontSize === 'large' ? '18px' : '16px';
-    const fontFamilies = ['Kumbh Sans', 'Arial', 'Georgia'];
-    const fontFamily = fontFamilies.includes(this.preferences.fontFamily)
-      ? this.preferences.fontFamily
-      : 'Kumbh Sans';
-    document.documentElement.style.setProperty('--app-font-family', fontFamily);
+    document.documentElement.style.setProperty('--app-font-family', 'Arial');
   }
 
   private dateInputValue(value: any): string {

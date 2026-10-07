@@ -27,7 +27,7 @@ input ::placeholder{
    width: 67px !important;
   height: 20px !important;
 
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-weight: 500 !important;
   font-size: 16px !important;
   line-height: 100% !important;
@@ -36,7 +36,7 @@ input ::placeholder{
 }
 
 .export-text {
-   font-family: 'Kumbh Sans', sans-serif !important;
+   font-family: Arial, sans-serif;
   font-weight: 600 !important;
   font-size: 14px !important;
   line-height: 100% !important;
@@ -51,13 +51,13 @@ input ::placeholder{
   border-radius: 8px;
   background: #26745f !important;
 
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 14px !important;
   font-weight: 600 !important;
   text-align: center !important;
 }
 .empty h3{
-   font-family: 'Kumbh Sans', sans-serif !important;
+   font-family: Arial, sans-serif;
   font-weight: 600 !important;
   font-size: 28px !important;
   line-height: 100% !important;
@@ -66,7 +66,7 @@ input ::placeholder{
   color: #4F4F4F;
 }
 .empty p{
-    font-family: 'Kumbh Sans', sans-serif !important;
+    font-family: Arial, sans-serif;
   font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 100% !important;
@@ -81,7 +81,7 @@ input ::placeholder{
 }
 .input-box::placeholder,
 .input-box select {
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 100% !important;
@@ -95,7 +95,7 @@ input ::placeholder{
   border: 0.5px solid #d1d5db !important;
   /* padding: 16px !important; */
   gap: 11px !important;
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 14px !important;
   font-weight: 500 !important;
   box-shadow: none !important;
@@ -108,7 +108,7 @@ input ::placeholder{
 }
 
  .teacher-details-page .details-left h2{
-   font-family: "Kumbh Sans", sans-serif !important;
+   font-family: Arial, sans-serif;
   font-weight: 700 !important;
   font-style: normal !important;
   font-size: 16px !important;
@@ -118,7 +118,7 @@ input ::placeholder{
   color: #1A1A1A !important;
  }
  .teacher-details-page .details-left p{
-  font-family: "Kumbh Sans", sans-serif !important;
+  font-family: Arial, sans-serif;
   font-weight: 700 !important;
   font-style: normal !important;
   font-size: 14px !important;
@@ -139,14 +139,14 @@ input ::placeholder{
   color: #A7A7A7 !important;
  }
   .table th {
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 12px !important;
   font-weight: 700 !important;
   color: #4F4F4F;
 }
 
 .table td {
-  font-family: 'Kumbh Sans', sans-serif !important;
+  font-family: Arial, sans-serif;
   font-size: 12px !important;
   font-weight: 500 !important;
   color: #4F4F4F;
@@ -351,7 +351,7 @@ input ::placeholder{
   }
 }
 *{
-  font-family: 'kumbh Sans',sans-serif;
+  font-family: Arial, sans-serif;
 }
 .progress-circle {
   width: 120px;
