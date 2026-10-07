@@ -224,7 +224,11 @@ async function updateEmployee(id, employee) {
         WHERE EmployeeID = ${id}
     `;
 
-    if (previousRole && Number(previousRole.RoleID) !== Number(employee.RoleID)) {
+    if (
+        employee.RecordPromotion === true &&
+        previousRole &&
+        Number(previousRole.RoleID) !== Number(employee.RoleID)
+    ) {
         const newRoleResult = await new sql.Request()
             .input("RoleID", sql.Int, employee.RoleID)
             .query("SELECT RoleName FROM Roles WHERE RoleID = @RoleID");

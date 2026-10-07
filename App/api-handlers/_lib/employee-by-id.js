@@ -65,49 +65,121 @@ module.exports = async function employeeByIdHandler(req, res) {
                 ? Number(employeeData.Experience)
                 : null;
 
-            await pool.request()
-                .input("EmployeeID", sql.Int, employeeId)
-                .input("EmployeePhoto", sql.NVarChar(sql.MAX), employeeData.EmployeePhoto || null)
-                .input("FullName", sql.NVarChar(100), employeeData.FullName || null)
-                .input("Email", sql.NVarChar(100), employeeData.Email || null)
-                .input("MobileNumber", sql.NVarChar(20), employeeData.MobileNumber || null)
-                .input("Password", sql.NVarChar(255), employeeData.Password || null)
-                .input("Gender", sql.NVarChar(20), employeeData.Gender || null)
-                .input("DateOfBirth", sql.Date, employeeData.DateOfBirth || null)
-                .input("JoiningDate", sql.Date, employeeData.JoiningDate || null)
-                .input("DepartmentID", sql.Int, departmentId)
-                .input("RoleID", sql.Int, roleId)
-                .input("EmploymentType", sql.NVarChar(50), employeeData.EmploymentType || null)
-                .input("Salary", sql.Decimal(10, 2), salary)
-                .input("Experience", sql.Decimal(4, 1), experience)
-                .input("PresentAddress", sql.NVarChar(sql.MAX), employeeData.PresentAddress || null)
-                .input("PermanentAddress", sql.NVarChar(sql.MAX), employeeData.PermanentAddress || null)
-                .input("EmergencyContactName", sql.NVarChar(100), employeeData.EmergencyContactName || null)
-                .input("EmergencyRelationship", sql.NVarChar(100), employeeData.EmergencyRelationship || null)
-                .input("EmergencyPhoneNumber", sql.NVarChar(20), employeeData.EmergencyPhoneNumber || null)
-                .query(`
-                    UPDATE Employees
-                    SET
-                        EmployeePhoto = COALESCE(@EmployeePhoto, EmployeePhoto),
-                        FullName = COALESCE(@FullName, FullName),
-                        Email = COALESCE(@Email, Email),
-                        MobileNumber = COALESCE(@MobileNumber, MobileNumber),
-                        Password = CASE WHEN @Password IS NOT NULL AND LEN(TRIM(@Password)) > 0 THEN @Password ELSE Password END,
-                        Gender = COALESCE(@Gender, Gender),
-                        DateOfBirth = COALESCE(@DateOfBirth, DateOfBirth),
-                        DepartmentID = COALESCE(@DepartmentID, DepartmentID),
-                        JoiningDate = COALESCE(@JoiningDate, JoiningDate),
-                        EmploymentType = COALESCE(@EmploymentType, EmploymentType),
-                        Salary = COALESCE(@Salary, Salary),
-                        Experience = COALESCE(@Experience, Experience),
-                        PresentAddress = COALESCE(@PresentAddress, PresentAddress),
-                        PermanentAddress = COALESCE(@PermanentAddress, PermanentAddress),
-                        EmergencyContactName = COALESCE(@EmergencyContactName, EmergencyContactName),
-                        EmergencyRelationship = COALESCE(@EmergencyRelationship, EmergencyRelationship),
-                        EmergencyPhoneNumber = COALESCE(@EmergencyPhoneNumber, EmergencyPhoneNumber),
-                        RoleID = COALESCE(@RoleID, RoleID)
-                    WHERE EmployeeID = @EmployeeID;
-                `);
+            const transaction = new sql.Transaction(pool);
+            await transaction.begin();
+
+            try {
+                const currentEmployee = await transaction.request()
+                    .input("EmployeeID", sql.Int, employeeId)
+                    .query(`
+                        SELECT employee.RoleID, role.RoleName
+                        FROM Employees employee WITH (UPDLOCK, HOLDLOCK)
+                        LEFT JOIN Roles role ON role.RoleID = employee.RoleID
+                        WHERE employee.EmployeeID = @EmployeeID
+                    `);
+
+                const previousRole = currentEmployee.recordset[0];
+                if (!previousRole) {
+                    await transaction.rollback();
+                    return res.status(404).json({ message: "Employee not found" });
+                }
+
+                const roleChanged = employeeData.RecordPromotion === true &&
+                    roleId !== null &&
+                    Number(previousRole.RoleID) !== roleId;
+                let newRoleName = null;
+
+                if (roleChanged) {
+                    const newRole = await transaction.request()
+                        .input("RoleID", sql.Int, roleId)
+                        .query("SELECT RoleName FROM Roles WHERE RoleID = @RoleID");
+                    newRoleName = newRole.recordset[0]?.RoleName || null;
+                    if (!newRoleName) {
+                        await transaction.rollback();
+                        return res.status(400).json({ message: "Selected role was not found" });
+                    }
+                }
+
+                await transaction.request()
+                    .input("EmployeeID", sql.Int, employeeId)
+                    .input("EmployeePhoto", sql.NVarChar(sql.MAX), employeeData.EmployeePhoto || null)
+                    .input("FullName", sql.NVarChar(100), employeeData.FullName || null)
+                    .input("Email", sql.NVarChar(100), employeeData.Email || null)
+                    .input("MobileNumber", sql.NVarChar(20), employeeData.MobileNumber || null)
+                    .input("Password", sql.NVarChar(255), employeeData.Password || null)
+                    .input("Gender", sql.NVarChar(20), employeeData.Gender || null)
+                    .input("DateOfBirth", sql.Date, employeeData.DateOfBirth || null)
+                    .input("JoiningDate", sql.Date, employeeData.JoiningDate || null)
+                    .input("DepartmentID", sql.Int, departmentId)
+                    .input("RoleID", sql.Int, roleId)
+                    .input("EmploymentType", sql.NVarChar(50), employeeData.EmploymentType || null)
+                    .input("Salary", sql.Decimal(10, 2), salary)
+                    .input("Experience", sql.Decimal(4, 1), experience)
+                    .input("PresentAddress", sql.NVarChar(sql.MAX), employeeData.PresentAddress || null)
+                    .input("PermanentAddress", sql.NVarChar(sql.MAX), employeeData.PermanentAddress || null)
+                    .input("EmergencyContactName", sql.NVarChar(100), employeeData.EmergencyContactName || null)
+                    .input("EmergencyRelationship", sql.NVarChar(100), employeeData.EmergencyRelationship || null)
+                    .input("EmergencyPhoneNumber", sql.NVarChar(20), employeeData.EmergencyPhoneNumber || null)
+                    .query(`
+                        UPDATE Employees
+                        SET
+                            EmployeePhoto = COALESCE(@EmployeePhoto, EmployeePhoto),
+                            FullName = COALESCE(@FullName, FullName),
+                            Email = COALESCE(@Email, Email),
+                            MobileNumber = COALESCE(@MobileNumber, MobileNumber),
+                            Password = CASE WHEN @Password IS NOT NULL AND LEN(TRIM(@Password)) > 0 THEN @Password ELSE Password END,
+                            Gender = COALESCE(@Gender, Gender),
+                            DateOfBirth = COALESCE(@DateOfBirth, DateOfBirth),
+                            DepartmentID = COALESCE(@DepartmentID, DepartmentID),
+                            JoiningDate = COALESCE(@JoiningDate, JoiningDate),
+                            EmploymentType = COALESCE(@EmploymentType, EmploymentType),
+                            Salary = COALESCE(@Salary, Salary),
+                            Experience = COALESCE(@Experience, Experience),
+                            PresentAddress = COALESCE(@PresentAddress, PresentAddress),
+                            PermanentAddress = COALESCE(@PermanentAddress, PermanentAddress),
+                            EmergencyContactName = COALESCE(@EmergencyContactName, EmergencyContactName),
+                            EmergencyRelationship = COALESCE(@EmergencyRelationship, EmergencyRelationship),
+                            EmergencyPhoneNumber = COALESCE(@EmergencyPhoneNumber, EmergencyPhoneNumber),
+                            RoleID = COALESCE(@RoleID, RoleID)
+                        WHERE EmployeeID = @EmployeeID;
+                    `);
+
+                if (roleChanged && previousRole.RoleName && newRoleName) {
+                    await transaction.request()
+                        .query(`
+                            IF OBJECT_ID('dbo.EmployeePromotionHistory', 'U') IS NULL
+                            BEGIN
+                                CREATE TABLE dbo.EmployeePromotionHistory (
+                                    PromotionID INT IDENTITY(1,1) PRIMARY KEY,
+                                    EmployeeID INT NOT NULL,
+                                    PreviousRoleName NVARCHAR(100) NOT NULL,
+                                    NewRoleName NVARCHAR(100) NOT NULL,
+                                    ChangedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+                                );
+                            END
+                        `);
+
+                    await transaction.request()
+                        .input("EmployeeID", sql.Int, employeeId)
+                        .input("PreviousRoleName", sql.NVarChar(100), previousRole.RoleName)
+                        .input("NewRoleName", sql.NVarChar(100), newRoleName)
+                        .query(`
+                            INSERT INTO dbo.EmployeePromotionHistory
+                                (EmployeeID, PreviousRoleName, NewRoleName)
+                            VALUES
+                                (@EmployeeID, @PreviousRoleName, @NewRoleName)
+                        `);
+                }
+
+                await transaction.commit();
+            } catch (error) {
+                try {
+                    await transaction.rollback();
+                } catch (rollbackError) {
+                    console.error("Employee update rollback failed:", rollbackError);
+                }
+                throw error;
+            }
 
             return res.status(200).json({
                 message: "Employee Updated Successfully"

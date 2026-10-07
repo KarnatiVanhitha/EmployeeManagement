@@ -50,6 +50,57 @@ module.exports = async function employeesHandler(req, res) {
     if (req.query?.route === "login") {
         return employeeLoginHandler(req, res);
     }
+    if (req.query?.route === "promotions") {
+        if (req.method !== "GET") {
+            res.setHeader("Allow", "GET");
+            return res.status(405).json({ success: false, message: "Method not allowed" });
+        }
+
+        const config = getDatabaseConfig();
+        if (!config) {
+            return res.status(503).json({
+                success: false,
+                message: "Database is not configured"
+            });
+        }
+
+        try {
+            const pool = await getConnectionPool(config);
+            await pool.request().query(`
+                IF OBJECT_ID('dbo.EmployeePromotionHistory', 'U') IS NULL
+                BEGIN
+                    CREATE TABLE dbo.EmployeePromotionHistory (
+                        PromotionID INT IDENTITY(1,1) PRIMARY KEY,
+                        EmployeeID INT NOT NULL,
+                        PreviousRoleName NVARCHAR(100) NOT NULL,
+                        NewRoleName NVARCHAR(100) NOT NULL,
+                        ChangedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+                    );
+                END
+            `);
+
+            const result = await pool.request().query(`
+                SELECT
+                    promotion.PromotionID,
+                    promotion.EmployeeID,
+                    promotion.PreviousRoleName,
+                    promotion.NewRoleName,
+                    promotion.ChangedAt,
+                    employee.FullName,
+                    employee.EmployeePhoto
+                FROM dbo.EmployeePromotionHistory promotion
+                INNER JOIN Employees employee ON employee.EmployeeID = promotion.EmployeeID
+                WHERE employee.IsActive = 1
+                  AND promotion.ChangedAt >= DATEADD(day, -30, SYSUTCDATETIME())
+                ORDER BY promotion.ChangedAt DESC
+            `);
+
+            return res.status(200).json(result.recordset);
+        } catch (error) {
+            console.error("Employee promotions API failed:", error);
+            return res.status(500).json({ message: error.message });
+        }
+    }
     if (req.query?.route === "signup") {
         if (req.method !== "POST") {
             res.setHeader("Allow", "POST");

@@ -63,6 +63,10 @@
       "destination": "/api/employees?route=login"
     },
     {
+      "source": "/api/employees/promotions",
+      "destination": "/api/employees?route=promotions"
+    },
+    {
       "source": "/api/employees/signup",
       "destination": "/api/employees?route=signup"
     },

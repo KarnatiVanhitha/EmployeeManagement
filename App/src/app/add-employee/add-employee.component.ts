@@ -488,7 +488,8 @@ this.clearErrors();
 
     ...this.employee,
 
-    EmployeePhoto: this.employeeImagePreview
+    EmployeePhoto: this.employeeImagePreview,
+    RecordPromotion: this.isEditMode && !this.isSelfRegistration
 
   };
 

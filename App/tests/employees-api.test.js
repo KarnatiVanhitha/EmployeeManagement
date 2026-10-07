@@ -54,6 +54,40 @@ test("rejects methods other than GET and POST", async () => {
     assert.equal(response.headers.Allow, "GET, POST");
 });
 
+test("accepts GET only for the promotions endpoint", async () => {
+    const methodResponse = createResponse();
+    await employeesHandler({
+      method: "POST",
+      query: { route: "promotions" }
+    }, methodResponse);
+
+    assert.equal(methodResponse.statusCode, 405);
+    assert.equal(methodResponse.headers.Allow, "GET");
+
+    const names = ["DB_SERVER", "DB_DATABASE", "DB_USER", "DB_PASSWORD"];
+    const previousValues = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+    names.forEach((name) => delete process.env[name]);
+
+    try {
+      const getResponse = createResponse();
+      await employeesHandler({
+        method: "GET",
+        query: { route: "promotions" }
+      }, getResponse);
+
+      assert.equal(getResponse.statusCode, 503);
+      assert.equal(getResponse.body.message, "Database is not configured");
+    } finally {
+      names.forEach((name) => {
+        if (previousValues[name] === undefined) {
+          delete process.env[name];
+        } else {
+          process.env[name] = previousValues[name];
+        }
+      });
+    }
+});
+
 test("validates signup account details before accessing the database", async () => {
     const response = createResponse();
     await employeesHandler({
