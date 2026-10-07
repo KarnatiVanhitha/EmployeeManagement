@@ -2431,6 +2431,18 @@
   white-space: nowrap;
 }
 
+.dashboard-card.dashboard-activity-card {
+  display: flex;
+  height: 360px;
+  flex-direction: column;
+}
+
+.dashboard-activity-scroll {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
 
 /* =========================================================
    ACTIVITY ICON

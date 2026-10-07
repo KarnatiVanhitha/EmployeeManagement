@@ -4192,7 +4192,7 @@
 
     <div class="col-lg-7">
 
-      <div class="dashboard-card h-100">
+      <div class="dashboard-card dashboard-activity-card">
 
         <div class="card-header-custom">
           <h5>
@@ -4201,7 +4201,7 @@
           </h5>
         </div>
 
-        <div class="card-body p-0">
+        <div class="card-body dashboard-activity-scroll p-0">
           <div class="activity-item" *ngFor="let activity of recentActivities">
             <img [src]="getRecentActivityImage(activity)" class="activity-avatar" alt="Employee avatar" />
 
@@ -4235,7 +4235,7 @@
 
     <div class="col-lg-5">
 
-      <div class="dashboard-card h-100">
+      <div class="dashboard-card dashboard-activity-card">
 
         <div class="card-header-custom">
           <h5>
@@ -4244,7 +4244,7 @@
           </h5>
         </div>
 
-        <div class="card-body p-0">
+        <div class="card-body dashboard-activity-scroll p-0">
           <div class="activity-item" *ngFor="let activity of todayActivities">
             <div class="activity-icon flex-shrink-0" [style.background]="activity.iconBg"
               [style.color]="activity.iconColor">
