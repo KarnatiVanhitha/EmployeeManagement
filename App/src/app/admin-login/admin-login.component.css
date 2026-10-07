@@ -47,6 +47,35 @@
   align-items: center;
 }
 
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.login-card form > .mb-3,
+.login-card form > .text-end {
+  width: 248px;
+  max-width: 100%;
+}
+
+.login-card form .form-control {
+  width: 100%;
+}
+
+.login-card form .Login-btn {
+  display: inline-flex;
+  width: 248px !important;
+  max-width: 100%;
+  min-width: 0 !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  margin: 0 auto;
+  padding: 10px 16px !important;
+  border-radius: 6px;
+}
+
 /* Click Animation */
 .Login-btn:active {
   transform: scale(0.96);

@@ -26,7 +26,7 @@
 
     <!-- TEACHERS -->
     <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'teacher'" class="mb-2">
-      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item"
+      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item sidebar-menu-toggle"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#teachersMenu">
@@ -54,7 +54,7 @@
 
     <!-- Employees -->
     <li *ngIf="role === 'office'" class="mb-2">
-      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item"
+      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item sidebar-menu-toggle"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#employeeMenu">
@@ -93,7 +93,7 @@
 
     <!-- STUDENTS -->
     <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'teacher' || role === 'student'" class="mb-2">
-      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item"
+      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item sidebar-menu-toggle"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#studentsMenu">
@@ -127,7 +127,7 @@
 
     <!-- STAFF -->
     <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'staff'" class="mb-2">
-      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item"
+      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item sidebar-menu-toggle"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#staffMenu">
@@ -155,7 +155,7 @@
 
     <!-- ADMIN -->
     <li *ngIf="role === 'SuperAdmin'" class="mb-2">
-      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item"
+      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item sidebar-menu-toggle"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#AdminMenu">

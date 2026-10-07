@@ -160,8 +160,8 @@ textarea,
   transition: var(--transition);
 }
 
-button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
-.btn:not(.btn-close):not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
+button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
+.btn:not(.sidebar-menu-toggle):not(.btn-close):not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
 .button:not(table .button):not(.modal .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button),
 .btn-primary:not(table .btn-primary):not(.modal .btn-primary):not(.toast .btn-primary):not(.app-toast .btn-primary):not(.custom-alert-toast .btn-primary):not([class*="notification"] .btn-primary):not([role="alert"] .btn-primary),
 .btn-outline-primary:not(table .btn-outline-primary):not(.modal .btn-outline-primary):not(.toast .btn-outline-primary):not(.app-toast .btn-outline-primary):not(.custom-alert-toast .btn-outline-primary):not([class*="notification"] .btn-outline-primary):not([role="alert"] .btn-outline-primary),
@@ -177,8 +177,8 @@ button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table butt
   box-shadow: none !important;
 }
 
-button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(.rounded-circle):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
-.btn:not(.btn-close):not(.rounded-circle):not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
+button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(.rounded-circle):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
+.btn:not(.sidebar-menu-toggle):not(.btn-close):not(.rounded-circle):not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
 .button:not(.rounded-circle):not(table .button):not(.modal .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button),
 .btn-primary:not(.btn-close):not(.rounded-circle):not(table .btn-primary):not(.modal .btn-primary):not(.toast .btn-primary):not(.app-toast .btn-primary):not(.custom-alert-toast .btn-primary):not([class*="notification"] .btn-primary):not([role="alert"] .btn-primary),
 .btn-outline-primary:not(.btn-close):not(.rounded-circle):not(table .btn-outline-primary):not(.modal .btn-outline-primary):not(.toast .btn-outline-primary):not(.app-toast .btn-outline-primary):not(.custom-alert-toast .btn-outline-primary):not([class*="notification"] .btn-outline-primary):not([role="alert"] .btn-outline-primary),
@@ -194,13 +194,12 @@ button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(.rounded-c
   white-space: nowrap;
 }
 
-button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover,
-.btn:not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn):hover,
+button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover,
+.btn:not(.sidebar-menu-toggle):not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn):hover,
 .button:not(table .button):not(.modal .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button):hover,
 .btn-primary:not(table .btn-primary):not(.modal .btn-primary):not(.toast .btn-primary):not(.app-toast .btn-primary):not(.custom-alert-toast .btn-primary):not([class*="notification"] .btn-primary):not([role="alert"] .btn-primary):hover,
 .btn-outline-primary:not(table .btn-outline-primary):not(.modal .btn-outline-primary):not(.toast .btn-outline-primary):not(.app-toast .btn-outline-primary):not(.custom-alert-toast .btn-outline-primary):not([class*="notification"] .btn-outline-primary):not([role="alert"] .btn-outline-primary):hover,
 .Login-btn:not(table .Login-btn):not(.modal .Login-btn):not(.toast .Login-btn):not(.app-toast .Login-btn):not(.custom-alert-toast .Login-btn):not([class*="notification"] .Login-btn):not([role="alert"] .Login-btn):hover,
-.menu li:hover,
 .submenu-item:hover {
   transform: none;
   background-color: var(--primary-dark) !important;
@@ -209,8 +208,8 @@ button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table butt
   box-shadow: 0 10px 22px var(--focus-shadow) !important;
 }
 
-button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):focus,
-.btn:not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn):focus,
+button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.modal button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):focus,
+.btn:not(.sidebar-menu-toggle):not(table .btn):not(.modal .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn):focus,
 .button:not(table .button):not(.modal .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button):focus,
 .btn-primary:not(table .btn-primary):not(.modal .btn-primary):not(.toast .btn-primary):not(.app-toast .btn-primary):not(.custom-alert-toast .btn-primary):not([class*="notification"] .btn-primary):not([role="alert"] .btn-primary):focus,
 .btn-outline-primary:not(table .btn-outline-primary):not(.modal .btn-outline-primary):not(.toast .btn-outline-primary):not(.app-toast .btn-outline-primary):not(.custom-alert-toast .btn-outline-primary):not([class*="notification"] .btn-outline-primary):not([role="alert"] .btn-outline-primary):focus,
@@ -764,8 +763,8 @@ input[type="reset"]:not(table input[type="reset"]):not([class*="notification"] i
   border-radius: 9px !important;
 }
 
-body button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
-body .btn:not(.btn-close):not(table .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
+body button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button),
+body .btn:not(.sidebar-menu-toggle):not(.btn-close):not(table .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn),
 body .button:not(table .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button),
 body .Login-btn:not(table .Login-btn):not(.toast .Login-btn):not(.app-toast .Login-btn):not(.custom-alert-toast .Login-btn):not([class*="notification"] .Login-btn):not([role="alert"] .Login-btn) {
   border-color: var(--primary-color) !important;
@@ -773,8 +772,8 @@ body .Login-btn:not(table .Login-btn):not(.toast .Login-btn):not(.app-toast .Log
   color: #fff !important;
 }
 
-body button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover,
-body .btn:not(.btn-close):not(table .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn):hover,
+body button:not(.sidebar-menu-toggle):not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover,
+body .btn:not(.sidebar-menu-toggle):not(.btn-close):not(table .btn):not(.toast .btn):not(.app-toast .btn):not(.custom-alert-toast .btn):not([class*="notification"] .btn):not([role="alert"] .btn):hover,
 body .button:not(table .button):not(.toast .button):not(.app-toast .button):not(.custom-alert-toast .button):not([class*="notification"] .button):not([role="alert"] .button):hover,
 body .Login-btn:not(table .Login-btn):not(.toast .Login-btn):not(.app-toast .Login-btn):not(.custom-alert-toast .Login-btn):not([class*="notification"] .Login-btn):not([role="alert"] .Login-btn):hover {
   border-color: var(--primary-dark) !important;
