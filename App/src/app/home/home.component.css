@@ -38,8 +38,8 @@ app-sidebar {
 
 @media screen and (min-width: 993px) {
   .sidebar-wrapper.sidebar-collapsed {
-    flex-basis: 72px;
-    width: 72px;
+    flex-basis: 80px;
+    width: 80px;
   }
 }
 

@@ -153,18 +153,18 @@
   text-align: center;
 }
 
-.menu-entry:hover,
+.menu-entry:not(.active):hover,
 .menu-entry:focus-within {
   background: #f2f5f1;
 }
 
-.menu-entry:hover > .menu-link,
+.menu-entry:not(.active):hover > .menu-link,
 .menu-link:hover {
   background: #f2f5f1 !important;
   color: #273a34 !important;
 }
 
-.menu-entry:hover > .menu-link > i,
+.menu-entry:not(.active):hover > .menu-link > i,
 .menu-link:hover > i {
   color: #43584a !important;
 }
@@ -190,6 +190,17 @@
 }
 
 .menu-entry.active > .menu-link > i {
+  color: #fff !important;
+}
+
+.menu-entry.active > .menu-link:hover,
+.menu-entry.active > .menu-link:focus-visible {
+  background: var(--primary-dark) !important;
+  color: #fff !important;
+}
+
+.menu-entry.active > .menu-link:hover > i,
+.menu-entry.active > .menu-link:focus-visible > i {
   color: #fff !important;
 }
 
@@ -236,7 +247,8 @@
 }
 
 .sidebar.is-collapsed .sidebar-brand {
-  justify-content: center;
+  justify-content: space-between;
+  gap: 2px;
   padding: 0;
 }
 
@@ -248,17 +260,17 @@
   display: none !important;
 }
 
-.sidebar.is-collapsed .sidebar-control {
-  position: absolute;
-  top: 19px;
-  right: 4px;
-  width: 22px;
-  height: 22px;
-  opacity: 0;
+.sidebar.is-collapsed .brand-mark {
+  flex-basis: 30px;
+  width: 30px;
+  height: 30px;
 }
 
-.sidebar.is-collapsed .sidebar-brand:hover .sidebar-control,
-.sidebar.is-collapsed .sidebar-control:focus-visible {
+.sidebar.is-collapsed .sidebar-control {
+  position: static;
+  flex-basis: 22px;
+  width: 22px;
+  height: 30px;
   opacity: 1;
 }
 

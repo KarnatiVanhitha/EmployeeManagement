@@ -33,6 +33,7 @@ import { TimeSheetComponent } from './time-sheet/time-sheet.component';
 import { ManagersComponent } from './managers/managers.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AuthGuard } from './auth.guard';
 
 
 const routes: Routes = [
@@ -44,7 +45,7 @@ const routes: Routes = [
   { path: "forgot-password", component: ForgotPasswordComponent },
   { path: "reset-password", component: ResetPasswordComponent },
   {
-    path: "home", component: HomeComponent,
+    path: "home", component: HomeComponent, canActivate: [AuthGuard],
     children: [
       { path: "", component: DashboardComponent },
       { path: "teachers", component: TeachersComponent },
