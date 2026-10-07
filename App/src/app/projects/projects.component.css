@@ -332,6 +332,16 @@
 
 }
 
+.project-manage-button {
+    border-radius: 9px !important;
+    padding: 6px 12px !important;
+}
+
+.project-manage-button:hover {
+    background:#1c5c4a;
+    transform:none;
+}
+
 .btn-primary:hover{
 
     background:#0b5ed7;

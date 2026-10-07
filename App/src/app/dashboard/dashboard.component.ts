@@ -4550,7 +4550,7 @@ private refreshRecentActivities(): void {
       };
     })
     .filter((activity: any) => activity.name !== 'Unknown Employee' &&
-      activity.date >= cutoff && activity.date <= today);
+      activity.date >= cutoff && activity.date < today);
 
   const promotions = this.promotionActivities
     .map((promotion: any) => ({
@@ -4560,7 +4560,7 @@ private refreshRecentActivities(): void {
       date: this.activityDateKey(promotion.ChangedAt ?? promotion.changedAt),
       type: 'promotion'
     }))
-    .filter((activity: any) => activity.date >= cutoff && activity.date <= today);
+    .filter((activity: any) => activity.date >= cutoff && activity.date < today);
 
   this.recentActivities = [...newEmployees, ...promotions]
     .sort((left: any, right: any) => right.date.localeCompare(left.date))
