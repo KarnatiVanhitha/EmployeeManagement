@@ -170,7 +170,7 @@
 }
 
 .menu-entry.active {
-  background: #e9efe7;
+  background: var(--primary-color);
 }
 
 .menu-entry.active::before {
@@ -185,12 +185,12 @@
 }
 
 .menu-entry.active > .menu-link {
-  color: #355c2d !important;
+  color: #fff !important;
   font-weight: 700;
 }
 
 .menu-entry.active > .menu-link > i {
-  color: #355c2d !important;
+  color: #fff !important;
 }
 
 .menu-chevron {
