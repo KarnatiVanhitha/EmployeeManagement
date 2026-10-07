@@ -51,6 +51,17 @@ export class LeaveComponent implements OnInit {
     this.reasonError = '';
   }
 
+  resetLeaveForm(): void {
+    this.leaveForm = {
+      type: '',
+      startDate: '',
+      endDate: '',
+      contactNumber: '',
+      reason: ''
+    };
+    this.clearErrors();
+  }
+
   constructor(private leaveService: LeaveService, private toastService: ToastService) { }
 
   ngOnInit(): void {
@@ -149,13 +160,7 @@ export class LeaveComponent implements OnInit {
 
     this.leaveService.addLeave(payload).subscribe({
       next: (res: any) => {
-        this.leaveForm = {
-          type: '',
-          startDate: '',
-          endDate: '',
-          contactNumber: '',
-          reason: ''
-        };
+        this.resetLeaveForm();
         this.loadLeaves();
         this.toastService.showSuccess(res.message || 'Leave Applied Successfully');
         const modalEl = document.getElementById('leaveModal');
