@@ -770,7 +770,7 @@ body .button:not(table .button):not(.toast .button):not(.app-toast .button):not(
 body .Login-btn:not(table .Login-btn):not(.toast .Login-btn):not(.app-toast .Login-btn):not(.custom-alert-toast .Login-btn):not([class*="notification"] .Login-btn):not([role="alert"] .Login-btn) {
   border-color: var(--primary-color) !important;
   background-color: var(--primary-color) !important;
-  color: #111 !important;
+  color: #fff !important;
 }
 
 body button:not(.btn-close):not(.custom-alert-close):not(.toast-close):not(table button):not(.toast button):not(.app-toast button):not(.custom-alert-toast button):not([class*="notification"] button):not([role="alert"] button):hover,
@@ -779,14 +779,14 @@ body .button:not(table .button):not(.toast .button):not(.app-toast .button):not(
 body .Login-btn:not(table .Login-btn):not(.toast .Login-btn):not(.app-toast .Login-btn):not(.custom-alert-toast .Login-btn):not([class*="notification"] .Login-btn):not([role="alert"] .Login-btn):hover {
   border-color: var(--primary-dark) !important;
   background-color: var(--primary-dark) !important;
-  color: #111 !important;
+  color: #fff !important;
 }
 
 body .btn-primary:not(table .btn-primary):not(.toast .btn-primary):not(.app-toast .btn-primary):not(.custom-alert-toast .btn-primary):not([class*="notification"] .btn-primary):not([role="alert"] .btn-primary),
 body .bg-primary {
   border-color: var(--primary-color) !important;
   background-color: var(--primary-color) !important;
-  color: #111 !important;
+  color: #fff !important;
 }
 
 body .text-primary,
@@ -805,13 +805,20 @@ body .progress-bar,
 body .pagination .page-item.active .page-link,
 body .nav-pills .nav-link.active,
 body .form-check-input:checked,
+body .bg-info,
+body .btn-info,
 body .upload-btn,
 body .submit-btn,
 body .office-admin-primary-action,
 body .project-manage-button,
-body .Schedule-btn {
+body .Schedule-btn,
+body .parents-page > div[style*="background-color"] {
   border-color: var(--primary-color) !important;
   background-color: var(--primary-color) !important;
+  color: #fff !important;
+}
+
+body .parents-page > div[style*="background-color"] * {
   color: #fff !important;
 }
 
@@ -876,4 +883,8 @@ body .welcome-card h2,
 body .welcome-card h3,
 body .welcome-card p {
   color: #111 !important;
+}
+
+body .fern-button-white-text {
+  color: #fff !important;
 }
