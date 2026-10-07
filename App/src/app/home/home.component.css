@@ -30,8 +30,8 @@ app-sidebar {
 }
 
 .sidebar-wrapper {
-  flex: 0 0 250px;
-  width: 250px;
+  flex: 0 0 256px;
+  width: 256px;
   height: 100%;
   transition: width 0.22s ease, flex-basis 0.22s ease;
 }

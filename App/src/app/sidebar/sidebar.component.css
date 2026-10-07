@@ -10,7 +10,7 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 16px 18px 14px;
+  padding: 18px 19px 15px;
   overflow: hidden;
   color: #263238;
   background: #fff;
@@ -22,17 +22,17 @@
 .sidebar-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 42px;
+  gap: 11px;
+  min-height: 44px;
   padding: 0 2px;
   margin-bottom: 24px;
 }
 
 .brand-mark {
   display: grid;
-  flex: 0 0 36px;
-  width: 36px;
-  height: 36px;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
   place-items: center;
   overflow: hidden;
   border-radius: 10px;
@@ -50,7 +50,7 @@
 .brand-name {
   overflow: hidden;
   color: #17211d;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -94,7 +94,7 @@
   padding: 0 10px;
   margin: 0 0 7px;
   color: #718078;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.09em;
   line-height: 1.5;
@@ -103,7 +103,7 @@
 
 .menu {
   display: grid;
-  gap: 3px;
+  gap: 4px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -120,16 +120,16 @@
 .menu-link {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 12px;
   width: 100%;
-  min-height: 40px;
+  min-height: 43px;
   padding: 0 10px !important;
   border: 0;
   border-radius: 9px;
   background: transparent;
   color: #45534c !important;
   font-family: Arial, sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   line-height: 1.2;
   text-align: left;
@@ -145,10 +145,10 @@
 }
 
 .menu-link > i:first-child {
-  flex: 0 0 16px;
-  width: 16px;
+  flex: 0 0 17px;
+  width: 17px;
   color: #58675e;
-  font-size: 14px;
+  font-size: 15px;
   text-align: center;
 }
 
@@ -203,10 +203,10 @@
 
 .submenu-item {
   display: block;
-  padding: 8px 9px;
+  padding: 9px 10px;
   border-radius: 7px;
   color: #58675e !important;
-  font-size: 11px;
+  font-size: 12px;
   text-decoration: none;
   transition: background-color 0.16s ease, color 0.16s ease;
 }
@@ -311,7 +311,7 @@
 
   .sidebar.is-collapsed .menu-link {
     justify-content: flex-start;
-    min-height: 40px;
+    min-height: 43px;
     padding: 0 10px;
   }
 
