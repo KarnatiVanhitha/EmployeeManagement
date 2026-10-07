@@ -2,6 +2,15 @@
 <router-outlet></router-outlet>
 
 <div class="app-loading-indicator" *ngIf="loading$ | async" role="status" aria-live="polite" aria-label="Loading">
-  <span class="app-loading-spinner" aria-hidden="true"></span>
+  <span class="app-loading-spinner" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </span>
   <span class="visually-hidden">Loading...</span>
 </div>
