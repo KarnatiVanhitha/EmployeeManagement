@@ -15,6 +15,8 @@ import { ToastService } from '../services/toast.service';
 export class SignInComponent  {
   
   step = 1;
+  showPassword = false;
+  showConfirmPassword = false;
 
   students: any[] = [];
 

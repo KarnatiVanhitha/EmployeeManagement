@@ -19,6 +19,8 @@ export class AddAdminComponent {
   phone = '';
   password = '';
   confirmPassword = '';
+  showPassword = false;
+  showConfirmPassword = false;
   role = '';
   department = '';
   address = '';

@@ -22,11 +22,25 @@
 
 /* SIDEBAR */
 app-sidebar {
-  width: 250px;
+  width: 100%;
   flex-shrink: 0;
   display: block;
   height: 100%;
   overflow: hidden;
+}
+
+.sidebar-wrapper {
+  flex: 0 0 250px;
+  width: 250px;
+  height: 100%;
+  transition: width 0.22s ease, flex-basis 0.22s ease;
+}
+
+@media screen and (min-width: 993px) {
+  .sidebar-wrapper.sidebar-collapsed {
+    flex-basis: 72px;
+    width: 72px;
+  }
 }
 
 /* RIGHT SIDE CONTAINER */

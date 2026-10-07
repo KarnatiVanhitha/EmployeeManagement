@@ -887,3 +887,43 @@ body .welcome-card p {
 body .fern-button-white-text {
   color: #fff !important;
 }
+
+.password-input-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.password-input-wrap > input {
+  width: 100%;
+  padding-right: 2.75rem !important;
+}
+
+body button.password-toggle {
+  position: absolute !important;
+  top: 50% !important;
+  right: 0.35rem !important;
+  z-index: 2;
+  display: inline-flex !important;
+  width: 2rem !important;
+  min-width: 2rem !important;
+  height: 2rem !important;
+  min-height: 2rem !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  transform: translateY(-50%) !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: #52645a !important;
+  box-shadow: none !important;
+}
+
+body button.password-toggle:hover,
+body button.password-toggle:focus-visible {
+  background: var(--primary-light) !important;
+  color: var(--primary-dark) !important;
+  transform: translateY(-50%) !important;
+  box-shadow: none !important;
+}

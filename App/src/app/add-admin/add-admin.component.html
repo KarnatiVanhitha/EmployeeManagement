@@ -148,12 +148,18 @@
                   Password
                 </label>
 
-                <input
-                  type="password"
-                  class="form-control"
-                  [class.is-invalid]="passwordError"
-                  placeholder="Enter password"
-                  [(ngModel)]="password">
+                <div class="password-input-wrap">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    class="form-control"
+                    [class.is-invalid]="passwordError"
+                    placeholder="Enter password"
+                    [(ngModel)]="password">
+                  <button type="button" class="password-toggle" (click)="showPassword = !showPassword"
+                          [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+                    <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+                  </button>
+                </div>
                 <div class="field-error" *ngIf="passwordError">
                   <i class="bi bi-exclamation-circle-fill"></i> {{ passwordError }}
                 </div>
@@ -164,12 +170,18 @@
                   Confirm Password
                 </label>
 
-                <input
-                  type="password"
-                  class="form-control"
-                  [class.is-invalid]="confirmPasswordError"
-                  placeholder="Confirm password"
-                  [(ngModel)]="confirmPassword">
+                <div class="password-input-wrap">
+                  <input
+                    [type]="showConfirmPassword ? 'text' : 'password'"
+                    class="form-control"
+                    [class.is-invalid]="confirmPasswordError"
+                    placeholder="Confirm password"
+                    [(ngModel)]="confirmPassword">
+                  <button type="button" class="password-toggle" (click)="showConfirmPassword = !showConfirmPassword"
+                          [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'">
+                    <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+                  </button>
+                </div>
                 <div class="field-error" *ngIf="confirmPasswordError">
                   <i class="bi bi-exclamation-circle-fill"></i> {{ confirmPasswordError }}
                 </div>

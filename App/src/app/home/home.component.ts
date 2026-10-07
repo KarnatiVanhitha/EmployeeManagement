@@ -7,5 +7,6 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
  isSidebarOpen = false;
+ isSidebarCollapsed = false;
  isAskMeOpen = false;
 }

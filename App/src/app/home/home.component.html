@@ -17,9 +17,13 @@
   <div
     class="sidebar-wrapper"
     [class.show-sidebar]="isSidebarOpen"
+    [class.sidebar-collapsed]="isSidebarCollapsed"
   >
 
-    <app-sidebar></app-sidebar>
+    <app-sidebar
+      [collapsed]="isSidebarCollapsed"
+      (collapsedChange)="isSidebarCollapsed = $event">
+    </app-sidebar>
 
   </div>
 

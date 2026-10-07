@@ -10,6 +10,9 @@ import { EmployeeService } from '../services/employee.service';
 })
 export class SettingsandprofileComponent implements OnInit {
   activeTab = 'profile';
+  showCurrentPassword = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
   message = '';
   messageType: 'success' | 'error' = 'success';
   teacherCount = 0;

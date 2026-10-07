@@ -1,348 +1,207 @@
-<div class="sidebar d-flex flex-column px-3 py-3 overflow-y-auto">
-
-  <!-- LOGO -->
-  <div class="logo-section text-center mb-3">
-    <div class="logo mx-auto rounded-circle bg-white d-flex align-items-center justify-content-center overflow-hidden">
-      <img src="https://desidea.com/Content/images/logo_new.png" class="img-fluid">
+<aside class="sidebar" [class.is-collapsed]="collapsed">
+  <div class="sidebar-brand">
+    <div class="brand-mark" aria-hidden="true">
+      <i class="bi bi-leaf"></i>
     </div>
-    <p class="mt-3 mb-0 fw-medium fs-6">
-      Desidea
-    </p>
+    <span class="brand-name">Desidea</span>
+    <button
+      type="button"
+      class="sidebar-control sidebar-collapse-toggle sidebar-menu-toggle"
+      (click)="toggleCollapsed()"
+      [attr.aria-label]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+      [attr.aria-expanded]="!collapsed"
+      [title]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+      <i class="bi" [ngClass]="collapsed ? 'bi-arrows-angle-expand' : 'bi-layout-sidebar-inset'"></i>
+    </button>
   </div>
 
-  <hr class="border border-light border-2 opacity-50">
+  <nav class="sidebar-nav" aria-label="Main navigation">
+    <section class="nav-section">
+      <h2 class="nav-section-title">Main menu</h2>
+      <ul class="menu list-unstyled">
+        <li class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home" class="menu-link" title="Dashboard">
+            <i class="bi bi-house"></i><span>Dashboard</span>
+          </a>
+        </li>
 
-  <ul class="menu list-unstyled flex-grow-1">
+        <li *ngIf="role === 'office'" class="menu-entry menu-group">
+          <button class="menu-link sidebar-menu-toggle"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#employeeMenu"
+                  title="Employee"
+                  (click)="expandForSubmenu()">
+            <i class="bi bi-people"></i><span>Employee</span>
+            <i class="bi bi-chevron-down menu-chevron"></i>
+          </button>
+          <div class="collapse show submenu-box" id="employeeMenu">
+            <a routerLink="/home/employee" routerLinkActive="active-submenu"
+               [routerLinkActiveOptions]="{ exact: true }" class="submenu-item">All Employee</a>
+            <a routerLink="/home/add-employee" routerLinkActive="active-submenu"
+               [routerLinkActiveOptions]="{ exact: true }" class="submenu-item">Add Employee</a>
+          </div>
+        </li>
 
-    <!-- DASHBOARD -->
-    <li class="d-flex align-items-center gap-3 rounded p-1 mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-house fs-5"></i>
-      <a routerLink="/home" class="text-decoration-none flex-grow-1">
-        Dashboard
-      </a>
-    </li>
+        <li *ngIf="isOfficeRole" class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/managers" class="menu-link" title="Managers">
+            <i class="bi bi-people"></i><span>Managers</span>
+          </a>
+        </li>
 
-    <!-- TEACHERS -->
-    <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'teacher'" class="mb-2">
-      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item sidebar-menu-toggle"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#teachersMenu">
-        <div class="d-flex align-items-center gap-3">
-          <i class="bi bi-mortarboard-fill fs-5"></i>
-          <span>Teachers</span>
-        </div>
-        <i class="bi bi-chevron-down small"></i>
-      </button>
-      <div class="collapse show submenu-box" id="teachersMenu">
-        <a routerLink="/home/teachers"
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block">
-          All Teachers
-        </a>
-        <a routerLink="/home/teachers/add"
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block" *ngIf="schoolFeaturesEnabled && role === 'school'">
-          Add Teacher
-        </a>
-      </div>
-    </li>
+        <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'teacher'" class="menu-entry menu-group">
+          <button class="menu-link sidebar-menu-toggle" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#teachersMenu" title="Teachers" (click)="expandForSubmenu()">
+            <i class="bi bi-mortarboard"></i><span>Teachers</span><i class="bi bi-chevron-down menu-chevron"></i>
+          </button>
+          <div class="collapse show submenu-box" id="teachersMenu">
+            <a routerLink="/home/teachers" routerLinkActive="active-submenu"
+               [routerLinkActiveOptions]="{ exact: true }" class="submenu-item">All Teachers</a>
+            <a *ngIf="schoolFeaturesEnabled && role === 'school'" routerLink="/home/teachers/add"
+               routerLinkActive="active-submenu" [routerLinkActiveOptions]="{ exact: true }"
+               class="submenu-item">Add Teacher</a>
+          </div>
+        </li>
 
-    <!-- Employees -->
-    <li *ngIf="role === 'office'" class="mb-2">
-      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item sidebar-menu-toggle"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#employeeMenu">
-        <div class="d-flex align-items-center gap-3">
-          <i class="bi bi-mortarboard-fill fs-5"></i>
-          <span>Employee</span>
-        </div>
-        <i class="bi bi-chevron-down small"></i>
-      </button>
-      <div class="collapse show submenu-box" id="employeeMenu">
-        <a routerLink="/home/employee"
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block">
-          All Employee
-        </a>
-        <a routerLink="/home/add-employee"
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block" *ngIf="role === 'office'">
-          Add Employee
-        </a>
-      </div>
-    </li>
+        <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'teacher' || role === 'student'" class="menu-entry menu-group">
+          <button class="menu-link sidebar-menu-toggle" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#studentsMenu" title="Students / Classes" (click)="expandForSubmenu()">
+            <i class="bi bi-people"></i><span>Students / Classes</span><i class="bi bi-chevron-down menu-chevron"></i>
+          </button>
+          <div class="collapse show submenu-box" id="studentsMenu">
+            <a routerLink="/home/students" routerLinkActive="active-submenu"
+               [routerLinkActiveOptions]="{ exact: true }" class="submenu-item">All Students</a>
+            <a *ngIf="schoolFeaturesEnabled && role === 'school'" routerLink="/home/students/addstudent"
+               routerLinkActive="active-submenu" [routerLinkActiveOptions]="{ exact: true }"
+               class="submenu-item">Add Student</a>
+            <a routerLink="/home/students/class" routerLinkActive="active-submenu"
+               [routerLinkActiveOptions]="{ exact: true }" class="submenu-item">Class</a>
+          </div>
+        </li>
 
-    <!-- MANAGERS -->
-    <li *ngIf="isOfficeRole"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-kanban fs-5"></i>
-      <a routerLink="/home/managers" class="text-decoration-none flex-grow-1">
-        Managers
-      </a>
-    </li>
+        <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'staff'" class="menu-entry menu-group">
+          <button class="menu-link sidebar-menu-toggle" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#staffMenu" title="Staff" (click)="expandForSubmenu()">
+            <i class="bi bi-person-badge"></i><span>Staff</span><i class="bi bi-chevron-down menu-chevron"></i>
+          </button>
+          <div class="collapse show submenu-box" id="staffMenu">
+            <a routerLink="/home/staff" routerLinkActive="active-submenu"
+               [routerLinkActiveOptions]="{ exact: true }" class="submenu-item">All Staff</a>
+            <a *ngIf="schoolFeaturesEnabled && role === 'school'" routerLink="/home/addstaff"
+               routerLinkActive="active-submenu" [routerLinkActiveOptions]="{ exact: true }"
+               class="submenu-item">Add Staff</a>
+          </div>
+        </li>
 
-    <!-- STUDENTS -->
-    <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'teacher' || role === 'student'" class="mb-2">
-      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item sidebar-menu-toggle"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#studentsMenu">
-        <div class="d-flex align-items-center gap-3">
-          <i class="bi bi-people-fill fs-5"></i>
-          <span>Students / Classes</span>
-        </div>
-        <i class="bi bi-chevron-down small"></i>
-      </button>
-      <div class="collapse show submenu-box" id="studentsMenu">
-        <a routerLink="/home/students"
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block">
-          All Students
-        </a>
-        <a routerLink="/home/students/addstudent" 
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block" *ngIf="schoolFeaturesEnabled && role === 'school'">
-          Add Student
-        </a>
-        <a routerLink="/home/students/class"
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block">
-          Class
-        </a>
-      </div>
-    </li>
+        <li *ngIf="role === 'SuperAdmin'" class="menu-entry menu-group">
+          <button class="menu-link sidebar-menu-toggle" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#AdminMenu" title="Admin" (click)="expandForSubmenu()">
+            <i class="bi bi-person-badge"></i><span>Admin</span><i class="bi bi-chevron-down menu-chevron"></i>
+          </button>
+          <div class="collapse show submenu-box" id="AdminMenu">
+            <a routerLink="/home/admin" routerLinkActive="active-submenu"
+               [routerLinkActiveOptions]="{ exact: true }" class="submenu-item">All Admins</a>
+            <a routerLink="/home/admin/addadmin" routerLinkActive="active-submenu"
+               [routerLinkActiveOptions]="{ exact: true }" class="submenu-item">Add Admin</a>
+          </div>
+        </li>
 
-    <!-- STAFF -->
-    <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'staff'" class="mb-2">
-      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item sidebar-menu-toggle"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#staffMenu">
-        <div class="d-flex align-items-center gap-3">
-          <i class="bi bi-person-badge-fill fs-5"></i>
-          <span>Staff</span>
-        </div>
-        <i class="bi bi-chevron-down small"></i>
-      </button>
-      <div class="collapse show submenu-box" id="staffMenu">
-        <a routerLink="/home/staff"
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block">
-          All Staff
-        </a>
-        <a routerLink="/home/addstaff"
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block" *ngIf="schoolFeaturesEnabled && role === 'school'">
-          Add Staff
-        </a>
-      </div>
-    </li>
+        <li *ngIf="role === 'schooladmin' || role === 'teacher' || role === 'student' || role === 'staff'"
+            class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/timetable" class="menu-link" title="Timetable">
+            <i class="bi bi-calendar3"></i><span>Timetable</span>
+          </a>
+        </li>
 
-    <!-- ADMIN -->
-    <li *ngIf="role === 'SuperAdmin'" class="mb-2">
-      <button class="btn w-100 d-flex align-items-center justify-content-between p-1 menu-item sidebar-menu-toggle"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#AdminMenu">
-        <div class="d-flex align-items-center gap-3">
-          <i class="bi bi-person-badge-fill fs-5"></i>
-          <span>Admin</span>
-        </div>
-        <i class="bi bi-chevron-down small"></i>
-      </button>
-      <div class="collapse show submenu-box" id="AdminMenu">
-        <a routerLink="/home/admin"
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block">
-          All Admins
-        </a>
-        <a routerLink="/home/admin/addadmin"
-           routerLinkActive="active-submenu"
-           [routerLinkActiveOptions]="{ exact: true }"
-           class="submenu-item d-block">
-          Add Admin
-        </a>
-      </div>
-    </li>
+        <li class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/leaves" class="menu-link" title="Leaves">
+            <i class="bi bi-calendar3"></i><span>Leaves</span>
+          </a>
+        </li>
 
-    <!-- TIMETABLE -->
-    <li class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item" 
-        *ngIf="role === 'schooladmin' || role === 'teacher' || role === 'student' || role === 'staff'"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-calendar3 fs-5"></i>
-      <a routerLink="/home/timetable" class="text-decoration-none flex-grow-1">
-        Timetable
-      </a>
-    </li>
+        <li *ngIf="isOfficeRole" class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/projects" class="menu-link" title="Projects">
+            <i class="bi bi-kanban"></i><span>Projects</span>
+          </a>
+        </li>
 
-    <!-- LEAVES -->
-    <li class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-calendar3 fs-5"></i>
-      <a routerLink="/home/leaves" class="text-decoration-none flex-grow-1">
-        Leaves
-      </a>
-    </li>
+        <li *ngIf="isOfficeRole" class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/Reviews" class="menu-link" title="Reviews">
+            <i class="bi bi-star"></i><span>Reviews</span>
+          </a>
+        </li>
 
-    <!-- HOMEWORK -->
-    <li class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item" 
-        *ngIf="role === 'schooladmin' || role === 'teacher' || role === 'student'"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-journal-text fs-5"></i>
-      <a routerLink="/home/homework" class="text-decoration-none flex-grow-1">
-        Homework
-      </a>
-    </li>
+        <li *ngIf="role === 'schooladmin' || role === 'teacher' || role === 'student'"
+            class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/homework" class="menu-link" title="Homework">
+            <i class="bi bi-journal-text"></i><span>Homework</span>
+          </a>
+        </li>
 
-    <!-- PROJECTS -->
-    <li *ngIf="isOfficeRole"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-kanban fs-5"></i>
-      <a routerLink="/home/projects" class="text-decoration-none flex-grow-1">
-        Projects
-      </a>
-    </li>
+        <li *ngIf="schoolFeaturesEnabled && role === 'school'" class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/billing" class="menu-link" title="Billing">
+            <i class="bi bi-credit-card"></i><span>Billing</span>
+          </a>
+        </li>
 
-    <!-- REVIEWS -->
-    <li *ngIf="isOfficeRole"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-star-fill fs-5"></i>
-      <a routerLink="/home/Reviews" class="text-decoration-none flex-grow-1">
-        Reviews
-      </a>
-    </li>
+        <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'teacher' || role === 'student' || role === 'staff'"
+            class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/holidays" class="menu-link" title="Holidays">
+            <i class="bi bi-calendar-check"></i><span>Holidays</span>
+          </a>
+        </li>
 
-    <!-- BILLING -->
-    <li *ngIf="schoolFeaturesEnabled && role === 'school'"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-credit-card fs-5"></i>
-      <a routerLink="/home/billing" class="text-decoration-none flex-grow-1">
-        Billing
-      </a>
-    </li>
+        <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'teacher' || role === 'student'"
+            class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/exams" class="menu-link" title="Exams">
+            <i class="bi bi-file-text"></i><span>Exams</span>
+          </a>
+        </li>
 
-    <!-- HOLIDAYS -->
-    <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'teacher' || role === 'student' || role === 'staff'"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-calendar-check fs-5"></i>
-      <a routerLink="/home/holidays" class="text-decoration-none flex-grow-1">
-        Holidays
-      </a>
-    </li>
+        <li *ngIf="schoolFeaturesEnabled && role === 'school'" class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/hostel-dayscholar" class="menu-link" title="Hostel / Dayscholar">
+            <i class="bi bi-house"></i><span>Hostel / Dayscholar</span>
+          </a>
+        </li>
 
-    <!-- CALENDAR -->
-    <li *ngIf="isOfficeRole"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-calendar-check fs-5"></i>
-      <a routerLink="/home/calender" class="text-decoration-none flex-grow-1">
-        Calendar
-      </a>
-    </li>
+        <li *ngIf="schoolFeaturesEnabled && role === 'school'" class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/transport" class="menu-link" title="Transport">
+            <i class="bi bi-bus-front"></i><span>Transport</span>
+          </a>
+        </li>
+      </ul>
+    </section>
 
-    <!-- TIMESHEET -->
-    <li *ngIf="isOfficeRole"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-calendar-check fs-5"></i>
-      <a routerLink="/home/timesheet" class="text-decoration-none flex-grow-1">
-        TimeSheet
-      </a>
-    </li>
+    <section class="nav-section workspace-section">
+      <h2 class="nav-section-title">Workspace</h2>
+      <ul class="menu list-unstyled">
+        <li *ngIf="isOfficeRole" class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/calender" class="menu-link" title="Calendar">
+            <i class="bi bi-calendar-check"></i><span>Calendar</span>
+          </a>
+        </li>
+        <li *ngIf="isOfficeRole" class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/timesheet" class="menu-link" title="TimeSheet">
+            <i class="bi bi-clock"></i><span>TimeSheet</span>
+          </a>
+        </li>
+        <li *ngIf="role !== 'SuperAdmin'" class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/notification" class="menu-link" title="Notifications">
+            <i class="bi bi-bell"></i><span>Notifications</span>
+          </a>
+        </li>
+        <li *ngIf="schoolFeaturesEnabled && role === 'school'" class="menu-entry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/home/settings" class="menu-link" title="Settings & Profile">
+            <i class="bi bi-gear"></i><span>Settings &amp; Profile</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </nav>
 
-    <!-- EXAMS -->
-    <li *ngIf="(schoolFeaturesEnabled && role === 'school') || role === 'teacher' || role === 'student'"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-file-text fs-5"></i>
-      <a routerLink="/home/exams" class="text-decoration-none flex-grow-1">
-        Exams
-      </a>
-    </li>
-
-    <!-- HOSTEL / DAY SCHOLAR -->
-    <li *ngIf="schoolFeaturesEnabled && role === 'school'"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-house fs-5"></i>
-      <a routerLink="/home/hostel-dayscholar" class="text-decoration-none flex-grow-1">
-        Hostel / Dayscholar
-      </a>
-    </li>
-
-    <!-- TRANSPORT -->
-    <li *ngIf="schoolFeaturesEnabled && role === 'school'"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-bus-front"></i>
-      <a routerLink="/home/transport" class="text-decoration-none flex-grow-1">
-        Transport
-      </a>
-    </li>
-
-    <!-- NOTIFICATIONS -->
-    <li *ngIf="role !== 'SuperAdmin'"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-bell"></i>
-      <a routerLink="/home/notification" class="text-decoration-none flex-grow-1">
-        Notifications
-      </a>
-    </li>
-
-    <!-- SETTINGS -->
-    <li *ngIf="schoolFeaturesEnabled && role === 'school'"
-        class="d-flex align-items-center gap-3 p-1 rounded mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-gear fs-5"></i>
-      <a routerLink="/home/settings" class="text-decoration-none flex-grow-1">
-        Settings & Profile
-      </a>
-    </li>
-
-    <!-- LOGOUT -->
-    <li class="d-flex align-items-center gap-3 rounded p-1 mb-3 menu-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-      <i class="bi bi-box-arrow-right fs-5"></i>
-      <a routerLink="" class="text-decoration-none flex-grow-1">
-        Logout
-      </a>
-    </li>
-
-  </ul>
-</div>
+  <div class="sidebar-footer">
+    <a routerLink="" class="menu-link logout-link" title="Logout">
+      <i class="bi bi-box-arrow-right"></i><span>Logout</span>
+    </a>
+  </div>
+</aside>

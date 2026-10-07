@@ -91,13 +91,25 @@
 
             <div class="signup-field">
               <label class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
-              <input type="password" class="form-control" [class.is-invalid]="passwordError" [(ngModel)]="employee.Password" autocomplete="new-password">
+              <div class="password-input-wrap">
+                <input [type]="showPassword ? 'text' : 'password'" class="form-control" [class.is-invalid]="passwordError" [(ngModel)]="employee.Password" autocomplete="new-password">
+                <button type="button" class="password-toggle" (click)="showPassword = !showPassword"
+                        [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+                  <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+                </button>
+              </div>
               <div class="field-error" *ngIf="passwordError"><i class="bi bi-exclamation-circle-fill"></i> {{ passwordError }}</div>
             </div>
 
             <div class="signup-field">
               <label class="form-label fw-semibold">Confirm Password <span class="text-danger">*</span></label>
-              <input type="password" class="form-control" [class.is-invalid]="confirmPasswordError" [(ngModel)]="employee.ConfirmPassword" autocomplete="new-password">
+              <div class="password-input-wrap">
+                <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" [class.is-invalid]="confirmPasswordError" [(ngModel)]="employee.ConfirmPassword" autocomplete="new-password">
+                <button type="button" class="password-toggle" (click)="showConfirmPassword = !showConfirmPassword"
+                        [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'">
+                  <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+                </button>
+              </div>
               <div class="field-error" *ngIf="confirmPasswordError"><i class="bi bi-exclamation-circle-fill"></i> {{ confirmPasswordError }}</div>
             </div>
           </div>
@@ -222,13 +234,19 @@
                     Password <span class="text-danger" *ngIf="!isEditMode">*</span>
                   </label>
 
-                  <input
-                    type="password"
-                    class="form-control"
-                    [class.is-invalid]="passwordError"
-                    autocomplete="new-password"
-                    placeholder="Enter Password"
-                    [(ngModel)]="employee.Password">
+                  <div class="password-input-wrap">
+                    <input
+                      [type]="showPassword ? 'text' : 'password'"
+                      class="form-control"
+                      [class.is-invalid]="passwordError"
+                      autocomplete="new-password"
+                      placeholder="Enter Password"
+                      [(ngModel)]="employee.Password">
+                    <button type="button" class="password-toggle" (click)="showPassword = !showPassword"
+                            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+                      <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+                    </button>
+                  </div>
                   <div class="field-error" *ngIf="passwordError">
                     <i class="bi bi-exclamation-circle-fill"></i> {{ passwordError }}
                   </div>
@@ -240,13 +258,19 @@
                     Confirm Password <span class="text-danger" *ngIf="!isEditMode">*</span>
                   </label>
 
-                  <input
-                    type="password"
-                    class="form-control"
-                    [class.is-invalid]="confirmPasswordError"
-                    autocomplete="new-password"
-                    placeholder="Confirm Password"
-                    [(ngModel)]="employee.ConfirmPassword">
+                  <div class="password-input-wrap">
+                    <input
+                      [type]="showConfirmPassword ? 'text' : 'password'"
+                      class="form-control"
+                      [class.is-invalid]="confirmPasswordError"
+                      autocomplete="new-password"
+                      placeholder="Confirm Password"
+                      [(ngModel)]="employee.ConfirmPassword">
+                    <button type="button" class="password-toggle" (click)="showConfirmPassword = !showConfirmPassword"
+                            [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'">
+                      <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+                    </button>
+                  </div>
                   <div class="field-error" *ngIf="confirmPasswordError">
                     <i class="bi bi-exclamation-circle-fill"></i> {{ confirmPasswordError }}
                   </div>

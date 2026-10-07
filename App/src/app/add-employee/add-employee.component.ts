@@ -43,6 +43,8 @@ export class AddEmployeeComponent {
   isCompletingProfile = false;
   isCreatingAccount = false;
   signupStep = 1;
+  showPassword = false;
+  showConfirmPassword = false;
 
   
   manager: {

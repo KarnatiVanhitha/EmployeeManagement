@@ -10,6 +10,7 @@ export class AdminLoginComponent {
 
   email: string = '';
   password: string = '';
+  showPassword = false;
 
   emailError: string = '';
   passwordError: string = '';

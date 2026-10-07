@@ -38,13 +38,19 @@
 
 <div class="mb-3">
 
-  <input
-    type="password"
-    class="form-control"
-    [class.is-invalid]="passwordError"
-    placeholder="Enter Password"
-    [(ngModel)]="password"
-    name="password">
+  <div class="password-input-wrap">
+    <input
+      [type]="showPassword ? 'text' : 'password'"
+      class="form-control"
+      [class.is-invalid]="passwordError"
+      placeholder="Enter Password"
+      [(ngModel)]="password"
+      name="password">
+    <button type="button" class="password-toggle" (click)="showPassword = !showPassword"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+      <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+    </button>
+  </div>
 
   <div class="field-error" *ngIf="passwordError">
     <i class="bi bi-exclamation-circle-fill"></i> {{ passwordError }}

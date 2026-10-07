@@ -15,6 +15,8 @@ export class ResetPasswordComponent {
 
   newPassword = '';
   confirmPassword = '';
+  showNewPassword = false;
+  showConfirmPassword = false;
 
   newPasswordError = '';
   confirmPasswordError = '';

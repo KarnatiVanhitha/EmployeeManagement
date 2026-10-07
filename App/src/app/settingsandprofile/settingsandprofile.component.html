@@ -249,18 +249,36 @@
         <form [formGroup]="securityForm" (ngSubmit)="updateSecurity()" class="form-grid">
           <label>
             Current password
-            <input type="password" formControlName="currentPassword" />
+            <span class="password-input-wrap">
+              <input [type]="showCurrentPassword ? 'text' : 'password'" formControlName="currentPassword" />
+              <button type="button" class="password-toggle" (click)="showCurrentPassword = !showCurrentPassword"
+                      [attr.aria-label]="showCurrentPassword ? 'Hide password' : 'Show password'">
+                <i class="bi" [ngClass]="showCurrentPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+              </button>
+            </span>
           </label>
 
           <label>
             New password
-            <input type="password" formControlName="newPassword" />
+            <span class="password-input-wrap">
+              <input [type]="showNewPassword ? 'text' : 'password'" formControlName="newPassword" />
+              <button type="button" class="password-toggle" (click)="showNewPassword = !showNewPassword"
+                      [attr.aria-label]="showNewPassword ? 'Hide password' : 'Show password'">
+                <i class="bi" [ngClass]="showNewPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+              </button>
+            </span>
             <span class="field-error" *ngIf="securityForm.get('newPassword')?.invalid && securityForm.get('newPassword')?.touched">Password must be at least 8 characters.</span>
           </label>
 
           <label>
             Confirm new password
-            <input type="password" formControlName="confirmPassword" />
+            <span class="password-input-wrap">
+              <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" />
+              <button type="button" class="password-toggle" (click)="showConfirmPassword = !showConfirmPassword"
+                      [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'">
+                <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+              </button>
+            </span>
           </label>
 
           <label class="switch-row full-width">
