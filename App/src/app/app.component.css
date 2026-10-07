@@ -28,8 +28,8 @@ body {
 .app-loading-spinner {
   position: relative;
   display: block;
-  width: 80px;
-  height: 80px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   animation: app-loading-spin 1s linear infinite;
 }
@@ -38,50 +38,50 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 15px;
-  height: 15px;
-  margin: -7.5px;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px;
   border-radius: 50%;
   background: #555;
 }
 
 .app-loading-spinner span:nth-child(1) {
-  transform: rotate(0deg) translateY(-32px);
+  transform: rotate(0deg) translateY(-22px);
   background: #555;
 }
 
 .app-loading-spinner span:nth-child(2) {
-  transform: rotate(45deg) translateY(-32px);
+  transform: rotate(45deg) translateY(-22px);
   background: #666;
 }
 
 .app-loading-spinner span:nth-child(3) {
-  transform: rotate(90deg) translateY(-32px);
+  transform: rotate(90deg) translateY(-22px);
   background: #777;
 }
 
 .app-loading-spinner span:nth-child(4) {
-  transform: rotate(135deg) translateY(-32px);
+  transform: rotate(135deg) translateY(-22px);
   background: #999;
 }
 
 .app-loading-spinner span:nth-child(5) {
-  transform: rotate(180deg) translateY(-32px);
+  transform: rotate(180deg) translateY(-22px);
   background: #b5b5b5;
 }
 
 .app-loading-spinner span:nth-child(6) {
-  transform: rotate(225deg) translateY(-32px);
+  transform: rotate(225deg) translateY(-22px);
   background: #ccc;
 }
 
 .app-loading-spinner span:nth-child(7) {
-  transform: rotate(270deg) translateY(-32px);
+  transform: rotate(270deg) translateY(-22px);
   background: #d8d8d8;
 }
 
 .app-loading-spinner span:nth-child(8) {
-  transform: rotate(315deg) translateY(-32px);
+  transform: rotate(315deg) translateY(-22px);
   background: #888;
 }
 
