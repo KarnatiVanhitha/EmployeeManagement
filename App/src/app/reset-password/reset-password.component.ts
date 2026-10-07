@@ -87,7 +87,7 @@ if (resetType === "admin") {
       this.toastService.showSuccess(res.message);
       localStorage.removeItem("resetEmail");
       localStorage.removeItem("resetType");
-      this.router.navigate(['/Admin-login']);
+      this.router.navigate(['/admin-login']);
     },
     error: (err: any) => {
       this.toastService.showError(err.error?.message || 'Something went wrong.');

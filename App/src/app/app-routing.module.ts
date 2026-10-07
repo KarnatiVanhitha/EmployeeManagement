@@ -40,7 +40,7 @@ const routes: Routes = [
   // School account registration is temporarily disabled.
   // { path: "SignIn", component: SignInComponent },
   { path: "employee-signup", component: AddEmployeeComponent },
-  { path: "Admin-login", component: AdminLoginComponent },
+  { path: "admin-login", component: AdminLoginComponent },
   { path: "forgot-password", component: ForgotPasswordComponent },
   { path: "reset-password", component: ResetPasswordComponent },
   {

@@ -17,29 +17,102 @@ body {
 
 .app-loading-indicator {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
+  inset: 0;
   z-index: 20000;
-  overflow: hidden;
-  pointer-events: none;
-  background: rgba(79, 121, 66, 0.2);
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(2px);
 }
 
-.app-loading-progress {
-  display: block;
-  width: 35%;
-  height: 100%;
-  background: #4f7942;
-  animation: app-loading-progress 1.2s ease-in-out infinite;
+.app-loading-laptop {
+  display: flex;
+  width: min(340px, 82vw);
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0 12px 18px rgba(17, 17, 17, 0.2));
 }
 
-@keyframes app-loading-progress {
-  from {
-    transform: translateX(-100%);
-  }
+.app-loading-screen {
+  display: flex;
+  width: 80%;
+  aspect-ratio: 1.55;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border: 7px solid #111;
+  border-bottom-width: 10px;
+  border-radius: 13px 13px 5px 5px;
+  background: linear-gradient(150deg, #62894f, #3d6033);
+}
+
+.app-loading-spinner {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #fff 0deg 18deg,
+    transparent 18deg 30deg,
+    #fff 30deg 48deg,
+    transparent 48deg 60deg,
+    #fff 60deg 78deg,
+    transparent 78deg 90deg,
+    #fff 90deg 108deg,
+    transparent 108deg 120deg,
+    #fff 120deg 138deg,
+    transparent 138deg 150deg,
+    #fff 150deg 168deg,
+    transparent 168deg 180deg,
+    #fff 180deg 198deg,
+    transparent 198deg 210deg,
+    #fff 210deg 228deg,
+    transparent 228deg 240deg,
+    #fff 240deg 258deg,
+    transparent 258deg 270deg,
+    #fff 270deg 288deg,
+    transparent 288deg 300deg,
+    #fff 300deg 318deg,
+    transparent 318deg 330deg,
+    #fff 330deg 348deg,
+    transparent 348deg 360deg
+  );
+  mask: radial-gradient(farthest-side, transparent 57%, #000 60%);
+  animation: app-loading-spin 1s linear infinite;
+}
+
+.app-loading-label {
+  color: #fff !important;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.app-loading-base {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 12px;
+  margin-top: -1px;
+  border-radius: 2px 2px 12px 12px;
+  background: linear-gradient(#d8dce0, #7e8589 72%, #c3c8cc);
+  clip-path: polygon(9% 0, 91% 0, 100% 75%, 97% 100%, 3% 100%, 0 75%);
+}
+
+.app-loading-base::after {
+  position: absolute;
+  top: 0;
+  left: 43%;
+  width: 14%;
+  height: 4px;
+  border-radius: 0 0 5px 5px;
+  background: #747a7e;
+  content: "";
+}
+
+@keyframes app-loading-spin {
   to {
-    transform: translateX(300%);
+    transform: rotate(360deg);
   }
 }
