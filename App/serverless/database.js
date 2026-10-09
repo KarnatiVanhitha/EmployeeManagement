@@ -1,4 +1,9 @@
 const sql = require("mssql");
+const path = require("node:path");
+const dotenv = require("dotenv");
+
+dotenv.config({ path: path.resolve(__dirname, "..", "..", "Backend", ".env.local") });
+dotenv.config({ path: path.resolve(__dirname, "..", "..", "Backend", ".env") });
 
 let poolPromise;
 

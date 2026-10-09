@@ -1,6 +1,6 @@
 const sql = require("mssql");
 const { getDatabaseConfig, getConnectionPool } = require("../../serverless/database");
-const { createAuthToken } = require("./auth-token");
+const { createAuthToken, getJwtSecret } = require("./auth-token");
 
 module.exports = async function employeeLoginHandler(req, res) {
     if (req.method !== "POST") {
@@ -13,6 +13,16 @@ module.exports = async function employeeLoginHandler(req, res) {
     if (!/^[^\s@]+@desidea\.com$/i.test(Email)) {
         return res.status(401).json({
             message: "Only @desidea.com employee accounts can sign in"
+        });
+    }
+
+    try {
+        getJwtSecret();
+    } catch (error) {
+        console.error("Employee login authentication configuration error:", error.message);
+        return res.status(503).json({
+            success: false,
+            message: "Login service is not configured. Please contact support."
         });
     }
 

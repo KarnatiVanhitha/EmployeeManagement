@@ -27,4 +27,4 @@ function createAuthToken({ email, role, name }) {
     return `${unsignedToken}.${signature}`;
 }
 
-module.exports = { createAuthToken };
+module.exports = { createAuthToken, getJwtSecret };

@@ -101,7 +101,7 @@ export class AdminLoginComponent {
       error: (err: any) => {
 
         this.loginError =
-          err.error?.message || "Invalid Email or Password.Please try again.";
+          err.error?.error || err.error?.message || "Invalid Email or Password.Please try again.";
 
       }
 

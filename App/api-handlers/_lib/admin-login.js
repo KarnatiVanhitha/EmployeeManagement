@@ -1,6 +1,6 @@
 const sql = require("mssql");
 const { getDatabaseConfig, getConnectionPool } = require("../../serverless/database");
-const { createAuthToken } = require("./auth-token");
+const { createAuthToken, getJwtSecret } = require("./auth-token");
 
 function withoutPassword(user) {
     if (!user) return user;
@@ -18,6 +18,16 @@ module.exports = async function adminLoginHandler(req, res) {
     const Email = String(submittedEmail || "").trim();
     if (!Email || !Password) {
         return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    try {
+        getJwtSecret();
+    } catch (error) {
+        console.error("Admin login authentication configuration error:", error.message);
+        return res.status(503).json({
+            success: false,
+            message: "Login service is not configured. Please contact support."
+        });
     }
 
     const config = getDatabaseConfig();

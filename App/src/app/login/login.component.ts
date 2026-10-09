@@ -89,7 +89,7 @@ if (this.emailError || this.passwordError) {
 
     error: (err: any) => {
 
-      this.loginError = err.error?.message || "Invalid email or password. Please try again.";
+      this.loginError = err.error?.error || err.error?.message || "Invalid email or password. Please try again.";
 
     }
 
