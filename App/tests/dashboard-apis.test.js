@@ -1,15 +1,26 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
-const meetingsHandler = require("../api/calendar/meetings");
+const calendarHandler = require("../api/calendar");
+const meetingsHandler = (req, res) => calendarHandler({
+    ...req,
+    query: { ...req.query, resource: "meetings" }
+}, res);
+const holidaysHandler = (req, res) => calendarHandler({
+    ...req,
+    query: { ...req.query, resource: "holidays" }
+}, res);
 
 const handlers = [
     require("../api/admins"),
     require("../api-handlers/_lib/admin-by-id"),
     require("../api-handlers/_lib/employee-by-id"),
-    require("../api/salaries"),
+    (req, res) => require("../api/leaves")({
+        ...req,
+        query: { ...req.query, resource: "salaries" }
+    }, res),
     require("../api/projects"),
     require("../api/tasks/employee/[id]"),
-    require("../api/calendar/holidays")
+    holidaysHandler
 ];
 
 function createResponse() {

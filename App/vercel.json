@@ -16,7 +16,15 @@
     },
     {
       "source": "/api/managers/:id",
-      "destination": "/api/managers?route=employee&id=:id"
+      "destination": "/api/departments?resource=managers&id=:id"
+    },
+    {
+      "source": "/api/managers",
+      "destination": "/api/departments?resource=managers"
+    },
+    {
+      "source": "/api/salaries",
+      "destination": "/api/leaves?resource=salaries"
     },
     {
       "source": "/api/reviews",
@@ -44,7 +52,7 @@
     },
     {
       "source": "/api/salary-data",
-      "destination": "/api/salaries?aggregate=data"
+      "destination": "/api/leaves?resource=salary-data"
     },
     {
       "source": "/api/admins/login",
@@ -84,7 +92,7 @@
     },
     {
       "source": "/api/employees/managers",
-      "destination": "/api/managers"
+      "destination": "/api/departments?resource=managers"
     },
     {
       "source": "/api/employees/:id",

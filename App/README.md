@@ -2,7 +2,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Vercel API deployment
 
-Set the Vercel project root directory to `App` so Vercel deploys `api/departments.js` and `api/roles.js` alongside the Angular app. Add these environment variables in the Vercel project settings for every deployment environment:
+Set the Vercel project root directory to `App` so Vercel deploys the API functions alongside the Angular app. Related public API routes are rewritten to shared functions: manager operations use `api/departments.js`, and salary operations use `api/leaves.js`. This keeps existing `/api/managers` and `/api/salaries` URLs while avoiding separate serverless functions for those resources. Add these environment variables in the Vercel project settings for every deployment environment:
 
 - `JWT_SECRET`: Random secret key with at least 32 characters (required for authentication tokens)
 - `DB_SERVER`: Azure SQL server hostname

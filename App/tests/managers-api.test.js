@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
-const managersHandler = require("../api/managers");
+const managersHandler = require("../api/departments");
 
 function createResponse() {
     return {
@@ -30,6 +30,7 @@ test("manager registration POST reaches database configuration", async () => {
         const response = createResponse();
         await managersHandler({
             method: "POST",
+            query: { resource: "managers" },
             body: {
                 ManagerID: 42,
                 ManagerName: "Test Manager",
@@ -56,7 +57,7 @@ test("manager registration POST reaches database configuration", async () => {
 
 test("manager registration requires manager details", async () => {
     const response = createResponse();
-    await managersHandler({ method: "POST", body: {} }, response);
+    await managersHandler({ method: "POST", query: { resource: "managers" }, body: {} }, response);
 
     assert.equal(response.statusCode, 400);
     assert.deepEqual(response.body, {
@@ -73,7 +74,7 @@ test("manager profile updates reach database configuration", async () => {
         const response = createResponse();
         await managersHandler({
             method: "PUT",
-            query: { id: "42", route: "employee" },
+            query: { id: "42", resource: "managers" },
             body: {
                 ManagerName: "Updated Manager",
                 Email: "manager@example.com",
