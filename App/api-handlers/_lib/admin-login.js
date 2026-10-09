@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const { getDatabaseConfig, getConnectionPool } = require("../../serverless/database");
+const { createAuthToken } = require("./auth-token");
 
 function withoutPassword(user) {
     if (!user) return user;
@@ -42,7 +43,12 @@ module.exports = async function adminLoginHandler(req, res) {
             return res.status(200).json({
                 message: "Super Admin Login Successful",
                 role: "SuperAdmin",
-                user: withoutPassword(superAdmin)
+                user: withoutPassword(superAdmin),
+                token: createAuthToken({
+                    email: superAdmin.Email || Email,
+                    role: "SuperAdmin",
+                    name: superAdmin.FullName
+                })
             });
         }
 
@@ -69,7 +75,12 @@ module.exports = async function adminLoginHandler(req, res) {
         return res.status(200).json({
             message: "Admin Login Successful",
             role: admin.AdminType,
-            user: withoutPassword(admin)
+            user: withoutPassword(admin),
+            token: createAuthToken({
+                email: admin.Email || Email,
+                role: admin.AdminType,
+                name: admin.FullName
+            })
         });
     } catch (error) {
         console.error("Admin login API failed:", error);

@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const { getDatabaseConfig, getConnectionPool } = require("../../serverless/database");
+const { createAuthToken } = require("./auth-token");
 
 module.exports = async function employeeLoginHandler(req, res) {
     if (req.method !== "POST") {
@@ -50,7 +51,12 @@ module.exports = async function employeeLoginHandler(req, res) {
         return res.status(200).json({
             message: "Login Successful",
             role: user.RoleName,
-            user
+            user,
+            token: createAuthToken({
+                email: user.Email || Email,
+                role: user.RoleName,
+                name: user.FullName
+            })
         });
     } catch (error) {
         console.error("Employee login API failed:", error);
