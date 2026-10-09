@@ -43,20 +43,6 @@
 
   </div>
 
-  <div class="ask-me-widget">
-    <section class="ask-me-panel" *ngIf="isAskMeOpen" id="ask-me-panel" role="status">
-      <p class="ask-me-panel-title">Ask me</p>
-      <p class="ask-me-panel-message">Your assistant is coming soon.</p>
-    </section>
-    <button
-      class="ask-me-button"
-      type="button"
-      aria-controls="ask-me-panel"
-      [attr.aria-expanded]="isAskMeOpen"
-      (click)="isAskMeOpen = !isAskMeOpen">
-      <i class="bi bi-chat-dots-fill" aria-hidden="true"></i>
-      <span>Ask me</span>
-    </button>
-  </div>
+    <app-chatbot *ngIf="!isAdmin"></app-chatbot>
 
 </div>

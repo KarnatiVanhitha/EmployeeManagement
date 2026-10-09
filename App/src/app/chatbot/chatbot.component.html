@@ -1,0 +1,53 @@
+<!-- Small hint card (shown only while chat is closed)
+<div class="ask-hint" *ngIf="!isOpen && showHint">
+  <div class="ask-hint-title">Ask me</div>
+  <div class="ask-hint-text">Your assistant is coming soon.</div>
+</div> -->
+
+<!-- Chat panel -->
+<div class="chat-panel" *ngIf="isOpen">
+
+  <div class="chat-panel-header">
+    <h6 class="mb-0">Employee Assistant</h6>
+    <button class="chat-close" (click)="toggleChat()" aria-label="Close chat">&times;</button>
+  </div>
+
+  <div class="chat-box" #chatBox>
+    <div *ngFor="let message of messages" class="mb-3">
+
+      <div *ngIf="message.sender === 'user'" class="text-end">
+        <span class="msg msg-user">{{ message.text }}</span>
+      </div>
+
+      <div *ngIf="message.sender === 'bot'" class="text-start">
+        <span class="msg msg-bot">{{ message.text }}</span>
+      </div>
+    </div>
+    <div *ngIf="loading" class="text-start mb-3" role="status" aria-live="polite">
+      <span class="msg msg-bot msg-thinking">
+        <span class="typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="visually-hidden">Thinking...</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="userMessage"
+      placeholder="Ask something..."
+      (keyup.enter)="sendMessage()"
+    />
+    <button class="btn-send" (click)="sendMessage()">Send</button>
+  </div>
+
+</div>
+
+<!-- Floating "Ask me" button -->
+<button class="ask-fab" (click)="toggleChat()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12 2C6.48 2 2 5.92 2 10.75c0 2.55 1.27 4.84 3.3 6.43L4.5 21.5l4.1-2.1c1.07.28 2.2.43 3.4.43 5.52 0 10-3.92 10-8.75S17.52 2 12 2zM8 11.5a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm4 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm4 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"/>
+  </svg>
+  <span>Ask me</span>
+</button>

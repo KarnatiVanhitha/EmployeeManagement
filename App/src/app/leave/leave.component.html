@@ -20,24 +20,25 @@
 
   <!-- Tabs -->
 
-  <ul class="nav nav-tabs mb-3">
-
-    <li
-      class="nav-item"
-      *ngIf="isAdminRole()">
-
-      <button
-        class="nav-link"
-        [class.active]="activeTab === 'employeeLeaves'"
-        (click)="activeTab='employeeLeaves'">
-
-        Employee Leaves
-
-      </button>
-
-    </li>
-
-  </ul>
+  <div class="leave-tabs mb-3" role="tablist" aria-label="Leave views">
+    <a href="#my-leaves"
+       class="leave-tab"
+       [class.active]="activeTab === 'myLeaves'"
+       role="tab"
+       [attr.aria-selected]="activeTab === 'myLeaves'"
+       (click)="$event.preventDefault(); activeTab = 'myLeaves'">
+      My Leaves
+    </a>
+    <a *ngIf="isAdminRole()"
+       href="#employee-leaves"
+       class="leave-tab"
+       [class.active]="activeTab === 'employeeLeaves'"
+       role="tab"
+       [attr.aria-selected]="activeTab === 'employeeLeaves'"
+       (click)="$event.preventDefault(); activeTab = 'employeeLeaves'">
+      Employee Leaves
+    </a>
+  </div>
 
   <!-- MY LEAVES -->
 

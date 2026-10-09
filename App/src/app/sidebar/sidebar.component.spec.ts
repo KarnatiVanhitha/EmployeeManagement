@@ -43,4 +43,18 @@ describe('SidebarComponent', () => {
     component.role = '';
     expect(component.isOfficeRole).toBeFalse();
   });
+
+  it('shows employee management only to admin roles', () => {
+    component.role = 'office';
+    expect(component.canManageEmployees).toBeTrue();
+
+    component.role = 'SuperAdmin';
+    expect(component.canManageEmployees).toBeTrue();
+
+    component.role = 'admin';
+    expect(component.canManageEmployees).toBeTrue();
+
+    component.role = 'Employee';
+    expect(component.canManageEmployees).toBeFalse();
+  });
 });

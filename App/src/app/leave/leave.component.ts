@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { LeaveService } from '../services/leave.service';
 import { ToastService } from '../services/toast.service';
 
@@ -62,10 +63,20 @@ export class LeaveComponent implements OnInit {
     this.clearErrors();
   }
 
-  constructor(private leaveService: LeaveService, private toastService: ToastService) { }
+  constructor(
+    private leaveService: LeaveService,
+    private toastService: ToastService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.role = this.normalizeRole(localStorage.getItem('role'));
+    this.route.queryParamMap.subscribe(params => {
+      const requestedTab = params.get('tab');
+      this.activeTab = requestedTab === 'employeeLeaves' && this.isAdminRole()
+        ? 'employeeLeaves'
+        : 'myLeaves';
+    });
     this.loadLeaves();
   }
 

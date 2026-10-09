@@ -41,4 +41,10 @@ export class SidebarComponent implements OnInit{
       !schoolRoles.has(normalizedRole) &&
       !normalizedRole.startsWith('school');
   }
+
+  get canManageEmployees(): boolean {
+    const normalizedRole = this.role.toLowerCase().replace(/[\s_-]/g, '');
+    return ['office', 'admin', 'superadmin'].includes(normalizedRole);
+  }
+
 }

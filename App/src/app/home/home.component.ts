@@ -9,4 +9,7 @@ export class HomeComponent {
  isSidebarOpen = false;
  isSidebarCollapsed = false;
  isAskMeOpen = false;
+ readonly isAdmin = ['admin', 'office', 'superadmin'].includes(
+   (localStorage.getItem('role') ?? '').trim().toLowerCase()
+ );
 }

@@ -349,6 +349,10 @@ export class EmployeeService {
     );
 
     localStorage.removeItem(
+      'authToken'
+    );
+
+    localStorage.removeItem(
       'userType'
     );
 

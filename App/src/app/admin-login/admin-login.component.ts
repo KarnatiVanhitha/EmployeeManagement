@@ -71,9 +71,15 @@ export class AdminLoginComponent {
           return;
         }
 
+        if (typeof res.token !== "string" || !res.token) {
+          this.loginError = "The server did not create a secure login session. Please contact support.";
+          return;
+        }
+
         this.loginSuccess = res.message;
 
         localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("authToken", res.token);
         localStorage.setItem("role", res.role);
         localStorage.setItem("loggedInUser", JSON.stringify(res.user));
 

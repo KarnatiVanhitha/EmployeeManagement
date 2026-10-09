@@ -41,6 +41,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ToastComponent } from './shared/toast/toast.component';
 import { LoadingInterceptor } from './services/loading.interceptor';
+import { AuthTokenInterceptor } from './services/auth-token.interceptor';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 
 
 
@@ -83,6 +85,7 @@ import { LoadingInterceptor } from './services/loading.interceptor';
      ForgotPasswordComponent,
      ResetPasswordComponent,
      ToastComponent,
+     ChatbotComponent,
 
   ],
   imports: [
@@ -96,6 +99,11 @@ import { LoadingInterceptor } from './services/loading.interceptor';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoadingInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthTokenInterceptor,
       multi: true
     }
   ],

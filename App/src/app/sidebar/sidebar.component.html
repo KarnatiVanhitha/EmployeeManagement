@@ -4,6 +4,15 @@
       <img src="https://desidea.com/Content/images/logo_new.png" alt="">
     </div>
     <span class="brand-name">Des<span style="color: #4F7942;">IDEA</span></span>
+    <button
+      type="button"
+      class="sidebar-control sidebar-collapse-toggle"
+      (click)="toggleCollapsed()"
+      [attr.aria-label]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+      [attr.aria-expanded]="!collapsed"
+      [title]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+      <i class="bi" [ngClass]="collapsed ? 'bi-arrows-angle-expand' : 'bi-layout-sidebar-inset'"></i>
+    </button>
   </div>
 
   <nav class="sidebar-nav" aria-label="Main navigation">
@@ -16,7 +25,8 @@
           </a>
         </li>
 
-        <li *ngIf="role === 'office'" class="menu-entry menu-group">
+        <li *ngIf="canManageEmployees" class="menu-entry menu-group"
+            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
           <button class="menu-link sidebar-menu-toggle"
                   type="button"
                   data-bs-toggle="collapse"

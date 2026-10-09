@@ -3,3 +3,28 @@
     color: whitesmoke;
     border: none;
 }
+
+.leave-tabs {
+    display: flex;
+    gap: 1.25rem;
+    border-bottom: 1px solid #dfe7e1;
+}
+
+.leave-tab {
+    padding: 0.65rem 0.15rem;
+    border-bottom: 2px solid transparent;
+    color: #58675e;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.leave-tab:hover {
+    color: #355c2d;
+}
+
+.leave-tab.active {
+    border-bottom-color: var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 700;
+}
