@@ -4,12 +4,15 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 Set the Vercel project root directory to `App` so Vercel deploys `api/departments.js` and `api/roles.js` alongside the Angular app. Add these environment variables in the Vercel project settings for every deployment environment:
 
+- `JWT_SECRET`: Random secret key with at least 32 characters (required for authentication tokens)
 - `DB_SERVER`: Azure SQL server hostname
 - `DB_DATABASE`: database name
 - `DB_USER`: database username
 - `DB_PASSWORD`: database password
 - `DB_PORT`: `1433` (optional)
 - `DB_TRUST_SERVER_CERTIFICATE`: `false` (optional)
+- `GROQ_API_KEY`: Groq API key for the AI assistant chatbot (optional, defaults to project key)
+- `LLM_MODEL`: AI model name (optional, defaults to `openai/gpt-oss-120b`)
 
 Redeploy after adding or changing environment variables. Keep database credentials out of Angular code and source control.
 # App

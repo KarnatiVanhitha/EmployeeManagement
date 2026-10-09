@@ -1,6 +1,5 @@
-import { HttpClient, HttpContext } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { SKIP_GLOBAL_LOADING } from '../services/loading.interceptor';
+import { ChatbotService } from '../services/chatbot.service';
 
 @Component({
   selector: 'app-chatbot',
@@ -23,7 +22,7 @@ export class ChatbotComponent {
     }
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private chatbotService: ChatbotService) {}
 
   toggleChat() {
     this.isOpen = !this.isOpen;
@@ -63,22 +62,40 @@ export class ChatbotComponent {
     this.userMessage = '';
     this.loading = true;
 
-    this.http.post<any>(
-      '/api/chat',
-      { message, history, today, events },
-      { context: new HttpContext().set(SKIP_GLOBAL_LOADING, true) }
-    ).subscribe({
+    this.chatbotService.sendMessage({ message, history, today, events }).subscribe({
 
       next: (response) => {
-        this.messages.push({ sender: 'bot', text: response.reply });
+        let text = 'I received your message, but got an empty reply.';
+        if (typeof response?.reply === 'string') {
+          text = response.reply;
+        } else if (response?.reply && typeof response.reply === 'object') {
+          text = response.reply.message || response.reply.text || response.reply.content || JSON.stringify(response.reply);
+        } else if (typeof response?.message === 'string') {
+          text = response.message;
+        } else if (typeof response === 'string') {
+          text = response;
+        }
+        this.messages.push({ sender: 'bot', text });
         this.loading = false;
       },
 
       error: (error) => {
         console.error(error);
+        let errorText = 'Sorry, something went wrong.';
+        if (typeof error?.error === 'string') {
+          errorText = error.error;
+        } else if (typeof error?.error?.error === 'string') {
+          errorText = error.error.error;
+        } else if (typeof error?.error?.message === 'string') {
+          errorText = error.error.message;
+        } else if (typeof error?.error?.error?.message === 'string') {
+          errorText = error.error.error.message;
+        } else if (typeof error?.message === 'string') {
+          errorText = error.message;
+        }
         this.messages.push({
           sender: 'bot',
-          text: error.error?.error || 'Sorry, something went wrong.'
+          text: errorText
         });
         this.loading = false;
       }

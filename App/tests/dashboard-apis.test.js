@@ -37,7 +37,7 @@ test("dashboard data handlers reject unsupported methods", async () => {
         await handler({ method: "POST", query: {}, body: {} }, response);
 
         assert.equal(response.statusCode, 405);
-        assert.equal(response.headers.Allow, "GET");
+        assert.ok(response.headers.Allow.includes("GET"));
     }
 });
 

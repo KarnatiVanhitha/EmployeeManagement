@@ -1,21 +1,21 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs';
+import { SKIP_GLOBAL_LOADING } from './loading.interceptor';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatbotService {
 
-  
-
-  private apiUrl = 'http://localhost:3000/api/chat';
+  private apiUrl = '/api/chat';
 
   constructor(private http: HttpClient) {}
 
-  sendMessage(message: string): Observable<any> {
-    return this.http.post<any>(this.apiUrl, {
-      message: message
+  sendMessage(payload: any): Observable<any> {
+    const body = typeof payload === 'string' ? { message: payload } : payload;
+    return this.http.post<any>(this.apiUrl, body, {
+      context: new HttpContext().set(SKIP_GLOBAL_LOADING, true)
     });
-}
+  }
 }

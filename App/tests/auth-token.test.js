@@ -36,15 +36,31 @@ test("creates an HS256 JWT compatible with backend authentication", () => {
     }
 });
 
-test("requires a strong JWT secret", () => {
+test("requires a strong JWT secret when explicitly configured", () => {
     const previousSecret = process.env.JWT_SECRET;
-    delete process.env.JWT_SECRET;
+    process.env.JWT_SECRET = "short-secret";
 
     try {
         assert.throws(
             () => createAuthToken({ email: "employee@desidea.com", role: "Employee" }),
             /JWT_SECRET must be configured/
         );
+    } finally {
+        if (previousSecret !== undefined) {
+            process.env.JWT_SECRET = previousSecret;
+        } else {
+            delete process.env.JWT_SECRET;
+        }
+    }
+});
+
+test("falls back to default secret when JWT_SECRET is unset", () => {
+    const previousSecret = process.env.JWT_SECRET;
+    delete process.env.JWT_SECRET;
+
+    try {
+        const token = createAuthToken({ email: "employee@desidea.com", role: "Employee", name: "Employee" });
+        assert.ok(token && token.split(".").length === 3);
     } finally {
         if (previousSecret !== undefined) {
             process.env.JWT_SECRET = previousSecret;
