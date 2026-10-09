@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config({ path: ".env.local" });
 require("dotenv").config();
 const { normalizeLocalUrls } = require("./utils/normalizeLocalUrls");
 
@@ -21,6 +22,7 @@ const timesheetRoutes = require("./Routes/TimesheetRoute");
 const useCaseRoutes = require('./Routes/UsecaseRoute');
 const sprintRoutes = require('./Routes/SprintRoute');
 const jiraRoutes = require('./Routes/JiraRoute');
+const chatRoutes = require('./Routes/chatbotRoute');
 
 // Table init functions (must run AFTER connectDB)
 const { initCalendarTables } = require("./Models/CalendarModel");
@@ -123,6 +125,7 @@ app.use('/api/projects/sprints', sprintRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/projects/tasks", taskRoutes);
 app.use("/api/jira", jiraRoutes);
+app.use('/api/chat', chatRoutes);
 
 app.get("/jira/wiki/api/v2/spaces", async (req, res) => {
     try {

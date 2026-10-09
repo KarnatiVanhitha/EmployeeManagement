@@ -1,5 +1,6 @@
 const SuperAdminModel = require("../Models/SuperadminModel");
 const adminModel = require("../Models/AdminModel");
+const { createAuthToken } = require("../utils/authTokens");
 
 const login = async (req, res) => {
 
@@ -17,7 +18,13 @@ const login = async (req, res) => {
 
                 role: "SuperAdmin",
 
-                user: SuperAdmin
+                user: SuperAdmin,
+
+                token: createAuthToken({
+                    email: SuperAdmin.Email || Email,
+                    role: "SuperAdmin",
+                    name: SuperAdmin.FullName
+                })
 
             });
 
@@ -38,7 +45,13 @@ const login = async (req, res) => {
 
                 role:admin.AdminType,
 
-                user: admin
+                user: admin,
+
+                token: createAuthToken({
+                    email: admin.Email || Email,
+                    role: admin.AdminType,
+                    name: admin.FullName
+                })
 
             });
 

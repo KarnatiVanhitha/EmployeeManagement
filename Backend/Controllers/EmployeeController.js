@@ -2,6 +2,7 @@ const employeeModel = require("../Models/EmployeeModel");
 const managerModel = require("../Models/TeamManagerModels");
 const roleModel = require("../Models/RoleModel");
 const salaryModel = require("../Models/SalaryModel");
+const { createAuthToken } = require("../utils/authTokens");
 
 function isDesideaEmail(email) {
     return /^[^\s@]+@desidea\.com$/i.test(String(email || '').trim());
@@ -275,7 +276,12 @@ async function login(req, res) {
         return res.status(200).json({
             message: "Login Successful",
             role: employee.RoleName,
-            user: employee
+            user: employee,
+            token: createAuthToken({
+                email: employee.Email || Email,
+                role: employee.RoleName,
+                name: employee.FullName
+            })
         });
 
     } catch (error) {
