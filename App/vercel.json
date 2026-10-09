@@ -8,7 +8,11 @@
     },
     {
       "source": "/api/roles/department/:id",
-      "destination": "/api/roles?departmentId=:id"
+      "destination": "/api/departments?resource=roles&departmentId=:id"
+    },
+    {
+      "source": "/api/roles",
+      "destination": "/api/departments?resource=roles"
     },
     {
       "source": "/api/managers/:id",
@@ -85,6 +89,14 @@
     {
       "source": "/api/employees/:id",
       "destination": "/api/employees?route=id&id=:id"
+    },
+    {
+      "source": "/api/calendar/holidays",
+      "destination": "/api/calendar?resource=holidays"
+    },
+    {
+      "source": "/api/calendar/meetings",
+      "destination": "/api/calendar?resource=meetings"
     },
     {
       "source": "/((?!api/).*)",
