@@ -169,13 +169,13 @@
 
 <!-- Modal -->
 
-<div class="modal fade" id="leaveModal">
-  <div class="modal-dialog modal-lg">
+<div class="modal fade" id="leaveModal" tabindex="-1" aria-labelledby="leaveModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title">Apply Leave</h5>
-        <button class="btn-close" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title" id="leaveModalTitle">Apply Leave</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body">
@@ -219,19 +219,6 @@
             [(ngModel)]="leaveForm.endDate">
           <div class="field-error" *ngIf="endDateError">
             <i class="bi bi-exclamation-circle-fill"></i> {{ endDateError }}
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label fw-semibold">Contact Number</label>
-          <input
-            type="text"
-            class="form-control"
-            [class.is-invalid]="contactNumberError"
-            placeholder="Contact Number"
-            [(ngModel)]="leaveForm.contactNumber">
-          <div class="field-error" *ngIf="contactNumberError">
-            <i class="bi bi-exclamation-circle-fill"></i> {{ contactNumberError }}
           </div>
         </div>
 

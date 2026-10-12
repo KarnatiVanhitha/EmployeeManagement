@@ -627,14 +627,18 @@ body .pagination .page-link {
 }
 
 .modal-backdrop.show {
-  opacity: 0.48;
+  opacity: 0.35;
 }
 
-.modal.show.d-block .modal-content {
-  width: min(620px, calc(100vw - 32px)) !important;
+#leaveModal.modal.show .modal-content {
+  width: min(620px, calc(100vw - 32px));
   max-height: calc(100vh - 48px);
-  margin: 8vh auto 0 !important;
   overflow: auto;
+}
+
+#leaveModal.modal.show .modal-dialog {
+  width: min(620px, calc(100vw - 32px)) !important;
+  max-width: none;
 }
 
 .parents-page > div[style*="background-color"] {

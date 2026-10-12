@@ -34,21 +34,18 @@ export class LeaveComponent implements OnInit {
     type: '',
     startDate: '',
     endDate: '',
-    contactNumber: '',
     reason: ''
   };
 
   typeError = '';
   startDateError = '';
   endDateError = '';
-  contactNumberError = '';
   reasonError = '';
 
   clearErrors(): void {
     this.typeError = '';
     this.startDateError = '';
     this.endDateError = '';
-    this.contactNumberError = '';
     this.reasonError = '';
   }
 
@@ -57,7 +54,6 @@ export class LeaveComponent implements OnInit {
       type: '',
       startDate: '',
       endDate: '',
-      contactNumber: '',
       reason: ''
     };
     this.clearErrors();
@@ -140,10 +136,6 @@ export class LeaveComponent implements OnInit {
       this.endDateError = 'Please select end date';
       hasError = true;
     }
-    if (!this.leaveForm.contactNumber?.trim()) {
-      this.contactNumberError = 'Contact number is required';
-      hasError = true;
-    }
     if (!this.leaveForm.reason?.trim()) {
       this.reasonError = 'Reason is required';
       hasError = true;
@@ -164,7 +156,7 @@ export class LeaveComponent implements OnInit {
       LeaveType: this.leaveForm.type,
       StartDate: this.leaveForm.startDate,
       EndDate: this.leaveForm.endDate,
-      ContactNumber: this.leaveForm.contactNumber,
+      ContactNumber: '',
       Reason: this.leaveForm.reason,
       Status: 'Pending'
     };
