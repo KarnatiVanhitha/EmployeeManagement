@@ -99,6 +99,10 @@
       "destination": "/api/employees?route=id&id=:id"
     },
     {
+      "source": "/api/calendar/holidays/:id",
+      "destination": "/api/calendar?resource=holidays&id=:id"
+    },
+    {
       "source": "/api/calendar/holidays",
       "destination": "/api/calendar?resource=holidays"
     },

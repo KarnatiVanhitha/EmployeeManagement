@@ -4,16 +4,86 @@ const { getDatabaseConfig, getConnectionPool } = require("../serverless/database
 // ─── Holidays ────────────────────────────────────────────────────────────────
 
 async function handleHolidays(req, res, pool) {
-    if (req.method !== "GET") {
-        res.setHeader("Allow", "GET");
+    if (!["GET", "POST", "PUT", "DELETE"].includes(req.method)) {
+        res.setHeader("Allow", "GET, POST, PUT, DELETE");
         return res.status(405).json({ success: false, message: "Method not allowed" });
     }
 
-    const result = await pool.request().query(`
-        SELECT HolidayID AS id, Title AS title, Date AS date, Description AS description
-        FROM Holidays
-    `);
-    return res.status(200).json(result.recordset);
+    if (req.method === "GET") {
+        const result = await pool.request().query(`
+            SELECT HolidayID AS id, Title AS title, Date AS date, Description AS description
+            FROM Holidays
+        `);
+        return res.status(200).json(result.recordset);
+    }
+
+    const holidayId = Number(req.query?.id);
+    if (req.method === "DELETE") {
+        if (!Number.isInteger(holidayId) || holidayId < 1) {
+            return res.status(400).json({ message: "A valid holiday ID is required" });
+        }
+
+        const result = await pool.request()
+            .input("HolidayID", sql.Int, holidayId)
+            .query(`
+                DELETE FROM Holidays
+                OUTPUT DELETED.HolidayID AS id
+                WHERE HolidayID = @HolidayID
+            `);
+        if (!result.recordset.length) {
+            return res.status(404).json({ message: "Holiday not found" });
+        }
+        return res.status(200).json({ message: "Holiday Deleted Successfully" });
+    }
+
+    const holiday = req.body || {};
+    const title = String(holiday.title || "").trim();
+    const date = String(holiday.date || "");
+    if (!title || !date) {
+        return res.status(400).json({ message: "Holiday name and date are required" });
+    }
+
+    const request = pool.request()
+        .input("Title", sql.NVarChar(250), title)
+        .input("Date", sql.Date, date)
+        .input("Description", sql.NVarChar(sql.MAX), holiday.description || null);
+
+    if (req.method === "POST") {
+        const result = await request.query(`
+            INSERT INTO Holidays (Title, Date, Description)
+            OUTPUT INSERTED.HolidayID AS id, INSERTED.Title AS title,
+                INSERTED.Date AS date, INSERTED.Description AS description
+            VALUES (@Title, @Date, @Description)
+        `);
+        return res.status(201).json({
+            message: "Holiday Added Successfully",
+            ...result.recordset[0]
+        });
+    }
+
+    if (!Number.isInteger(holidayId) || holidayId < 1) {
+        return res.status(400).json({ message: "A valid holiday ID is required" });
+    }
+    request.input("HolidayID", sql.Int, holidayId);
+
+    if (req.method === "PUT") {
+        const result = await request.query(`
+            UPDATE Holidays
+            SET Title = @Title, Date = @Date, Description = @Description
+            OUTPUT INSERTED.HolidayID AS id, INSERTED.Title AS title,
+                INSERTED.Date AS date, INSERTED.Description AS description
+            WHERE HolidayID = @HolidayID
+        `);
+        if (!result.recordset.length) {
+            return res.status(404).json({ message: "Holiday not found" });
+        }
+        return res.status(200).json({
+            message: "Holiday Updated Successfully",
+            ...result.recordset[0]
+        });
+    }
+
+    return res.status(405).json({ success: false, message: "Method not allowed" });
 }
 
 // ─── Meetings ────────────────────────────────────────────────────────────────
@@ -58,6 +128,12 @@ async function handleMeetings(req, res, pool) {
 // ─── Router ──────────────────────────────────────────────────────────────────
 
 module.exports = async function calendarHandler(req, res) {
+    const resource = req.query?.resource;
+    if (resource === "holidays" && !["GET", "POST", "PUT", "DELETE"].includes(req.method)) {
+        res.setHeader("Allow", "GET, POST, PUT, DELETE");
+        return res.status(405).json({ success: false, message: "Method not allowed" });
+    }
+
     const config = getDatabaseConfig();
     if (!config) {
         return res.status(503).json({ success: false, message: "Database is not configured" });
@@ -65,7 +141,6 @@ module.exports = async function calendarHandler(req, res) {
 
     try {
         const pool = await getConnectionPool(config);
-        const resource = req.query.resource;
 
         if (resource === "holidays") {
             return await handleHolidays(req, res, pool);

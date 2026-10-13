@@ -19,8 +19,7 @@ const handlers = [
         query: { ...req.query, resource: "salaries" }
     }, res),
     require("../api/projects"),
-    require("../api/tasks/employee/[id]"),
-    holidaysHandler
+    require("../api/tasks/employee/[id]")
 ];
 
 function createResponse() {
@@ -94,6 +93,44 @@ test("meeting creation allows employees to reach database validation", async () 
             success: false,
             message: "Database is not configured"
         });
+    } finally {
+        names.forEach((name) => {
+            if (previousValues[name] === undefined) {
+                delete process.env[name];
+            } else {
+                process.env[name] = previousValues[name];
+            }
+        });
+    }
+});
+
+test("holiday create, update, and delete allow requests to reach database validation", async () => {
+    const names = ["DB_SERVER", "DB_DATABASE", "DB_USER", "DB_PASSWORD"];
+    const previousValues = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+    names.forEach((name) => delete process.env[name]);
+
+    try {
+        const unsupportedResponse = createResponse();
+        await holidaysHandler({ method: "PATCH" }, unsupportedResponse);
+        assert.equal(unsupportedResponse.statusCode, 405);
+        assert.equal(unsupportedResponse.headers.Allow, "GET, POST, PUT, DELETE");
+
+        const requests = [
+            { method: "POST", body: { title: "Holiday", date: "2026-10-20" } },
+            { method: "PUT", query: { id: "1" }, body: { title: "Holiday", date: "2026-10-20" } },
+            { method: "DELETE", query: { id: "1" } }
+        ];
+
+        for (const request of requests) {
+            const response = createResponse();
+            await holidaysHandler(request, response);
+
+            assert.equal(response.statusCode, 503);
+            assert.deepEqual(response.body, {
+                success: false,
+                message: "Database is not configured"
+            });
+        }
     } finally {
         names.forEach((name) => {
             if (previousValues[name] === undefined) {
