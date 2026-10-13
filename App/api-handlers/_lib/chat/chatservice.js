@@ -35,19 +35,9 @@ function filterSchema(schema, allowed) {
 }
 
 function isProjectRelated(message) {
-  const patterns = [
-    /\\bmeeting(s)?\\b/i,
-    /\\b(today|tonight|this day)\\b/i,
-    /\\b(activity|activities|event|events|birthday|birthdays)\\b/i,
-    /\\b(?:my|me|myself)\\b/i,
-    /\\b(?:information|details|profile|record|data)\\b/i,
-    /\\b(?:remaining|left|balance|available)\\b/i,
-    /\\b(?:leaves?|leave days?|pto)\\b/i,
-    /\\b(?:how many|number of|count of|total).*(?:employees?|staff|workers|people)\\b/i,
-    /\\bupcoming\\b.*\\bleaves?\\b/i,
-    /\\bleaves?\\b.*\\bupcoming\\b/i
-  ];
-  return patterns.some((p) => p.test(message));
+  // Broad keyword check for any employee‑management related query
+  const keywordRegex = /\b(meeting|today|activity|event|birthday|profile|information|details|leave|employees?|staff|workers?|count|total|upcoming)\b/i;
+  return keywordRegex.test(message);
 }
 
 async function askChatbot(message, history = [], user = null, requestedDate = null, events = []) {
