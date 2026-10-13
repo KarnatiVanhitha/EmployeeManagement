@@ -682,18 +682,18 @@ async function askChatbot(message, history = [], user = null, requestedDate = nu
 
   // ---------- Guard: block anything unrelated to the company data ----------
 
-  const isSmallTalk = /^\s*(hi|hello|hey|thanks|thank you|bye)\b[\s!.?]*$/i.test(message);
-  if (isSmallTalk) {
-    return "Hello! Ask me about your company's employee data, such as leaves, timesheets, meetings or holidays.";
-  }
-  // Strict mode (default): no rule matched, so do not let the model answer freely.
-  // Set ALLOW_LLM_FALLBACK=true in .env to let the guarded model handle unmatched questions.
-  if (process.env.ALLOW_LLM_FALLBACK !== "true") {
-    return (await isInScope(message)) ? NOT_UNDERSTOOD : OUT_OF_SCOPE;
-  }
-  if (!(await isInScope(message))) {
-    return OUT_OF_SCOPE;
-  }
+  
+const isSmallTalk =
+  /^\s*(hi|hello|hey|thanks|thank you|bye)\b[\s!.?]*$/i.test(message);
+
+if (isSmallTalk) {
+  return "Hello! Ask me about your company's employee data, such as leaves, timesheets, meetings or holidays.";
+}
+
+// Strict mode: unmatched questions never reach the LLM.
+if (process.env.ALLOW_LLM_FALLBACK !== "true") {
+  return OUT_OF_SCOPE;
+}
 
   // ---------- LLM with tools ----------
 
