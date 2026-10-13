@@ -41,9 +41,10 @@ function isProjectRelated(message) {
 }
 
 async function askChatbot(message, history = [], user = null, requestedDate = null, events = []) {
-  // Restrict queries to project-related topics only
-  if (!isProjectRelated(message)) {
-    return "I can only provide information related to the employee management system. Please ask a relevant question.";
+  // Friendly greeting handling
+  const greetingRegex = /^\s*(hi|hello|hey|good morning|good afternoon|good evening)\b/i;
+  if (greetingRegex.test(message)) {
+    return "Hello! I’m here to help with the employee management system. How can I assist you today?";
   }
   const scope = await getScope(user);
   if (!scope) return "Sorry, I could not verify your account, so I can't show data.";
