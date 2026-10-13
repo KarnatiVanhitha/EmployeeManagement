@@ -515,7 +515,24 @@ async function askChatbot(message, history = [], user = null, requestedDate = nu
       });
     return ["Here is the employee information linked to your account:", ...details].join("\n");
   }
+  // Match questions about the user's manager
+const asksManager =
+  /\b(my manager|who is my manager|manager name|department manager|who do i report to)\b/i
+    .test(message);
 
+if (asksManager) {
+  const roleName = String(user?.RoleName || user?.roleName || user?.role || "");
+  const departmentName = String(
+    user?.DepartmentName || user?.departmentName || ""
+  );
+
+  if (!departmentName) {
+    return "I couldn't identify your department. Please check your profile.";
+  }
+
+  // Find the manager for this department using your existing
+  // database query/helper and return the manager's name.
+}
   const asksForOwnManager =
     /\b(?:who|name)\b[\s\S]*\bmy\b[\s\S]*\b(?:manager|supervisor|boss)\b/i.test(message) ||
     /\bmy\b[\s\S]*\b(?:manager|supervisor|boss)\b[\s\S]*\b(?:name|who|email|contact)\b/i.test(message);
