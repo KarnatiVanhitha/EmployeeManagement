@@ -9,6 +9,18 @@ async function handleHolidays(req, res, pool) {
         return res.status(405).json({ success: false, message: "Method not allowed" });
     }
 
+    await pool.request().query(`
+        IF OBJECT_ID('dbo.Holidays', 'U') IS NULL
+        BEGIN
+            CREATE TABLE dbo.Holidays (
+                HolidayID INT IDENTITY(1,1) PRIMARY KEY,
+                Title NVARCHAR(250) NOT NULL,
+                Date DATE NOT NULL,
+                Description NVARCHAR(MAX)
+            );
+        END
+    `);
+
     if (req.method === "GET") {
         const result = await pool.request().query(`
             SELECT HolidayID AS id, Title AS title, Date AS date, Description AS description
