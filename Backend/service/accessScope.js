@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const { getPool, getSchemaText } = require("./schemaservice");
+const { validateSql } = require("./sqlguard");
 
 const DEPT_EMP =
   "EmployeeID IN (SELECT EmployeeID FROM dbo.Employees WHERE DepartmentID = @deptId)";
@@ -73,8 +74,14 @@ async function checkTables(q, scope) {
   }
 }
 
-async function runScoped(q, scope) {
-  await checkTables(q, scope);
+// opts.trusted = true is ONLY for queries written by the server itself
+// (e.g. the total employee count, which intentionally reads dbo.Employees).
+// Never pass trusted for SQL written by the model.
+async function runScoped(q, scope, opts = {}) {
+  if (!opts.trusted) {
+    validateSql(q, allowedTables(scope), scope.role === "admin");
+    await checkTables(q, scope);
+  }
   const pool = await getPool();
   const req = pool.request();
   if (scope.role !== "admin") {

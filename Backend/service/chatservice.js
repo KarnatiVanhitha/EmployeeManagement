@@ -9,6 +9,9 @@ const client = new OpenAI({
 });
 const MODEL = process.env.LLM_MODEL || "openai/gpt-oss-120b";
 
+const OUT_OF_SCOPE = "I can only help with questions about your company's employee data.";
+const NO_RECORDS = "No matching records found.";
+
 // Show the AI only the tables this user may query
 function filterSchema(schema, allowed) {
   if (!allowed) return schema;
@@ -25,6 +28,42 @@ function filterSchema(schema, allowed) {
     .join("\n");
 }
 
+// Only keep plain user/assistant text from the client-supplied history.
+// This blocks injected system/tool messages.
+function sanitizeHistory(history) {
+  return (Array.isArray(history) ? history : [])
+    .filter((m) => m && m.role === "user" && typeof m.content === "string")
+    .slice(-5)
+    .map((m) => ({ role: "user", content: m.content.slice(0, 1000) }));
+}
+
+// Separate cheap call: is this question about the company system at all?
+async function isInScope(message) {
+  try {
+    const r = await client.chat.completions.create({
+      model: MODEL,
+      temperature: 0,
+      max_completion_tokens: 50,
+      reasoning_effort: "low",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Classify the user message. Reply ONLY 'YES' if it asks about employees, leaves, salaries, " +
+            "timesheets, reviews, promotions, meetings, holidays, birthdays, departments or roles " +
+            "in a company system. Reply ONLY 'NO' for anything else " +
+            "(general knowledge, coding, news, math, advice, chit-chat).",
+        },
+        { role: "user", content: message },
+      ],
+    });
+    return /^\s*YES/i.test(r.choices[0].message.content || "");
+  } catch (err) {
+    console.error("Scope check failed:", err);
+    return false; // fail closed
+  }
+}
+
 async function askChatbot(message, history = [], user = null, requestedDate = null, events = []) {
   const scope = await getScope(user);
   if (!scope) return "Sorry, I could not verify your account, so I can't show data.";
@@ -32,6 +71,9 @@ async function askChatbot(message, history = [], user = null, requestedDate = nu
   const today = /^\d{4}-\d{2}-\d{2}$/.test(requestedDate || "")
     ? requestedDate
     : localDateKey(new Date());
+
+  // ---------- Dedicated server-side handlers (no LLM involved) ----------
+
   const asksForTodayMeetings =
     /\bmeeting(s)?\b/i.test(message) &&
     /\b(today|tonight|this day)\b/i.test(message);
@@ -150,6 +192,18 @@ async function askChatbot(message, history = [], user = null, requestedDate = nu
     return `Upcoming leaves (approved and pending):\n${rows.join("\n")}`;
   }
 
+  // ---------- Guard: block anything unrelated to the company data ----------
+
+  const isSmallTalk = /^\s*(hi|hello|hey|thanks|thank you|bye)\b[\s!.?]*$/i.test(message);
+  if (isSmallTalk) {
+    return "Hello! Ask me about your company's employee data, such as leaves, timesheets, meetings or holidays.";
+  }
+  if (!(await isInScope(message))) {
+    return OUT_OF_SCOPE;
+  }
+
+  // ---------- LLM with tools ----------
+
   const filteredSchema = filterSchema(schema, allowedTables(scope));
 
   const who =
@@ -163,21 +217,22 @@ async function askChatbot(message, history = [], user = null, requestedDate = nu
     {
       role: "system",
       content: `You are a data assistant for an employee management system.
-Today is ${new Date().toISOString().slice(0, 10)}.
+Today is ${today}.
 ${who}
+
+SCOPE (strict):
+- You ONLY answer questions about this system's data (employees, leaves, salaries, timesheets, reviews, promotions, meetings, holidays, departments, roles).
+- For anything else (general knowledge, coding, news, math, advice, opinions), reply exactly: "${OUT_OF_SCOPE}"
+- Never use outside or general knowledge, even if you know the answer.
+- Every fact in your answer must come from a tool result in this conversation.
 
 Tools:
 - get_approved_leaves: for questions about approved leave usage. Return aggregate counts only.
 - run_sql_query: for every other data question, ONE T-SQL SELECT (SQL Server: use TOP, not LIMIT).
 
 Rules:
- You ONLY answer questions about this employee management system's data
-  (employees, leaves, salaries, timesheets, reviews, meetings, holidays, etc.).
-- For anything else (general knowledge, coding, news, advice, math, opinions),
-  reply exactly: "I can only help with questions about your company's employee data."
-- Never use outside or general knowledge, even if you know the answer.
-- Every factual statement in your answer must come from a tool result in this conversation.
 - Use plain table names only (no dbo.). Never use SELECT *; list columns.
+- Queries must read from real tables. Never SELECT literal values or made-up data.
 - JOIN tables using the relationships below. Do calculations (SUM, COUNT, AVG) in SQL.
 - The server automatically restricts Employees, Leaves, Salaries, Timesheets, Reviews, and promotion history to the signed-in employee or the manager's department. Never bypass those restrictions or return data outside the user's scope.
 - Meetings and Holidays are organization-wide calendar data and are available to every role.
@@ -196,25 +251,34 @@ Rules:
 DATABASE STRUCTURE:
 ${filteredSchema}`,
     },
-    ...history,
+    ...sanitizeHistory(history),
     { role: "user", content: message },
   ];
+
+  let usedTool = false;
 
   for (let round = 0; round < 6; round++) {
     const response = await client.chat.completions.create({
       model: MODEL,
       messages,
       tools: toolDefinitions,
-      temperature: 1,
+      tool_choice: round === 0 ? "required" : "auto", // must query the DB first
+      temperature: 0,
       max_completion_tokens: 2048,
       top_p: 1,
-      reasoning_effort: "medium",
+      reasoning_effort: "low",
     });
 
     const msg = response.choices[0].message;
     messages.push(msg);
 
-    if (!msg.tool_calls || msg.tool_calls.length === 0) return msg.content;
+    if (!msg.tool_calls || msg.tool_calls.length === 0) {
+      // Answer produced without any database result behind it -> block it
+      if (!usedTool) return OUT_OF_SCOPE;
+      return msg.content;
+    }
+
+    usedTool = true;
 
     for (const call of msg.tool_calls) {
       let data;
@@ -227,6 +291,12 @@ ${filteredSchema}`,
         console.error("Tool error:", err);
         data = { error: "The tool failed to run." };
       }
+
+      // Empty result: answer from code, never let the model "explain" it
+      if (Array.isArray(data) && data.length === 0) {
+        return NO_RECORDS;
+      }
+
       messages.push({ role: "tool", tool_call_id: call.id, content: JSON.stringify(data) });
     }
   }
